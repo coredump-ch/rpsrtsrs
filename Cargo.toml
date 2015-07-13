@@ -1,0 +1,4 @@
+[package]
+name = "rpsrtsrs"
+version = "0.1.0"
+authors = ["Raphael Nestler <raphael.nestler@gmail.com>"]
