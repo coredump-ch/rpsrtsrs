@@ -19,6 +19,7 @@ pub struct Square {
 
 impl Square {
     fn new(position: [f64;2]) -> Square {
+        println!("Create square at {:?}", position);
         Square {
             rotation: 0.0,
             position: position,
@@ -30,15 +31,17 @@ impl Square {
 
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
-    square: Square,
+    squares: Vec<Square>,
 }
 
 impl App {
     fn select(&mut self, position: &[f64;2]) {
-        self.square.selected = position[0]< self.square.position[0]+25.0 &&
-            position[0]> self.square.position[0]-25.0 &&
-            position[1]< self.square.position[1]+25.0 &&
-            position[1]> self.square.position[1]-25.0;
+        for s in &mut self.squares {
+            s.selected = position[0]< s.position[0]+25.0 &&
+                position[0]> s.position[0]-25.0 &&
+                position[1]< s.position[1]+25.0 &&
+                position[1]> s.position[1]-25.0;
+        };
     }
 
     fn render(&mut self, args: &RenderArgs) {
@@ -47,36 +50,44 @@ impl App {
         const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
         const RED:   [f32; 4] = [1.0, 0.0, 0.0, 1.0];
         const BLUE:  [f32; 4] = [0.0, 0.0, 1.0, 1.0];
-
-        let square = rectangle::square(0.0, 0.0, 50.0);
-        let rotation = self.square.rotation;
-        let pos = self.square.position;
-        let selected = self.square.selected;
+        let squares = &self.squares;
 
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
             clear(GREEN, gl);
+            for s in squares.iter() {
+                let square = rectangle::square(0.0, 0.0, 50.0);
+                let transform = c.transform.trans(s.position[0], s.position[1])
+                    .rot_rad(s.rotation)
+                    .trans(-25.0, -25.0);
 
-            let transform = c.transform.trans(pos[0], pos[1])
-                                       .rot_rad(rotation)
-                                       .trans(-25.0, -25.0);
-
-            // Draw a box rotating around the middle of the screen.
-            if selected {
-                rectangle(RED, square, transform, gl);
-            } else {
-                rectangle(BLUE, square, transform, gl);
+                // Draw the box RED if selected
+                if s.selected {
+                    rectangle(RED, square, transform, gl);
+                } else {
+                    rectangle(BLUE, square, transform, gl);
+                }
             }
         });
     }
 
     fn update(&mut self, args: &UpdateArgs) {
-        // Rotate 2 radians per second.
-        self.square.rotation += 2.0 * args.dt;
+        for s in &mut self.squares {
+            // Rotate 2 radians per second.
+            s.rotation += 2.0 * args.dt;
 
-        let diff = [self.square.target[0]-self.square.position[0], self.square.target[1]-self.square.position[1]];
-        self.square.position[0] += diff[0]/2.0*args.dt;
-        self.square.position[1] += diff[1]/2.0*args.dt;
+            let diff = [s.target[0]-s.position[0], s.target[1]-s.position[1]];
+            s.position[0] += diff[0]/2.0*args.dt;
+            s.position[1] += diff[1]/2.0*args.dt;
+        }
+    }
+
+    fn move_selected(&mut self, position: [f64;2]) {
+        for s in &mut self.squares {
+            if s.selected {
+                s.target = position;
+            }
+        }
     }
 }
 
@@ -95,7 +106,7 @@ fn main() {
     // Create a new game and run it.
     let mut app = App {
         gl: GlGraphics::new(opengl),
-        square: Square::new([50.0, 50.0]),
+        squares: vec![Square::new([50.0, 50.0]), Square::new([100.0, 100.0])],
     };
 
     let mut cursor = [0.0,0.0];
@@ -107,7 +118,7 @@ fn main() {
         if let Some(Button::Mouse(button)) = e.press_args() {
             match button {
                 MouseButton::Left  => app.select(&cursor),
-                MouseButton::Right => if app.square.selected { app.square.target = cursor },
+                MouseButton::Right => app.move_selected(cursor),
                 _ => println!("Pressed mouse button '{:?}'", button),
             }
         }
