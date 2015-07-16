@@ -2,6 +2,7 @@ extern crate piston;
 extern crate graphics;
 extern crate glutin_window;
 extern crate opengl_graphics;
+extern crate rand;
 
 use piston::window::WindowSettings;
 use piston::event::*;
@@ -106,8 +107,13 @@ fn main() {
     // Create a new game and run it.
     let mut app = App {
         gl: GlGraphics::new(opengl),
-        squares: vec![Square::new([50.0, 50.0]), Square::new([100.0, 100.0])],
+        squares: vec![],
     };
+    for _ in 0..10 {
+        let x = rand::random::<f64>() * 600.0 + 40.0;
+        let y = rand::random::<f64>() * 440.0 + 40.0;
+        app.squares.push(Square::new([x,y]));
+    }
 
     let mut cursor = [0.0,0.0];
 
