@@ -34,6 +34,13 @@ pub struct App {
 }
 
 impl App {
+    fn select(&mut self, position: &[f64;2]) {
+        self.square.selected = position[0]< self.square.position[0]+25.0 &&
+            position[0]> self.square.position[0]-25.0 &&
+            position[1]< self.square.position[1]+25.0 &&
+            position[1]> self.square.position[1]-25.0;
+    }
+
     fn render(&mut self, args: &RenderArgs) {
         use graphics::*;
 
@@ -99,8 +106,8 @@ fn main() {
         }
         if let Some(Button::Mouse(button)) = e.press_args() {
             match button {
-                MouseButton::Left  => println!("Pressed left mouse button '{:?}'", button),
-                MouseButton::Right => app.square.target = cursor,
+                MouseButton::Left  => app.select(&cursor),
+                MouseButton::Right => if app.square.selected { app.square.target = cursor },
                 _ => println!("Pressed mouse button '{:?}'", button),
             }
         }
