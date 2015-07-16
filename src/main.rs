@@ -124,7 +124,6 @@ fn main() {
         }
         e.mouse_cursor(|x, y| {
             cursor = [x, y];
-            println!("Mouse moved '{} {}'", x, y);
         });
 
         if let Some(u) = e.update_args() {
