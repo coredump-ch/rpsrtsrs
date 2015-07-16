@@ -97,8 +97,8 @@ fn main() {
     // Create an Glutin window.
     let window = Window::new(
         WindowSettings::new(
-            "spinning-square",
-            [200, 200]
+            "rpsrtsrs",
+            [640, 480]
         )
         .exit_on_esc(true)
     );
