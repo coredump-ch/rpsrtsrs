@@ -15,3 +15,6 @@ cargo build
 
 ### Windows
 You will need to install [freetype](https://github.com/PistonDevelopers/freetype-sys#for-windows-users)
+
+## Ideas
+See [ideas](ideas.md)
