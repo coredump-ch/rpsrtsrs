@@ -75,9 +75,6 @@ impl App {
 
     fn update(&mut self, args: &UpdateArgs) {
         for s in &mut self.squares {
-            // Rotate 2 radians per second.
-            s.rotation += 2.0 * args.dt;
-
             let diff = [s.target[0]-s.position[0], s.target[1]-s.position[1]];
             s.position[0] += diff[0]/2.0*args.dt;
             s.position[1] += diff[1]/2.0*args.dt;
@@ -88,6 +85,9 @@ impl App {
         for s in &mut self.squares {
             if s.selected {
                 s.target = position;
+                let d0 = position[0]-s.position[0];
+                let d1 = position[1]-s.position[1];
+                s.rotation = (d1/d0).atan();
             }
         }
     }
