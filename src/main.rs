@@ -48,14 +48,15 @@ impl App {
     fn render(&mut self, args: &RenderArgs) {
         use graphics::*;
 
-        const GREEN: [f32; 4] = [0.0, 1.0, 0.0, 1.0];
-        const RED:   [f32; 4] = [1.0, 0.0, 0.0, 1.0];
-        const BLUE:  [f32; 4] = [0.0, 0.0, 1.0, 1.0];
+        const BLACK: [f32; 4] = [0.0, 0.0,  0.0, 1.0];
+        const YELLOW:[f32; 4] = [1.0, 1.0,  0.22, 1.0];
+        const ORANGE:[f32; 4] = [1.0, 0.61, 0.22, 1.0];
+
         let squares = &self.squares;
 
         self.gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
-            clear(GREEN, gl);
+            clear(BLACK, gl);
             for s in squares.iter() {
                 let square = rectangle::square(0.0, 0.0, 50.0);
                 let transform = c.transform.trans(s.position[0], s.position[1])
@@ -64,9 +65,9 @@ impl App {
 
                 // Draw the box RED if selected
                 if s.selected {
-                    rectangle(RED, square, transform, gl);
+                    rectangle(ORANGE, square, transform, gl);
                 } else {
-                    rectangle(BLUE, square, transform, gl);
+                    rectangle(YELLOW, square, transform, gl);
                 }
             }
         });
