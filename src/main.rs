@@ -94,7 +94,7 @@ impl App {
 }
 
 fn main() {
-    let opengl = OpenGL::_3_2;
+    let opengl = OpenGL::V3_2;
 
     // Create an Glutin window.
     let window = Window::new(
