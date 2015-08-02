@@ -5,7 +5,9 @@ dependencies = [
  "piston 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "piston2d-graphics 0.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "piston2d-opengl_graphics 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pistoncore-glfw_window 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pistoncore-glutin_window 0.7.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pistoncore-sdl2_window 0.6.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -207,6 +209,23 @@ dependencies = [
  "khronos_api 0.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
+
+[[package]]
+name = "glfw"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "bitflags 0.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "glfw-sys 3.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "log 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "semver 0.1.20 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "glfw-sys"
+version = "3.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "glob"
@@ -424,6 +443,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "pistoncore-glfw_window"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "gl 0.0.12 (registry+https://github.com/rust-lang/crates.io-index)",
+ "glfw 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pistoncore-input 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pistoncore-window 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "shader_version 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "pistoncore-glutin_window"
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -444,6 +475,19 @@ dependencies = [
  "num 0.1.25 (registry+https://github.com/rust-lang/crates.io-index)",
  "piston-viewport 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rustc-serialize 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "pistoncore-sdl2_window"
+version = "0.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "gl 0.0.12 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num 0.1.25 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pistoncore-input 0.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "pistoncore-window 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sdl2 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "shader_version 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -479,6 +523,32 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "rustc-serialize"
 version = "0.3.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
+[[package]]
+name = "sdl2"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "bitflags 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num 0.1.25 (registry+https://github.com/rust-lang/crates.io-index)",
+ "rand 0.3.9 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sdl2-sys 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "sdl2-sys"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "libc 0.1.8 (registry+https://github.com/rust-lang/crates.io-index)",
+ "num 0.1.25 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "semver"
+version = "0.1.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]

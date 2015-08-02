@@ -7,5 +7,23 @@ authors = ["Raphael Nestler <raphael.nestler@gmail.com>"]
 rand = "*"
 piston ="0.5"
 piston2d-graphics = "0.4"
-pistoncore-glutin_window = "0.7"
 piston2d-opengl_graphics = "0.6"
+
+[dependencies.pistoncore-sdl2_window]
+version = "0.6"
+optional = true
+
+[dependencies.pistoncore-glfw_window]
+version = "0.5"
+optional = true
+
+[dependencies.pistoncore-glutin_window]
+version = "0.7"
+optional = true
+
+[features]
+default = ["include_sdl2"]
+include_sdl2 = ["pistoncore-sdl2_window"]
+include_glfw = ["pistoncore-glfw_window"]
+include_glutin = ["pistoncore-glutin_window"]
+
