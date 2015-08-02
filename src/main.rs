@@ -1,15 +1,15 @@
 extern crate piston;
 extern crate graphics;
-extern crate glutin_window;
 extern crate opengl_graphics;
 extern crate rand;
 
+extern crate glutin_window;
+
 use piston::window::WindowSettings;
-use piston::event::*;
-use glutin_window::GlutinWindow as Window;
 use opengl_graphics::{ GlGraphics, OpenGL };
-use piston::input::{ Button };
-use piston::input::mouse::MouseButton;
+use piston::input::*;
+use piston::event_loop::*;
+use glutin_window::GlutinWindow as Window;
 
 pub struct Square {
     rotation: f64,   // Rotation for the square.
@@ -97,13 +97,10 @@ fn main() {
     let opengl = OpenGL::V3_2;
 
     // Create an Glutin window.
-    let window = Window::new(
-        WindowSettings::new(
-            "rpsrtsrs",
-            [640, 480]
-        )
-        .exit_on_esc(true)
-    );
+    let window : Window = WindowSettings::new(
+        "rpsrtsrs",
+        [640, 480]
+    ).exit_on_esc(true).into();
 
     // Create a new game and run it.
     let mut app = App {

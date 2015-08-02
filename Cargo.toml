@@ -5,7 +5,7 @@ authors = ["Raphael Nestler <raphael.nestler@gmail.com>"]
 
 [dependencies]
 rand = "*"
-piston = "0.4"
+piston ="0.5"
 piston2d-graphics = "0.4"
-pistoncore-glutin_window = "0.6"
+pistoncore-glutin_window = "0.7"
 piston2d-opengl_graphics = "0.6"
