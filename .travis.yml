@@ -1,4 +1,8 @@
 language: rust
 sudo: false
+addons:
+    apt:
+        packages:
+            - libsdl2-dev
 rust:
     - stable
