@@ -35,13 +35,15 @@ pub struct App {
     squares: Vec<Square>,
 }
 
+const STDSIZE:f64 = 50.0;
 impl App {
+
     fn select(&mut self, position: &[f64;2]) {
         for s in &mut self.squares {
-            s.selected = position[0]< s.position[0]+25.0 &&
-                position[0]> s.position[0]-25.0 &&
-                position[1]< s.position[1]+25.0 &&
-                position[1]> s.position[1]-25.0;
+            s.selected = position[0]< s.position[0]+STDSIZE/2.0 &&
+                position[0]> s.position[0]-STDSIZE/2.0 &&
+                position[1]< s.position[1]+STDSIZE/2.0 &&
+                position[1]> s.position[1]-STDSIZE/2.0;
         };
     }
 
@@ -58,10 +60,10 @@ impl App {
             // Clear the screen.
             clear(BLACK, gl);
             for s in squares.iter() {
-                let square = rectangle::square(0.0, 0.0, 50.0);
+                let square = rectangle::square(0.0, 0.0, STDSIZE);
                 let transform = c.transform.trans(s.position[0], s.position[1])
                     .rot_rad(s.rotation)
-                    .trans(-25.0, -25.0);
+                    .trans(-STDSIZE/2.0, -STDSIZE/2.0);
 
                 // Draw the box RED if selected
                 if s.selected {
