@@ -1,11 +1,15 @@
 # Ideas
 
-## Rock Paper Scissor
+## The Game
 
-Player A has an advantage against player B, player B against C and player C
-against A.
+The game works like rock-paper-scissors. Player *A* has an advantage against 
+player *B*, player *B* against *C* and player *C* against *A*.
 
-So A > B > C > A
+So initially `A > B > C > A` holds true.
+
+The goal of the game is to overwhelm the other players without being defeated
+yourself. So be aware: Attacking your inferior opponent will result in you
+having a weak defense against your stronger enemy.
 
 ## Simple Graphics
 
