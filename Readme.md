@@ -4,6 +4,8 @@ rpsrtsrs
 
 Rock-Paper-Scissors-Real-Time-Strategie written in Rust :wink:
 
+![](docs/images/game-board-initial.png)
+
 ## Building
 
 ### Linux
