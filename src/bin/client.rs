@@ -42,7 +42,6 @@ impl App {
         const YELLOW: [f32; 4] = [1.0, 1.0,  0.22, 1.0];
         const ORANGE: [f32; 4] = [1.0, 0.61, 0.22, 1.0];
 
-        const UNIT_SIZE: f64 = 50.0;
         const FRONT_THICKNESS: f64 = 5.0;
 
         let units = &self.units;
@@ -55,19 +54,15 @@ impl App {
             for s in units.iter() {
 
                 // Create a triangle polygon. The initial orientation is facing east.
-                let triangle: Polygon = &[
-                    [0.0, UNIT_SIZE / 2.0], // Left
-                    [UNIT_SIZE, UNIT_SIZE], // Top right
-                    [UNIT_SIZE, 0.0],       // Bottom right
-                ];
+                let triangle: Polygon = &s.get_shape();
 
                 // Create a border on the front of the polygon. This is a trapezoid.
                 // Because the angle of the trapezoid side is 22.5°, we know that `dx` is always `2 * dy`.
                 let front: Polygon = &[
-                    [UNIT_SIZE, UNIT_SIZE],                                           // Top right
-                    [UNIT_SIZE, 0.0],                                                 // Bottom right
-                    [UNIT_SIZE - FRONT_THICKNESS, FRONT_THICKNESS / 2.0],             // Bottom left
-                    [UNIT_SIZE - FRONT_THICKNESS, UNIT_SIZE - FRONT_THICKNESS / 2.0], // Top left
+                    [s.size, s.size],                                           // Top right
+                    [s.size, 0.0],                                                 // Bottom right
+                    [s.size - FRONT_THICKNESS, FRONT_THICKNESS / 2.0],             // Bottom left
+                    [s.size - FRONT_THICKNESS, s.size - FRONT_THICKNESS / 2.0], // Top left
                 ];
 
                 // Create the transformation matrix

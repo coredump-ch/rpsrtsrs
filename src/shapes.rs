@@ -1,4 +1,6 @@
 //! Shapes in the game, like units (triangles) and buildings (squares).
+extern crate graphics;
+use self::graphics::types::Triangle;
 
 
 pub struct Unit {
@@ -6,6 +8,7 @@ pub struct Unit {
     pub position: [f64; 2],
     pub target: [f64; 2],
     pub selected: bool,
+    pub size: f64,
 }
 
 
@@ -17,8 +20,18 @@ impl Unit {
             rotation: rotation,
             position: position,
             target: position,
-            selected: false
+            selected: false,
+            size: 50.0,
         }
+    }
+
+    pub fn get_shape(&self) -> Triangle {
+        let triangle: Triangle = [
+            [0.0, self.size / 2.0], // Left
+            [self.size, self.size], // Top right
+            [self.size, 0.0],       // Bottom right
+        ];
+        triangle
     }
 
 }
