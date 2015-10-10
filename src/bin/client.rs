@@ -32,29 +32,43 @@ impl App {
     }
 
     fn render(&mut self, args: &RenderArgs) {
-        use graphics::*;
+        use graphics::{polygon, clear, Transformed};
+        use graphics::types::Polygon;
 
-        const BLACK: [f32; 4] = [0.0, 0.0,  0.0, 1.0];
-        const YELLOW:[f32; 4] = [1.0, 1.0,  0.22, 1.0];
-        const ORANGE:[f32; 4] = [1.0, 0.61, 0.22, 1.0];
+        const BLACK:  [f32; 4] = [0.0, 0.0,  0.0, 1.0];
+        const YELLOW: [f32; 4] = [1.0, 1.0,  0.22, 1.0];
+        const ORANGE: [f32; 4] = [1.0, 0.61, 0.22, 1.0];
+
+        const UNIT_SIZE: f64 = 50.0;
 
         let units = &self.units;
 
         self.gl.draw(args.viewport(), |c, gl| {
+
             // Clear the screen.
             clear(BLACK, gl);
+
             for s in units.iter() {
-                let square = rectangle::square(0.0, 0.0, 50.0);
+
+                // Create a triangle polygon. The initial orientation is facing east.
+                let triangle: Polygon = &[
+                    [0.0, UNIT_SIZE / 2.0], // Left
+                    [UNIT_SIZE, UNIT_SIZE], // Top right
+                    [UNIT_SIZE, 0.0],       // Bottom right
+                ];
+
+                // Create the transoformation matrix
                 let transform = c.transform.trans(s.position[0], s.position[1])
                     .rot_rad(s.rotation)
                     .trans(-25.0, -25.0);
 
-                // Draw the box RED if selected
+                // Draw the unit ORANGE if selected
                 if s.selected {
-                    rectangle(ORANGE, square, transform, gl);
+                    polygon(ORANGE, triangle, transform, gl);
                 } else {
-                    rectangle(YELLOW, square, transform, gl);
+                    polygon(YELLOW, triangle, transform, gl);
                 }
+
             }
         });
     }
