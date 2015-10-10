@@ -8,10 +8,15 @@ Rock-Paper-Scissors-Real-Time-Strategie written in Rust :wink:
 
 ## Building
 
+The source is split up into three parts:
+ - common
+ - client
+ - server
+
 ### Linux
 Just run
 
-    $ cargo build
+    $ make
 
 To build with the default configuration. If you want to change the window
 backend use any of the following:

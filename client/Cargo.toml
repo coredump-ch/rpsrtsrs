@@ -1,5 +1,5 @@
 [package]
-name = "rpsrtsrs"
+name = "rpsrtsrs-client"
 version = "0.1.0"
 authors = ["Raphael Nestler <raphael.nestler@gmail.com>"]
 
@@ -8,6 +8,9 @@ rand = "*"
 piston ="0.5"
 piston2d-graphics = "0.4"
 piston2d-opengl_graphics = "0.6"
+
+[dependencies.common]
+path="../common"
 
 [dependencies.pistoncore-sdl2_window]
 version = "0.6"
