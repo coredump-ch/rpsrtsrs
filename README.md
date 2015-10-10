@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/rnestler/rpsrtsrs.svg?branch=master)](https://travis-ci.org/rnestler/rpsrtsrs)
+[![Build Status](https://travis-ci.org/coredump-ch/rpsrtsrs.svg?branch=master)](https://travis-ci.org/coredump-ch/rpsrtsrs)
 
 # rpsrtsrs
 
