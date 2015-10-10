@@ -2,23 +2,17 @@ extern crate piston;
 extern crate graphics;
 extern crate opengl_graphics;
 extern crate rand;
-#[cfg(feature = "include_sdl2")]
-extern crate sdl2_window;
-#[cfg(feature = "include_glfw")]
-extern crate glfw_window;
-#[cfg(feature = "include_glutin")]
-extern crate glutin_window;
+#[cfg(feature = "include_sdl2")] extern crate sdl2_window;
+#[cfg(feature = "include_glfw")] extern crate glfw_window;
+#[cfg(feature = "include_glutin")] extern crate glutin_window;
 
 use piston::window::WindowSettings;
 use opengl_graphics::{ GlGraphics, OpenGL };
 use piston::input::*;
 use piston::event_loop::*;
-#[cfg(feature = "include_sdl2")]
-use sdl2_window::Sdl2Window as Window;
-#[cfg(feature = "include_glfw")]
-use glfw_window::GlfwWindow as Window;
-#[cfg(feature = "include_glutin")]
-use glutin_window::GlutinWindow as Window;
+#[cfg(feature = "include_sdl2")] use sdl2_window::Sdl2Window as Window;
+#[cfg(feature = "include_glfw")] use glfw_window::GlfwWindow as Window;
+#[cfg(feature = "include_glutin")] use glutin_window::GlutinWindow as Window;
 
 pub struct Square {
     rotation: f64,   // Rotation for the square.
