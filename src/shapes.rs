@@ -10,13 +10,15 @@ pub struct Unit {
 
 
 impl Unit {
-    pub fn new(position: [f64;2]) -> Unit {
-        println!("Create unit at {:?}", position);
+
+    pub fn new(position: [f64;2], rotation: f64) -> Unit {
+        println!("Create unit at {:?} with rotation {}", position, rotation);
         Unit {
-            rotation: 0.0,
+            rotation: rotation,
             position: position,
             target: position,
             selected: false
         }
     }
+
 }

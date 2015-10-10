@@ -116,9 +116,14 @@ fn main() {
         units: vec![],
     };
     for _ in 0..10 {
+        // Create new unit in random location
         let x = rand::random::<f64>() * 600.0 + 40.0;
         let y = rand::random::<f64>() * 440.0 + 40.0;
-        app.units.push(Unit::new([x,y]));
+        let r = (rand::random::<f64>() - 0.5) * PI;
+        let unit = Unit::new([x,y], r);
+
+        // Register unit
+        app.units.push(unit);
     }
 
     let mut cursor = [0.0,0.0];
