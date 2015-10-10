@@ -38,11 +38,12 @@ impl App {
         use graphics::Transformed;
         use graphics::types::Polygon;
 
-        const BLACK:  [f32; 4] = [0.0, 0.0,  0.0, 1.0];
+        const BLACK:  [f32; 4] = [0.0, 0.0,  0.0,  1.0];
         const YELLOW: [f32; 4] = [1.0, 1.0,  0.22, 1.0];
         const ORANGE: [f32; 4] = [1.0, 0.61, 0.22, 1.0];
 
         const UNIT_SIZE: f64 = 50.0;
+        const FRONT_THICKNESS: f64 = 5.0;
 
         let units = &self.units;
 
@@ -60,7 +61,16 @@ impl App {
                     [UNIT_SIZE, 0.0],       // Bottom right
                 ];
 
-                // Create the transoformation matrix
+                // Create a border on the front of the polygon. This is a trapezoid.
+                // Because the angle of the trapezoid side is 22.5°, we know that `dx` is always `2 * dy`.
+                let front: Polygon = &[
+                    [UNIT_SIZE, UNIT_SIZE],                                           // Top right
+                    [UNIT_SIZE, 0.0],                                                 // Bottom right
+                    [UNIT_SIZE - FRONT_THICKNESS, FRONT_THICKNESS / 2.0],             // Bottom left
+                    [UNIT_SIZE - FRONT_THICKNESS, UNIT_SIZE - FRONT_THICKNESS / 2.0], // Top left
+                ];
+
+                // Create the transformation matrix
                 let transform = c.transform.trans(s.position[0], s.position[1])
                     .rot_rad(s.rotation)
                     .trans(-25.0, -25.0);
@@ -68,8 +78,10 @@ impl App {
                 // Draw the unit ORANGE if selected
                 if s.selected {
                     polygon(ORANGE, triangle, transform, gl);
+                    polygon(YELLOW, front, transform, gl);
                 } else {
                     polygon(YELLOW, triangle, transform, gl);
+                    polygon(ORANGE, front, transform, gl);
                 }
 
             }
