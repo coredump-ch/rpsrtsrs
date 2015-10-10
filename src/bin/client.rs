@@ -2,6 +2,7 @@ extern crate piston;
 extern crate graphics;
 extern crate opengl_graphics;
 extern crate rand;
+extern crate rpsrtsrs;
 #[cfg(feature = "include_sdl2")] extern crate sdl2_window;
 #[cfg(feature = "include_glfw")] extern crate glfw_window;
 #[cfg(feature = "include_glutin")] extern crate glutin_window;
@@ -13,25 +14,7 @@ use piston::event_loop::*;
 #[cfg(feature = "include_sdl2")] use sdl2_window::Sdl2Window as Window;
 #[cfg(feature = "include_glfw")] use glfw_window::GlfwWindow as Window;
 #[cfg(feature = "include_glutin")] use glutin_window::GlutinWindow as Window;
-
-pub struct Square {
-    rotation: f64,   // Rotation for the square.
-    position: [f64; 2],
-    target: [f64; 2],
-    selected: bool,
-}
-
-impl Square {
-    fn new(position: [f64;2]) -> Square {
-        println!("Create square at {:?}", position);
-        Square {
-            rotation: 0.0,
-            position: position,
-            target: position,
-            selected: false
-        }
-    }
-}
+use rpsrtsrs::shapes::Square;
 
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
@@ -138,4 +121,3 @@ fn main() {
         }
     }
 }
-
