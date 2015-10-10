@@ -25,9 +25,10 @@ You will need to install [freetype](https://github.com/PistonDevelopers/freetype
 
 ## Running
 
-If everything built fine you can use cargo to run:
+If everything built fine you can use cargo to run the client or the server:
 
-    $ cargo run
+    $ cargo run --bin client
+    $ cargo run --bin server
 
 ## Ideas
 See [ideas](ideas.md)
