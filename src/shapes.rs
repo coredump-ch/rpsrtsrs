@@ -1,18 +1,18 @@
-//! Shapes in the game, like triangles and squares.
+//! Shapes in the game, like units (triangles) and buildings (squares).
 
 
-pub struct Square {
-    pub rotation: f64,   // Rotation for the square.
+pub struct Unit {
+    pub rotation: f64,
     pub position: [f64; 2],
     pub target: [f64; 2],
     pub selected: bool,
 }
 
 
-impl Square {
-    pub fn new(position: [f64;2]) -> Square {
-        println!("Create square at {:?}", position);
-        Square {
+impl Unit {
+    pub fn new(position: [f64;2]) -> Unit {
+        println!("Create unit at {:?}", position);
+        Unit {
             rotation: 0.0,
             position: position,
             target: position,
