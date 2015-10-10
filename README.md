@@ -1,10 +1,10 @@
-[![Build Status](https://travis-ci.org/rnestler/rpsrtsrs.svg?branch=master)](https://travis-ci.org/rnestler/rpsrtsrs)
+[![Build Status](https://travis-ci.org/coredump-ch/rpsrtsrs.svg?branch=master)](https://travis-ci.org/coredump-ch/rpsrtsrs)
 
 # rpsrtsrs
 
-Rock-Paper-Scissors-Real-Time-Strategie written in Rust :wink:
+Rock-Paper-Scissors-Real-Time-Strategy game written in Rust :wink:
 
-![](docs/images/game-board-initial.png)
+![screnshot](docs/images/game-board-initial.png)
 
 ## Prequisites
 
