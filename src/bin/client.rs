@@ -120,7 +120,7 @@ fn main() {
     let window : Window = WindowSettings::new(
         "rpsrtsrs",
         [640, 480]
-    ).exit_on_esc(true).into();
+    ).exit_on_esc(true).samples(8).into();
 
     // Create a new game and run it.
     let mut app = App {
