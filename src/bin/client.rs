@@ -7,6 +7,8 @@ extern crate rpsrtsrs;
 #[cfg(feature = "include_glfw")] extern crate glfw_window;
 #[cfg(feature = "include_glutin")] extern crate glutin_window;
 
+
+use std::f64::consts::PI;
 use piston::window::WindowSettings;
 use opengl_graphics::{ GlGraphics, OpenGL };
 use piston::input::*;
@@ -32,7 +34,8 @@ impl App {
     }
 
     fn render(&mut self, args: &RenderArgs) {
-        use graphics::{polygon, clear, Transformed};
+        use graphics::{polygon, clear};
+        use graphics::Transformed;
         use graphics::types::Polygon;
 
         const BLACK:  [f32; 4] = [0.0, 0.0,  0.0, 1.0];
@@ -85,9 +88,14 @@ impl App {
         for s in &mut self.units {
             if s.selected {
                 s.target = position;
-                let d0 = position[0]-s.position[0];
-                let d1 = position[1]-s.position[1];
-                s.rotation = (d1/d0).atan();
+                let dx = position[0] - s.position[0];
+                let dy = position[1] - s.position[1];
+                if dx.is_sign_negative() {
+                    s.rotation = (dy / dx).atan() + PI;
+                } else {
+                    s.rotation = (dy / dx).atan();
+                }
+                println!("dx: {}, dy: {}, new rotation: {}", dx, dy, s.rotation);
             }
         }
     }
