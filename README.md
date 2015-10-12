@@ -4,7 +4,7 @@
 
 Rock-Paper-Scissors-Real-Time-Strategy game written in Rust :wink:
 
-![screnshot](docs/images/game-board-initial.png)
+![screenshot](docs/images/game-board-initial.png)
 
 ## Prequisites
 
