@@ -65,18 +65,21 @@ impl App {
                     [s.size - FRONT_THICKNESS, s.size - FRONT_THICKNESS / 2.0], // Top left
                 ];
 
-                // Create the transformation matrix
-                let transform = c.transform.trans(s.position[0], s.position[1])
+                // Rotate the front to match the unit
+                let transform_front = c.transform.trans(s.position[0], s.position[1])
                     .rot_rad(s.rotation)
                     .trans(-25.0, -25.0);
 
+                // We don't need to apply any transformation to the units
+                let transform_triangle = c.transform;
+
                 // Draw the unit ORANGE if selected
                 if s.selected {
-                    polygon(ORANGE, triangle, transform, gl);
-                    polygon(YELLOW, front, transform, gl);
+                    polygon(ORANGE, triangle, transform_triangle, gl);
+                    polygon(YELLOW, front, transform_front, gl);
                 } else {
-                    polygon(YELLOW, triangle, transform, gl);
-                    polygon(ORANGE, front, transform, gl);
+                    polygon(YELLOW, triangle, transform_triangle, gl);
+                    polygon(ORANGE, front, transform_front, gl);
                 }
 
             }
