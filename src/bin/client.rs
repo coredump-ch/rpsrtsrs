@@ -24,9 +24,9 @@ pub struct App {
 }
 
 impl App {
-    fn select(&mut self, position: &[f64;2]) {
+    fn select(&mut self, position: [f64;2]) {
         for u in &mut self.units {
-            u.selected = u.is_hit(*position);
+            u.selected = u.is_hit(position);
         };
     }
 
@@ -141,7 +141,7 @@ fn main() {
         }
         if let Some(Button::Mouse(button)) = e.press_args() {
             match button {
-                MouseButton::Left  => app.select(&cursor),
+                MouseButton::Left  => app.select(cursor),
                 MouseButton::Right => app.move_selected(cursor),
                 _ => println!("Pressed mouse button '{:?}'", button),
             }
