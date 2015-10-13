@@ -1,7 +1,6 @@
 //! Shapes in the game, like units (triangles) and buildings (squares).
 extern crate graphics;
 use self::graphics::types::Triangle;
-use self::graphics::math::Matrix2d;
 use self::graphics::math;
 
 
@@ -27,6 +26,7 @@ impl Unit {
         }
     }
 
+    /// Return the base shape of the unit.
     pub fn get_shape(&self) -> Triangle {
         // Base shape
         let mut triangle: Triangle = [
@@ -51,4 +51,51 @@ impl Unit {
         triangle
     }
 
+    /// Calculate whether or not this unit is hit by the point at the specified position.
+    pub fn is_hit(&self, position: [f64;2]) -> bool {
+        let hitbox = self.get_shape();
+        math::inside_triangle(hitbox, position)
+    }
+
+}
+
+
+#[cfg(test)]
+mod test {
+    use std::f64::consts::FRAC_PI_2;
+    use super::Unit;
+
+    #[test]
+    fn test_hitbox() {
+        // Create a unit at position (100,100) that has been rotated by 90° CW.
+        //
+        //    /\
+        //   /__\
+        //
+        let unit = Unit::new([100.0, 100.0], FRAC_PI_2);
+
+        // The following points should be outside of the hitbox.
+        assert_eq!(unit.is_hit([0.0, 0.0]), false);
+        assert_eq!(unit.is_hit([unit.size, unit.size]), false);
+
+        // The following five points should be inside the hitbox.
+        //      .
+        //     /.\
+        //   ./_._\.
+        //
+        let vertical_distance = unit.size / 2.0 - 1.0;
+        assert_eq!(unit.is_hit([100.0, 100.0]), true);
+        assert_eq!(unit.is_hit([100.0, 100.0 - vertical_distance]), true);
+        assert_eq!(unit.is_hit([100.0, 100.0 + vertical_distance]), true);
+        assert_eq!(unit.is_hit([100.0 - vertical_distance, 100.0 + vertical_distance]), true);
+        assert_eq!(unit.is_hit([100.0 + vertical_distance, 100.0 + vertical_distance]), true);
+
+        // The following two points should be outside the hitbox.
+        //
+        //  . /\ .
+        //   /__\
+        //
+        assert_eq!(unit.is_hit([100.0 - vertical_distance, 100.0]), false);
+        assert_eq!(unit.is_hit([100.0 + vertical_distance, 100.0]), false);
+    }
 }

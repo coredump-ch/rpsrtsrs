@@ -25,11 +25,8 @@ pub struct App {
 
 impl App {
     fn select(&mut self, position: &[f64;2]) {
-        for s in &mut self.units {
-            s.selected = position[0]< s.position[0]+25.0 &&
-                position[0]> s.position[0]-25.0 &&
-                position[1]< s.position[1]+25.0 &&
-                position[1]> s.position[1]-25.0;
+        for u in &mut self.units {
+            u.selected = u.is_hit(*position);
         };
     }
 
