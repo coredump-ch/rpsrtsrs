@@ -4,6 +4,17 @@
 
 Rock-Paper-Scissors-Real-Time-Strategy game written in Rust :wink:
 
+The game is to be played by at least 3 players. Like in Rock-Paper-Scissors,
+each player has an advantage against one of the players and a disadvantage
+against the other one (`A > B > C > A`).
+
+The user therefore has to decide whether to defend his units against the
+stronger user for survival, or whether to attack the weaker user for fame and
+glory.
+
+Two units (represented as triangles) can be combined to a building (a square).
+In that form, they cannot attack anymore, but have a defense bonus.
+
 ![screenshot](docs/images/game-board-initial.png)
 
 ## Prequisites
