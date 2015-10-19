@@ -2,88 +2,89 @@ extern crate piston;
 extern crate graphics;
 extern crate opengl_graphics;
 extern crate rand;
-#[cfg(feature = "include_sdl2")]
-extern crate sdl2_window;
-#[cfg(feature = "include_glfw")]
-extern crate glfw_window;
-#[cfg(feature = "include_glutin")]
-extern crate glutin_window;
+extern crate rpsrtsrs;
+#[cfg(feature = "include_sdl2")] extern crate sdl2_window;
+#[cfg(feature = "include_glfw")] extern crate glfw_window;
+#[cfg(feature = "include_glutin")] extern crate glutin_window;
 
+
+use std::f64::consts::PI;
 use piston::window::WindowSettings;
 use opengl_graphics::{ GlGraphics, OpenGL };
 use piston::input::*;
 use piston::event_loop::*;
-#[cfg(feature = "include_sdl2")]
-use sdl2_window::Sdl2Window as Window;
-#[cfg(feature = "include_glfw")]
-use glfw_window::GlfwWindow as Window;
-#[cfg(feature = "include_glutin")]
-use glutin_window::GlutinWindow as Window;
-
-pub struct Square {
-    rotation: f64,   // Rotation for the square.
-    position: [f64; 2],
-    target: [f64; 2],
-    selected: bool,
-}
-
-impl Square {
-    fn new(position: [f64;2]) -> Square {
-        println!("Create square at {:?}", position);
-        Square {
-            rotation: 0.0,
-            position: position,
-            target: position,
-            selected: false
-        }
-    }
-}
+#[cfg(feature = "include_sdl2")] use sdl2_window::Sdl2Window as Window;
+#[cfg(feature = "include_glfw")] use glfw_window::GlfwWindow as Window;
+#[cfg(feature = "include_glutin")] use glutin_window::GlutinWindow as Window;
+use rpsrtsrs::shapes::Unit;
 
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
-    squares: Vec<Square>,
+    units: Vec<Unit>,
 }
 
 impl App {
-    fn select(&mut self, position: &[f64;2]) {
-        for s in &mut self.squares {
-            s.selected = position[0]< s.position[0]+25.0 &&
-                position[0]> s.position[0]-25.0 &&
-                position[1]< s.position[1]+25.0 &&
-                position[1]> s.position[1]-25.0;
+    fn select(&mut self, position: [f64;2]) {
+        for u in &mut self.units {
+            u.selected = u.is_hit(position);
         };
     }
 
     fn render(&mut self, args: &RenderArgs) {
-        use graphics::*;
+        use graphics::{polygon, clear};
+        use graphics::Transformed;
+        use graphics::types::Polygon;
 
-        const BLACK: [f32; 4] = [0.0, 0.0,  0.0, 1.0];
-        const YELLOW:[f32; 4] = [1.0, 1.0,  0.22, 1.0];
-        const ORANGE:[f32; 4] = [1.0, 0.61, 0.22, 1.0];
+        const BLACK:  [f32; 4] = [0.0, 0.0,  0.0,  1.0];
+        const YELLOW: [f32; 4] = [1.0, 1.0,  0.22, 1.0];
+        const ORANGE: [f32; 4] = [1.0, 0.61, 0.22, 1.0];
 
-        let squares = &self.squares;
+        const FRONT_THICKNESS: f64 = 5.0;
+
+        let units = &self.units;
 
         self.gl.draw(args.viewport(), |c, gl| {
+
             // Clear the screen.
             clear(BLACK, gl);
-            for s in squares.iter() {
-                let square = rectangle::square(0.0, 0.0, 50.0);
-                let transform = c.transform.trans(s.position[0], s.position[1])
+
+            for s in units.iter() {
+
+                // Create a triangle polygon. The initial orientation is facing east.
+                let triangle: Polygon = &s.get_shape();
+
+                // Create a border on the front of the polygon. This is a trapezoid.
+                // Because the angle of the trapezoid side is 22.5°, we know that `dx` is always `2 * dy`.
+                let front: Polygon = &[
+                    [s.size, s.size],                                           // Top right
+                    [s.size, 0.0],                                                 // Bottom right
+                    [s.size - FRONT_THICKNESS, FRONT_THICKNESS / 2.0],             // Bottom left
+                    [s.size - FRONT_THICKNESS, s.size - FRONT_THICKNESS / 2.0], // Top left
+                ];
+
+                // Rotate the front to match the unit
+                let transform_front = c.transform.trans(s.position[0], s.position[1])
                     .rot_rad(s.rotation)
                     .trans(-25.0, -25.0);
 
-                // Draw the box RED if selected
+                // We don't need to apply any transformation to the units
+                let transform_triangle = c.transform;
+
+                // Draw the unit ORANGE if selected
                 if s.selected {
-                    rectangle(ORANGE, square, transform, gl);
+                    polygon(ORANGE, triangle, transform_triangle, gl);
+                    polygon(YELLOW, front, transform_front, gl);
                 } else {
-                    rectangle(YELLOW, square, transform, gl);
+                    polygon(YELLOW, triangle, transform_triangle, gl);
+                    polygon(ORANGE, front, transform_front, gl);
                 }
+
             }
         });
     }
 
     fn update(&mut self, args: &UpdateArgs) {
-        for s in &mut self.squares {
+        for s in &mut self.units {
             let diff = [s.target[0]-s.position[0], s.target[1]-s.position[1]];
             s.position[0] += diff[0]/2.0*args.dt;
             s.position[1] += diff[1]/2.0*args.dt;
@@ -91,12 +92,17 @@ impl App {
     }
 
     fn move_selected(&mut self, position: [f64;2]) {
-        for s in &mut self.squares {
+        for s in &mut self.units {
             if s.selected {
                 s.target = position;
-                let d0 = position[0]-s.position[0];
-                let d1 = position[1]-s.position[1];
-                s.rotation = (d1/d0).atan();
+                let dx = position[0] - s.position[0];
+                let dy = position[1] - s.position[1];
+                if dx.is_sign_negative() {
+                    s.rotation = (dy / dx).atan() + PI;
+                } else {
+                    s.rotation = (dy / dx).atan();
+                }
+                println!("dx: {}, dy: {}, new rotation: {}", dx, dy, s.rotation);
             }
         }
     }
@@ -109,17 +115,22 @@ fn main() {
     let window : Window = WindowSettings::new(
         "rpsrtsrs",
         [640, 480]
-    ).exit_on_esc(true).into();
+    ).exit_on_esc(true).samples(8).into();
 
     // Create a new game and run it.
     let mut app = App {
         gl: GlGraphics::new(opengl),
-        squares: vec![],
+        units: vec![],
     };
     for _ in 0..10 {
+        // Create new unit in random location
         let x = rand::random::<f64>() * 600.0 + 40.0;
         let y = rand::random::<f64>() * 440.0 + 40.0;
-        app.squares.push(Square::new([x,y]));
+        let r = (rand::random::<f64>() - 0.5) * PI;
+        let unit = Unit::new([x,y], r);
+
+        // Register unit
+        app.units.push(unit);
     }
 
     let mut cursor = [0.0,0.0];
@@ -130,7 +141,7 @@ fn main() {
         }
         if let Some(Button::Mouse(button)) = e.press_args() {
             match button {
-                MouseButton::Left  => app.select(&cursor),
+                MouseButton::Left  => app.select(cursor),
                 MouseButton::Right => app.move_selected(cursor),
                 _ => println!("Pressed mouse button '{:?}'", button),
             }
@@ -144,4 +155,3 @@ fn main() {
         }
     }
 }
-
