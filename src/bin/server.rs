@@ -15,7 +15,7 @@ fn main() {
     let game = Game{
         players: vec![
             Player{
-                color: colors::ORANGE,
+                id: 0,
                 units: vec![],
             }]
     };

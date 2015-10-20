@@ -10,8 +10,17 @@ pub struct Unit {
 /// A player has a color and consists of N Unit's
 #[derive(RustcEncodable, RustcDecodable, PartialEq)]
 pub struct Player {
-    pub color: [f32; 4],
+    pub id: u32,
     pub units: Vec<Unit>,
+}
+
+impl Player {
+    pub fn new(id: u32) -> Player {
+        Player{
+            id: id,
+            units: vec![],
+        }
+    }
 }
 
 /// The whole game consists of N players
