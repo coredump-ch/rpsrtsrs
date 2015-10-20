@@ -1,5 +1,5 @@
 /// The state of a single unit
-#[derive(RustcEncodable, RustcDecodable, PartialEq)]
+#[derive(RustcEncodable, RustcDecodable, PartialEq, Debug)]
 pub struct Unit {
     pub position: [u64; 2],
     pub angle: u64,
@@ -7,8 +7,8 @@ pub struct Unit {
     pub health: u64,
 }
 
-/// A player has a color and consists of N Unit's
-#[derive(RustcEncodable, RustcDecodable, PartialEq)]
+/// A player has an ID and consists of 0..N `Unit`s
+#[derive(RustcEncodable, RustcDecodable, PartialEq, Debug)]
 pub struct Player {
     pub id: u32,
     pub units: Vec<Unit>,
@@ -24,7 +24,7 @@ impl Player {
 }
 
 /// The whole game consists of N players
-#[derive(RustcEncodable, RustcDecodable, PartialEq)]
+#[derive(RustcEncodable, RustcDecodable, PartialEq, Debug)]
 pub struct Game {
     pub players: Vec<Player>,
 }
