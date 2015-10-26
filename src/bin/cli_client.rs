@@ -19,7 +19,13 @@ fn main() {
 
     loop {
         let game_state: DecodingResult<Game> = decode_from(&mut stream, SizeLimit::Infinite);
-        println!("{:?}", game_state);
+        match game_state {
+            Ok(game) => println!("{:?}", game),
+            Err(e) => {
+                println!("{:?}", e);
+                return;
+            }
+        }
     }
 }
 
