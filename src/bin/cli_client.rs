@@ -1,17 +1,43 @@
 extern crate bincode;
 extern crate rustc_serialize;
 extern crate rpsrtsrs;
+extern crate docopt;
+
 use std::net::TcpStream;
+use std::ops::Deref;
 
 use rpsrtsrs::state::{Game};
 use rpsrtsrs::network::{Message};
+
+use docopt::Docopt;
 
 use bincode::SizeLimit;
 use bincode::rustc_serialize::{decode_from, encode_into};
 use bincode::rustc_serialize::DecodingResult;
 
+static USAGE: &'static str = "
+Usage: cli_client [-p PORT] [-i IP]
+
+Options:
+    -p PORT  The port to connect to [default: 8080].
+    -i IP    The ipv4 address to connect to [default: 127.0.0.1].
+";
+
+#[derive(RustcDecodable, Debug)]
+struct Args {
+    flag_p: u16,
+    flag_i: String,
+}
+
 fn main() {
-    let mut stream = TcpStream::connect("127.0.0.1:8080").unwrap();
+    let args: Args = Docopt::new(USAGE).and_then(|d| d.decode())
+                                       .unwrap_or_else(|e| e.exit());
+    let host = args.flag_i;
+    let port = args.flag_p;
+
+    println!("connecting to host: {:?}:{:?}", host, port);
+
+    let mut stream = TcpStream::connect((host.deref(), port)).unwrap();
 
     encode_into(&Message::ClientHello, &mut stream, SizeLimit::Infinite).unwrap();
     let world: DecodingResult<Message> = decode_from(&mut stream, SizeLimit::Infinite);
