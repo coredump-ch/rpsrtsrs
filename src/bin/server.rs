@@ -38,6 +38,24 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
                             id, world_lock.clone()), SizeLimit::Infinite).unwrap();
                     stream.write(&encoded).unwrap();
                 },
+                Message::ClientReconnect(id) => {
+                    let world_lock = world.lock().unwrap();
+
+                    match world_lock.game.players.iter().find(|player|player.id==id) {
+                        Some(player) => {
+                            println!("Found you :)");
+                            let encoded: Vec<u8> = encode(&Message::ServerHello(
+                                    id, world_lock.clone()), SizeLimit::Infinite).unwrap();
+                            stream.write(&encoded).unwrap();
+                        },
+                        None => {
+                            println!("Reconnect to id {} not possible", id);
+                            let encoded: Vec<u8> = encode(&Message::Error, SizeLimit::Infinite).unwrap();
+                            stream.write(&encoded).unwrap();
+                            return
+                        }
+                    }
+                },
                 _ => {
                     println!("Did not receive ClientHello{:?}", message);
                     let encoded: Vec<u8> = encode(&Message::Error, SizeLimit::Infinite).unwrap();
