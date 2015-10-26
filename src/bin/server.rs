@@ -54,8 +54,10 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
 
     // GameState loop
     loop {
-        let world_lock = world.lock().unwrap();
-        let encoded: Vec<u8> = encode(&world_lock.game, SizeLimit::Infinite).unwrap();
+        let encoded: Vec<u8> = {
+            let world_lock = world.lock().unwrap();
+            encode(&world_lock.game, SizeLimit::Infinite).unwrap()
+        };
         match stream.write(&encoded) {
             Err(e) => {
                 println!("Error: {:?}", e);
