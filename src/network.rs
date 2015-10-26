@@ -10,6 +10,7 @@ pub enum Command {
 pub enum Message {
     Error,
     ClientHello,
+    ClientReconnect(u32),
     ServerHello(u32, World),
     UpdateGamestate(Game),
     Command(Command),
