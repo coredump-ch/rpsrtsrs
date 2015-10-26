@@ -42,6 +42,7 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
                     println!("Did not receive ClientHello{:?}", message);
                     let encoded: Vec<u8> = encode(&Message::Error, SizeLimit::Infinite).unwrap();
                     stream.write(&encoded).unwrap();
+                    return
                 }
             }
         }
