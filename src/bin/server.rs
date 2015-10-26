@@ -7,7 +7,7 @@ use std::ops::Deref;
 use std::sync::{Mutex,Arc};
 use std::thread;
 
-use rpsrtsrs::state::{World, Player};
+use rpsrtsrs::state::{World, Player, Unit};
 use rpsrtsrs::network::{Message};
 
 use bincode::SizeLimit;
@@ -27,7 +27,12 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
                     let mut world_lock = world.lock().unwrap();
                     let id = world_lock.game.players.last().map_or(0, |player| player.id+1);
                     // create new player for the newly connected client
-                    world_lock.game.players.push(Player::new(id));
+                    let mut player = Player::new(id);
+                    player.units.push(Unit::new([ 50, 50]));
+                    player.units.push(Unit::new([ 50,100]));
+                    player.units.push(Unit::new([100, 50]));
+                    player.units.push(Unit::new([100,100]));
+                    world_lock.game.players.push(player);
 
                     let encoded: Vec<u8> = encode(&Message::ServerHello(
                             id, world_lock.clone()), SizeLimit::Infinite).unwrap();
