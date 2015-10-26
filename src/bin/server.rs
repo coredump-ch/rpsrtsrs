@@ -65,12 +65,32 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
     }
 }
 
+fn update_world(world: SafeWorldState) {
+    loop {
+        {
+            let mut world_lock = world.lock().unwrap();
+            for player in world_lock.game.players.iter_mut() {
+                for unit in player.units.iter_mut() {
+                    unit.update(500);
+                    println!("{:?}", unit);
+                }
+            }
+        }
+        thread::sleep_ms(500);
+    }
+}
+
 fn main() {
     let world = Arc::new(Mutex::new(World::new(800, 600)));
 
     let socket_addr = "127.0.0.1:8080".to_string();
     let tcp_listener = TcpListener::bind(socket_addr.deref()).unwrap();
     println!("Start server: {:?}", tcp_listener);
+
+    let world_clone = world.clone();
+    thread::spawn(move || {
+        update_world(world_clone);
+    });
 
     for stream in tcp_listener.incoming() {
         match stream {
