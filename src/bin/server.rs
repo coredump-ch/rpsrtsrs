@@ -99,6 +99,33 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
         }
     }
 
+    let mut command_stream = stream.try_clone().unwrap();
+    // Command receiver loop
+    thread::spawn(move || {
+        loop {
+            let client_message: DecodingResult<Message> = decode_from(&mut command_stream, SizeLimit::Bounded(128));
+            match client_message {
+                Ok(message) => {
+                    match message {
+                        Message::Command(command) => {
+                            println!("Did receive command {:?}", command);
+                        },
+                        _ => {
+                            println!("Did receive unexpected message: {:?}", message);
+                            let encoded: Vec<u8> = encode(&Message::Error, SizeLimit::Infinite).unwrap();
+                            command_stream.write(&encoded).unwrap();
+                            return
+                        },
+                    }
+                },
+                Err(e) => {
+                    println!("Error: {:?}", e);
+                    return;
+                }
+            };
+        }
+    });
+
     // GameState loop
     loop {
         let encoded: Vec<u8> = {
