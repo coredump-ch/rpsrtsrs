@@ -4,10 +4,13 @@ version = "0.1.0"
 authors = ["Raphael Nestler <raphael.nestler@gmail.com>"]
 
 [dependencies]
-rand = "*"
-piston ="0.5"
-piston2d-graphics = "0.4"
-piston2d-opengl_graphics = "0.6"
+rand = "^0.3"
+piston = "^0.5"
+piston2d-graphics = "^0.4"
+piston2d-opengl_graphics = "^0.6"
+bincode = "^0.4"
+rustc-serialize = "^0.3"
+docopt = "^0.6"
 
 [dependencies.pistoncore-sdl2_window]
 version = "0.6"
