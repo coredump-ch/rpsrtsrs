@@ -1,11 +1,15 @@
 extern crate bincode;
 extern crate rustc_serialize;
 extern crate rpsrtsrs;
+extern crate docopt;
+
 use std::net::{TcpListener, TcpStream};
 use std::io::Write;
 use std::ops::Deref;
 use std::sync::{Mutex,Arc};
 use std::thread;
+
+use docopt::Docopt;
 
 use rpsrtsrs::state::{World, Player, Unit};
 use rpsrtsrs::network::{Message};
@@ -101,13 +105,31 @@ fn update_world(world: SafeWorldState) {
     }
 }
 
-fn main() {
-    let world = Arc::new(Mutex::new(World::new(800, 600)));
+static USAGE: &'static str = "
+Usage: server [-p PORT] [-i IP]
 
-    let socket_addr = "127.0.0.1:8080".to_string();
-    let tcp_listener = TcpListener::bind(socket_addr.deref()).unwrap();
+Options:
+    -p PORT  The port to listen on [default: 8080].
+    -i IP    The ipv4 address to listen on [default: 127.0.0.1].
+    -r ID    Reconnect with the given ID
+";
+
+#[derive(RustcDecodable, Debug)]
+struct Args {
+    flag_p: u16,
+    flag_i: String,
+}
+
+fn main() {
+    let args: Args = Docopt::new(USAGE).and_then(|d| d.decode())
+                                       .unwrap_or_else(|e| e.exit());
+    let host = args.flag_i;
+    let port = args.flag_p;
+
+    let tcp_listener = TcpListener::bind((host.deref(),port)).unwrap();
     println!("Start server: {:?}", tcp_listener);
 
+    let world = Arc::new(Mutex::new(World::new(800, 600)));
     let world_clone = world.clone();
     thread::spawn(move || {
         update_world(world_clone);
