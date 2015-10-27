@@ -24,7 +24,7 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
 
     // handle client hello
     let client_message: DecodingResult<Message> = decode_from(&mut stream, SizeLimit::Bounded(128));
-    match client_message {
+    let id = match client_message {
         Ok(message) => {
             match message {
                 Message::ClientHello => {
@@ -41,16 +41,18 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
                     let encoded: Vec<u8> = encode(&Message::ServerHello(
                             id, world_lock.clone()), SizeLimit::Infinite).unwrap();
                     stream.write(&encoded).unwrap();
+                    id
                 },
                 Message::ClientReconnect(id) => {
                     let world_lock = world.lock().unwrap();
 
                     match world_lock.game.players.iter().find(|player|player.id==id) {
-                        Some(player) => {
+                        Some(_) => {
                             println!("Found you :)");
                             let encoded: Vec<u8> = encode(&Message::ServerHello(
                                     id, world_lock.clone()), SizeLimit::Infinite).unwrap();
                             stream.write(&encoded).unwrap();
+                            id
                         },
                         None => {
                             println!("Reconnect to id {} not possible", id);
@@ -72,20 +74,47 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
             println!("{:?}", e);
             return
         }
-    }
+    };
 
     // GameState loop
+    let mut update_stream = stream.try_clone().unwrap();
+    thread::spawn(move || {
+        loop {
+            let encoded: Vec<u8> = {
+                let world_lock = world.lock().unwrap();
+                encode(&world_lock.game, SizeLimit::Infinite).unwrap()
+            };
+            match update_stream.write(&encoded) {
+                Err(e) => {
+                    println!("Error: {:?}", e);
+                    return
+                }
+                _ =>  thread::sleep_ms(1000),
+            };
+        }
+    });
+
+    // Command receiver loop
     loop {
-        let encoded: Vec<u8> = {
-            let world_lock = world.lock().unwrap();
-            encode(&world_lock.game, SizeLimit::Infinite).unwrap()
-        };
-        match stream.write(&encoded) {
+        let client_message: DecodingResult<Message> = decode_from(&mut stream, SizeLimit::Bounded(128));
+        match client_message {
+            Ok(message) => {
+                match message {
+                    Message::Command(command) => {
+                        println!("Did receive command {:?}", command);
+                    },
+                    _ => {
+                        println!("Did receive unexpected message: {:?}", message);
+                        let encoded: Vec<u8> = encode(&Message::Error, SizeLimit::Infinite).unwrap();
+                        stream.write(&encoded).unwrap();
+                        return
+                    },
+                }
+            },
             Err(e) => {
-                println!("Error: {:?}", e);
-                return;
-            }
-            _ =>  thread::sleep_ms(1000),
+                println!("{:?}", e);
+                return
+            },
         };
     }
 }
