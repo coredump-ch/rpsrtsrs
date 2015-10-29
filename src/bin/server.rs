@@ -126,8 +126,8 @@ fn update_world(world: SafeWorldState) {
             for player in world_lock.game.players.iter_mut() {
                 for unit in player.units.iter_mut() {
                     unit.update(500);
-                    println!("{:?}", unit);
                 }
+                println!("{:?}", player);
             }
         }
         thread::sleep_ms(500);
