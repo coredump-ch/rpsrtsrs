@@ -4,21 +4,21 @@ version = "0.1.0"
 authors = ["Raphael Nestler <raphael.nestler@gmail.com>"]
 
 [dependencies]
-rand = "*"
-piston ="0.5"
-piston2d-graphics = "0.4"
-piston2d-opengl_graphics = "0.6"
+rand = "0.3"
+piston = "0.22"
+piston2d-graphics = "0.16"
+piston2d-opengl_graphics = "0.28"
 
 [dependencies.pistoncore-sdl2_window]
-version = "0.6"
+version = "0.30"
 optional = true
 
 [dependencies.pistoncore-glfw_window]
-version = "0.5"
+version = "0.22"
 optional = true
 
 [dependencies.pistoncore-glutin_window]
-version = "0.7"
+version = "0.26"
 optional = true
 
 [features]

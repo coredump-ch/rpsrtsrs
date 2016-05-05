@@ -112,10 +112,10 @@ fn main() {
     let opengl = OpenGL::V3_2;
 
     // Create an Glutin window.
-    let window : Window = WindowSettings::new(
+    let mut window : Window = WindowSettings::new(
         "rpsrtsrs",
         [640, 480]
-    ).exit_on_esc(true).samples(8).into();
+    ).exit_on_esc(true).samples(8).build().unwrap();
 
     // Create a new game and run it.
     let mut app = App {
@@ -135,7 +135,8 @@ fn main() {
 
     let mut cursor = [0.0,0.0];
 
-    for e in window.events() {
+    let mut events = window.events();
+    while let Some(e) = events.next(&mut window) {
         if let Some(r) = e.render_args() {
             app.render(&r);
         }
