@@ -1,18 +1,17 @@
-use state::{Game,World};
+use state::{Game, World, UnitId, ClientId};
 
 #[derive(RustcEncodable, RustcDecodable, PartialEq, Debug)]
 pub enum Command {
     /// Move command with unit ID and target
-    Move(u32, [u64;2]),
+    Move(UnitId, [u64;2]),
 }
 
 #[derive(RustcEncodable, RustcDecodable, PartialEq, Debug)]
 pub enum Message {
     Error,
     ClientHello,
-    ClientReconnect(u32),
-    ServerHello(u32, World),
+    ClientReconnect(ClientId),
+    ServerHello(ClientId, World),
     UpdateGamestate(Game),
     Command(Command),
 }
-
