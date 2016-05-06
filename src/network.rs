@@ -1,4 +1,4 @@
-use state::{Game, World, UnitId, ClientId};
+use state::{GameState, WorldState, UnitId, ClientId};
 
 #[derive(RustcEncodable, RustcDecodable, PartialEq, Debug)]
 pub enum Command {
@@ -11,7 +11,7 @@ pub enum Message {
     Error,
     ClientHello,
     ClientReconnect(ClientId),
-    ServerHello(ClientId, World),
-    UpdateGamestate(Game),
+    ServerHello(ClientId, WorldState),
+    UpdateGamestate(GameState),
     Command(Command),
 }
