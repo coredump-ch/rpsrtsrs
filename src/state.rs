@@ -1,3 +1,7 @@
+//! Data structures that can be shared between the server and the client.
+//!
+//! All these structures should be serializable, so that they can be
+//! transferred from the server to the client over the network.
 extern crate rand;
 
 use std::convert::Into;
