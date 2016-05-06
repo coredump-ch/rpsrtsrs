@@ -8,6 +8,7 @@ use std::io::Write;
 use std::ops::Deref;
 use std::sync::{Mutex,Arc};
 use std::thread;
+use std::time::Duration;
 
 use docopt::Docopt;
 
@@ -46,7 +47,7 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
                     let world_lock = world.lock().unwrap();
 
                     match world_lock.game.players.iter().find(|player|player.id==id) {
-                        Some(player) => {
+                        Some(_) => {
                             println!("Found you :)");
                             let encoded: Vec<u8> = encode(&Message::ServerHello(
                                     id, world_lock.clone()), SizeLimit::Infinite).unwrap();
@@ -85,7 +86,7 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
                 println!("Error: {:?}", e);
                 return;
             }
-            _ =>  thread::sleep_ms(1000),
+            _ => thread::sleep(Duration::from_millis(1000)),
         };
     }
 }
@@ -101,7 +102,7 @@ fn update_world(world: SafeWorldState) {
                 }
             }
         }
-        thread::sleep_ms(500);
+        thread::sleep(Duration::from_millis(500));
     }
 }
 
