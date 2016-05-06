@@ -19,8 +19,9 @@ In that form, they cannot attack anymore, but have a defense bonus.
 
 ## Prequisites
 
-* SDL 2 (`libsdl2-dev` on Ubuntu)
-* FreeType (`libfreetype6-dev` on Ubuntu)
+ * SDL 2 (`libsdl2-dev` on Ubuntu)
+ * FreeType (`libfreetype6-dev` on Ubuntu)
+ * Rust version 1.8.0 or higher
 
 ## Building
 
