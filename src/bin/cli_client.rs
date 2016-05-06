@@ -6,7 +6,7 @@ extern crate docopt;
 use std::net::TcpStream;
 use std::ops::Deref;
 
-use rpsrtsrs::state::{Game, ClientId};
+use rpsrtsrs::state::{Game};
 use rpsrtsrs::network::{Message};
 
 use docopt::Docopt;
@@ -28,7 +28,7 @@ Options:
 struct Args {
     flag_p: u16,
     flag_i: String,
-    flag_r: Option<ClientId>,
+    flag_r: Option<u32>,
 }
 
 fn main() {
@@ -44,7 +44,7 @@ fn main() {
 
     match reconnect {
         Some(id) => {
-            encode_into(&Message::ClientReconnect(id), &mut stream, SizeLimit::Infinite).unwrap();
+            encode_into(&Message::ClientReconnect(id.into()), &mut stream, SizeLimit::Infinite).unwrap();
         },
         None => {
             encode_into(&Message::ClientHello, &mut stream, SizeLimit::Infinite).unwrap();
