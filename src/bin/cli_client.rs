@@ -6,7 +6,7 @@ extern crate docopt;
 use std::net::TcpStream;
 use std::ops::Deref;
 
-use rpsrtsrs::state::{Game};
+use rpsrtsrs::state::{GameState};
 use rpsrtsrs::network::{Message};
 
 use docopt::Docopt;
@@ -54,7 +54,7 @@ fn main() {
     println!("{:?}", server_hello);
 
     loop {
-        let game_state: DecodingResult<Game> = decode_from(&mut stream, SizeLimit::Infinite);
+        let game_state: DecodingResult<GameState> = decode_from(&mut stream, SizeLimit::Infinite);
         match game_state {
             Ok(game) => println!("{:?}", game),
             Err(e) => {

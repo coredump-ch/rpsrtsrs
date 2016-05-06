@@ -12,14 +12,14 @@ use std::time::Duration;
 
 use docopt::Docopt;
 
-use rpsrtsrs::state::{World, Player, Unit};
+use rpsrtsrs::state::{WorldState, Player, Unit};
 use rpsrtsrs::network::{Message};
 
 use bincode::SizeLimit;
 use bincode::rustc_serialize::{decode_from, encode};
 use bincode::rustc_serialize::DecodingResult;
 
-type SafeWorldState = Arc<Mutex<World>>;
+type SafeWorldState = Arc<Mutex<WorldState>>;
 
 fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
 
@@ -154,7 +154,7 @@ fn main() {
     let tcp_listener = TcpListener::bind((host.deref(),port)).unwrap();
     println!("Start server: {:?}", tcp_listener);
 
-    let world = Arc::new(Mutex::new(World::new(800, 600)));
+    let world = Arc::new(Mutex::new(WorldState::new(800, 600)));
     let world_clone = world.clone();
     thread::spawn(move || {
         update_world(world_clone);

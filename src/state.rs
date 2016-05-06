@@ -99,28 +99,33 @@ impl Player {
     }
 }
 
-/// The whole game consists of N players
+/// Data related to the current game.
+///
+/// This needs to be transferred to the client every time the game state
+/// changes.
 #[derive(RustcEncodable, RustcDecodable, PartialEq, Debug, Clone)]
-pub struct Game {
+pub struct GameState {
     pub players: Vec<Player>,
 }
 
-/// The world consists of an x and y size
+/// Data related to the entire world, like width and height.
+///
+/// This needs to be transferred to the client only once, on connecting.
 #[derive(RustcEncodable, RustcDecodable, PartialEq, Debug, Clone)]
-pub struct World {
+pub struct WorldState {
     /// Width of the world in mm
     pub x: u64,
     /// Height of the world in mm
     pub y: u64,
-    pub game: Game,
+    pub game: GameState,
 }
 
-impl World {
-    pub fn new(x: u64, y: u64) -> World {
-        World {
+impl WorldState {
+    pub fn new(x: u64, y: u64) -> WorldState {
+        WorldState {
             x: x,
             y: y,
-            game: Game{
+            game: GameState {
                 players: vec![],
             }
         }
