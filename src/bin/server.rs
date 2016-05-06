@@ -13,7 +13,7 @@ use std::time::Duration;
 use docopt::Docopt;
 
 use rpsrtsrs::state::{WorldState, Player, Unit};
-use rpsrtsrs::network::{Message};
+use rpsrtsrs::network::{Message, Command};
 
 use bincode::SizeLimit;
 use bincode::rustc_serialize::{decode_from, encode};
@@ -100,6 +100,7 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
     }
 
     let mut command_stream = stream.try_clone().unwrap();
+    let world_clone = world.clone();
     // Command receiver loop
     thread::spawn(move || {
         loop {
@@ -108,7 +109,8 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
                 Ok(message) => {
                     match message {
                         Message::Command(command) => {
-                            println!("Did receive command {:?}", command);
+                            let world_lock = world_clone.lock().unwrap();
+                            handle_command(&mut command_stream, &world_lock, &command);
                         },
                         _ => {
                             println!("Did receive unexpected message: {:?}", message);
@@ -139,6 +141,13 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
             }
             _ => thread::sleep(Duration::from_millis(1000)),
         };
+    }
+}
+
+fn handle_command(mut stream: &TcpStream, world: &WorldState, command: &Command) {
+    println!("Did receive command {:?}", command);
+    match command {
+        &Command::Move(id, target) => println!("Move {} to {:?}!", id, target),
     }
 }
 
