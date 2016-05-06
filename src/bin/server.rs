@@ -29,49 +29,73 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
         Ok(message) => {
             match message {
                 Message::ClientHello => {
+                    // Get exclusive world access
                     let mut world_lock = world.lock().unwrap();
-                    let id = world_lock.game.players.last().map_or(0, |player| player.id+1);
-                    // create new player for the newly connected client
+
+                    // Get next free ID. This assumes the players list is
+                    // sorted ascending by ID.
+                    let id = world_lock.game.players.last()
+                                                    .map_or(0, |player| player.id.0 + 1);
+
+                    // Create new player for the newly connected client
                     let mut player = Player::new(id);
-                    player.units.push(Unit::new([ 50, 50]));
-                    player.units.push(Unit::new([ 50,100]));
-                    player.units.push(Unit::new([100, 50]));
-                    player.units.push(Unit::new([100,100]));
+
+                    // Create four initial units for the player
+                    player.units.push(Unit::new_random([ 50,  50]));
+                    player.units.push(Unit::new_random([ 50, 100]));
+                    player.units.push(Unit::new_random([100,  50]));
+                    player.units.push(Unit::new_random([100, 100]));
+
+                    // Add player to the world
+                    let player_id = player.id;
                     world_lock.game.players.push(player);
 
-                    let encoded: Vec<u8> = encode(&Message::ServerHello(
-                            id, world_lock.clone()), SizeLimit::Infinite).unwrap();
+                    // Send ServerHello message
+                    let encoded: Vec<u8> = encode(
+                        &Message::ServerHello(player_id, world_lock.clone()),
+                        SizeLimit::Infinite
+                    ).unwrap();
                     stream.write(&encoded).unwrap();
                 },
                 Message::ClientReconnect(id) => {
+                    // Get exclusive world access
                     let world_lock = world.lock().unwrap();
 
-                    match world_lock.game.players.iter().find(|player|player.id==id) {
+                    // Find player with specified id
+                    match world_lock.game.players.iter().find(|player| player.id == id) {
                         Some(_) => {
                             println!("Found you :)");
-                            let encoded: Vec<u8> = encode(&Message::ServerHello(
-                                    id, world_lock.clone()), SizeLimit::Infinite).unwrap();
+
+                            // Send ServerHello message
+                            let encoded: Vec<u8> = encode(
+                                &Message::ServerHello(id, world_lock.clone()),
+                                SizeLimit::Infinite
+                            ).unwrap();
                             stream.write(&encoded).unwrap();
                         },
                         None => {
                             println!("Reconnect to id {} not possible", id);
-                            let encoded: Vec<u8> = encode(&Message::Error, SizeLimit::Infinite).unwrap();
+
+                            // Send Error message
+                            let encoded: Vec<u8> = encode(
+                                &Message::Error,
+                                SizeLimit::Infinite).unwrap();
                             stream.write(&encoded).unwrap();
-                            return
+                            return  // Don't enter game loop
                         }
                     }
                 },
                 _ => {
-                    println!("Did not receive ClientHello{:?}", message);
+                    println!("Did not receive ClientHello: {:?}", message);
                     let encoded: Vec<u8> = encode(&Message::Error, SizeLimit::Infinite).unwrap();
                     stream.write(&encoded).unwrap();
-                    return
+                    return  // Don't enter game loop
                 }
             }
         }
         Err(e) => {
-            println!("{:?}", e);
-            return
+            println!("Error: {:?}", e);
+            return  // Don't enter game loop
         }
     }
 

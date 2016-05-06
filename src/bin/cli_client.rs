@@ -6,7 +6,7 @@ extern crate docopt;
 use std::net::TcpStream;
 use std::ops::Deref;
 
-use rpsrtsrs::state::{Game};
+use rpsrtsrs::state::{Game, ClientId};
 use rpsrtsrs::network::{Message};
 
 use docopt::Docopt;
@@ -28,7 +28,7 @@ Options:
 struct Args {
     flag_p: u16,
     flag_i: String,
-    flag_r: Option<u32>,
+    flag_r: Option<ClientId>,
 }
 
 fn main() {
@@ -50,8 +50,8 @@ fn main() {
             encode_into(&Message::ClientHello, &mut stream, SizeLimit::Infinite).unwrap();
         }
     }
-    let world: DecodingResult<Message> = decode_from(&mut stream, SizeLimit::Infinite);
-    println!("{:?}", world);
+    let server_hello: DecodingResult<Message> = decode_from(&mut stream, SizeLimit::Infinite);
+    println!("{:?}", server_hello);
 
     loop {
         let game_state: DecodingResult<Game> = decode_from(&mut stream, SizeLimit::Infinite);
