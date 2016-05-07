@@ -30,25 +30,25 @@ fn main() {
     ).exit_on_esc(true).samples(8).build().unwrap();
 
     // Create a new game and run it.
-    let mut app = App {
-        gl: GlGraphics::new(opengl),
-        units: vec![],
-    };
-    for _ in 0..10 {
-        // Create new unit in random location
-        let x = rand::random::<f64>() * 600.0 + 40.0;
-        let y = rand::random::<f64>() * 440.0 + 40.0;
-        let r = (rand::random::<f64>() - 0.5) * PI;
-        let unit = Unit::new([x,y], r);
+    let mut app = App::new(GlGraphics::new(opengl));
+    let world_state = app.world_state.clone();
+    let mut network_client = NetworkClient::new(("127.0.0.1", 8080), world_state.clone());
 
-        // Register unit
-        app.units.push(unit);
-    }
+    network_client.connect();
+    network_client.update();
+
 
     let mut cursor = [0.0,0.0];
 
     let mut events = window.events();
     while let Some(e) = events.next(&mut window) {
+
+        let world_lock = world_state.lock().unwrap();
+        app.units = vec![];
+        for unit in world_lock.game.players[0].units.iter() {
+            app.units.push(Unit::new(unit.position.clone(), 0.0f64));
+        }
+
         if let Some(r) = e.render_args() {
             app.render(&r);
         }

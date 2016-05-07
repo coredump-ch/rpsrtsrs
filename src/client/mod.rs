@@ -1,15 +1,92 @@
+use std::sync::{Mutex, Arc};
+use std::net::{SocketAddr, ToSocketAddrs};
 use std::f64::consts::PI;
 use opengl_graphics::GlGraphics;
 use piston::input::{RenderArgs, UpdateArgs};
 
+use std::thread;
+use std::net::TcpStream;
+use network::{Command, Message};
+
+use bincode::SizeLimit;
+use bincode::rustc_serialize::{decode_from, encode_into};
+use bincode::rustc_serialize::DecodingResult;
+
+use state::{WorldState, GameState};
 use shapes::Unit;
+
+
+pub struct NetworkClient {
+    pub world_state: Arc<Mutex<WorldState>>,
+    server_addr: SocketAddr,
+    stream: Option<TcpStream>,
+}
+
+impl NetworkClient {
+    pub fn new<T: ToSocketAddrs>(server_addrs: T, world_state: Arc<Mutex<WorldState>>) -> NetworkClient {
+        let server_addr = server_addrs.to_socket_addrs().unwrap().next().unwrap();
+        NetworkClient {
+            world_state: world_state,
+            server_addr: server_addr,
+            stream: None,
+        }
+    }
+
+    // todo: Maybe return client_id here? Would allow the application to reconnect...
+    pub fn connect(&mut self) {
+        let mut stream = TcpStream::connect(self.server_addr).unwrap();
+        encode_into(&Message::ClientHello, &mut stream, SizeLimit::Infinite).unwrap();
+        let server_hello: DecodingResult<Message> = decode_from(&mut stream, SizeLimit::Infinite);
+
+        self.stream = Some(stream);
+        if let Ok(Message::ServerHello(_, world_state)) = server_hello {
+            let mut world_state_lock = self.world_state.lock().unwrap();
+            *world_state_lock = world_state;
+        } else {
+            panic!("Could not connect to server");
+        }
+    }
+
+    pub fn update(self) {
+        thread::spawn(move || {
+            let mut stream = self.stream.expect("Stream not here :(");
+            loop {
+                let game_state: DecodingResult<GameState> = decode_from(&mut stream,
+                                                                        SizeLimit::Infinite);
+                match game_state {
+                    Ok(game) => {
+                        println!("{:?}", game);
+                        let mut world_state_lock = self.world_state.lock().unwrap();
+                        world_state_lock.game = game;
+
+                    }
+                    Err(e) => {
+                        println!("{:?}", e);
+                        return;
+                    }
+                }
+            }
+        });
+    }
+}
+
 
 pub struct App {
     pub gl: GlGraphics, // OpenGL drawing backend.
+    pub world_state: Arc<Mutex<WorldState>>,
     pub units: Vec<Unit>,
 }
 
 impl App {
+    pub fn new(gl: GlGraphics) -> App {
+        App {
+            gl: gl,
+            world_state: Arc::new(Mutex::new(WorldState::new(0, 0))),
+            units: vec![],
+        }
+    }
+
+
     pub fn select(&mut self, position: [f64;2]) {
         for u in &mut self.units {
             u.selected = u.is_hit(position);
