@@ -13,7 +13,7 @@ use std::time::Duration;
 use docopt::Docopt;
 
 use rpsrtsrs::state::{WorldState, Player, Unit};
-use rpsrtsrs::network::{Message};
+use rpsrtsrs::network::{Message, Command};
 
 use bincode::SizeLimit;
 use bincode::rustc_serialize::{decode_from, encode};
@@ -99,6 +99,35 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
         }
     }
 
+    let mut command_stream = stream.try_clone().unwrap();
+    let world_clone = world.clone();
+    // Command receiver loop
+    thread::spawn(move || {
+        loop {
+            let client_message: DecodingResult<Message> = decode_from(&mut command_stream, SizeLimit::Bounded(128));
+            match client_message {
+                Ok(message) => {
+                    match message {
+                        Message::Command(command) => {
+                            let world_lock = world_clone.lock().unwrap();
+                            handle_command(&mut command_stream, &world_lock, &command);
+                        },
+                        _ => {
+                            println!("Did receive unexpected message: {:?}", message);
+                            let encoded: Vec<u8> = encode(&Message::Error, SizeLimit::Infinite).unwrap();
+                            command_stream.write(&encoded).unwrap();
+                            return
+                        },
+                    }
+                },
+                Err(e) => {
+                    println!("Error: {:?}", e);
+                    return;
+                }
+            };
+        }
+    });
+
     // GameState loop
     loop {
         let encoded: Vec<u8> = {
@@ -115,6 +144,13 @@ fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
     }
 }
 
+fn handle_command(mut stream: &TcpStream, world: &WorldState, command: &Command) {
+    println!("Did receive command {:?}", command);
+    match command {
+        &Command::Move(id, target) => println!("Move {} to {:?}!", id, target),
+    }
+}
+
 fn update_world(world: SafeWorldState) {
     loop {
         {
@@ -122,8 +158,8 @@ fn update_world(world: SafeWorldState) {
             for player in world_lock.game.players.iter_mut() {
                 for unit in player.units.iter_mut() {
                     unit.update(500);
-                    println!("{:?}", unit);
                 }
+                println!("{:?}", player);
             }
         }
         thread::sleep(Duration::from_millis(500));
