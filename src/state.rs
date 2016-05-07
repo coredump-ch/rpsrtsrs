@@ -2,8 +2,6 @@
 //!
 //! All these structures should be serializable, so that they can be
 //! transferred from the server to the client over the network.
-extern crate rand;
-
 use std::convert::Into;
 use std::fmt;
 
@@ -47,6 +45,7 @@ pub struct Unit {
     /// The unit identifier
     pub id: UnitId,
 
+    // TODO: Support negative coordinates
     /// X/Y position in the world in mm
     pub position: [u64; 2],
 
@@ -71,13 +70,6 @@ impl Unit {
             speed_vector: [0,0],
             health: 100_0000,
         }
-    }
-
-    // Like `new`, but generate a random unit id.
-    // TODO: Id conflicts are possible, so this needs to be changed.
-    pub fn new_random(position: [u64; 2]) -> Unit {
-        let id = rand::random::<u32>();
-        Unit::new(id, position)
     }
 
     pub fn update(&mut self, dt_ms: u64) {
@@ -109,6 +101,7 @@ impl Player {
 /// changes.
 #[derive(RustcEncodable, RustcDecodable, PartialEq, Debug, Clone)]
 pub struct GameState {
+    /// List of players
     pub players: Vec<Player>,
 }
 
@@ -135,4 +128,3 @@ impl WorldState {
         }
     }
 }
-

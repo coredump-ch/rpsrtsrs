@@ -4,6 +4,7 @@ use std::net::{TcpListener, TcpStream, SocketAddr, ToSocketAddrs};
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
+use std::ops::RangeFrom;
 
 use bincode::SizeLimit;
 use bincode::rustc_serialize::{decode_from, encode};
@@ -16,6 +17,10 @@ use network::{Message, Command};
 pub struct Server {
     socket_addr: SocketAddr,
     world: Arc<Mutex<WorldState>>,
+    /// Generator that returns sequential unit IDs
+    unit_id_generator: Arc<Mutex<RangeFrom<u32>>>,
+    /// Generator that returns sequential client IDs
+    client_id_generator: Arc<Mutex<RangeFrom<u32>>>,
 }
 
 impl Server {
@@ -27,6 +32,8 @@ impl Server {
         Ok(Server {
             socket_addr: addr,
             world: world,
+            client_id_generator: Arc::new(Mutex::new(0..)),
+            unit_id_generator: Arc::new(Mutex::new(0..)),
         })
     }
 
@@ -43,9 +50,12 @@ impl Server {
             match stream {
                 Ok(stream) => {
                     let world_clone = self.world.clone();
+                    let client_id_generator_clone = self.client_id_generator.clone();
+                    let unit_id_generator_clone = self.unit_id_generator.clone();
                     println!("Spawning thread...");
                     thread::spawn(move || {
-                        handle_client(stream, world_clone);
+                        handle_client(stream, world_clone,
+                                      client_id_generator_clone, unit_id_generator_clone);
                     });
                 }
                 Err(e) => {
@@ -59,7 +69,9 @@ impl Server {
 pub type SafeWorldState = Arc<Mutex<WorldState>>;
 
 pub fn handle_client(mut stream: TcpStream,
-                     world: SafeWorldState) {
+                     world: SafeWorldState,
+                     client_id_generator: Arc<Mutex<RangeFrom<u32>>>,
+                     unit_id_generator: Arc<Mutex<RangeFrom<u32>>>) {
 
     // handle client hello
     let client_message: DecodingResult<Message> = decode_from(&mut stream, SizeLimit::Bounded(128));
@@ -70,20 +82,21 @@ pub fn handle_client(mut stream: TcpStream,
                     // Get exclusive world access
                     let mut world_lock = world.lock().unwrap();
 
-                    // Get next free ID. This assumes the players list is
-                    // sorted ascending by ID.
-                    let id = world_lock.game.players.last()
-                                                    .map_or(0, |player| player.id.0 + 1);
-
                     // Create new player for the newly connected client
-                    let mut player = Player::new(id);
+                    let client_id = client_id_generator
+                        .lock().expect("Could not lock client_id_generator mutex")
+                        .next().expect("No more client IDs available!");
+                    let mut player = Player::new(client_id);
 
                     // Create four initial units for the player
                     let coords = [
                         [50, 50], [50, 100], [100, 50], [100, 100],
                     ];
                     for coord in coords.iter() {
-                        player.units.push(Unit::new_random(*coord));
+                        let unit_id = unit_id_generator
+                            .lock().expect("Could not lock unit_id_generator mutex")
+                            .next().expect("No more unit IDs available!");
+                        player.units.push(Unit::new(unit_id, *coord));
                     }
 
                     // Add player to the world
