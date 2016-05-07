@@ -17,6 +17,8 @@ In that form, they cannot attack anymore, but have a defense bonus.
 
 ![screenshot](docs/images/game-board-initial.png)
 
+[Development Docs](http://coredump-ch.github.io/rpsrtsrs/)
+
 ## Prequisites
 
  * SDL 2 (`libsdl2-dev` on Ubuntu)
