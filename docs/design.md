@@ -7,6 +7,34 @@ The clients send commands to the server and receive the current gamestate.
 
 ## Network protocol
 
+### State machine
+
+This is the state machine on the Server:
+
+    +-------+   +-----------+   +----------------------------+
+    |*start*+--->ClientHello+--->ServerHello(ClientId, World)+-+
+    +-------+   +-----------+   +----------------------------+ |
+                                                               |
+                +-----------+                                  |
+                |*connected*<----------------------------------+--+-+
+                ++-+--------+                                     | |
+                 | |                                              | |
+                 | | +----------------+   +---------------------+ | |
+                 | +->Command(Command)+--->UpdateGamestate(Game)+-+ |
+                 |   +----------------+   +---------------------+   |
+                 |                                                  |
+                 |   +-------------------------+                    |
+                 +--->ClientReconnect(ClientId)+--------------------+
+                     +-------------------------+
+
+- Initially, the server waits for a `ClientHello` message.
+- It responds with a `ServerHello` message that contains the client ID that can
+  be used by the client for reconnecting with a `ClientReconnect` message when
+  the connection was lost.
+- Then the server enters a loop and waits for a `Command` from the client. When
+  such a command results in a world change, the world is sent back to the client
+  as an `UpdateGamestate` message.
+
 ### Connect
 
 Hello from client! Server responds with an ID that was assigned to the client.
