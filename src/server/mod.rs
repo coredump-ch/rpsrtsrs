@@ -90,7 +90,7 @@ pub fn handle_client(mut stream: TcpStream,
 
                     // Create four initial units for the player
                     let coords = [
-                        [50, 50], [50, 100], [100, 50], [100, 100],
+                        [50.0f64, 50.0f64], [50.0f64, 100.0f64], [100.0f64, 50.0f64], [100.0f64, 100.0f64],
                     ];
                     for coord in coords.iter() {
                         let unit_id = unit_id_generator

@@ -32,8 +32,8 @@ struct Args {
 
     cmd_read: bool,
     arg_id: Option<u32>,
-    arg_x: Option<u64>,
-    arg_y: Option<u64>,
+    arg_x: Option<f64>,
+    arg_y: Option<f64>,
 }
 
 fn main() {
