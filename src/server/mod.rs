@@ -1,8 +1,10 @@
 use std::io::Write;
-use std::net::{TcpListener, TcpStream};
-use std::sync::{Mutex,Arc};
+use std::io::Result as IoResult;
+use std::net::{TcpListener, TcpStream, SocketAddr, ToSocketAddrs};
+use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
+use std::ops::RangeFrom;
 
 use bincode::SizeLimit;
 use bincode::rustc_serialize::{decode_from, encode};
@@ -11,9 +13,65 @@ use bincode::rustc_serialize::DecodingResult;
 use state::{WorldState, Player, Unit};
 use network::{Message, Command};
 
+/// A `Server` instance holds global server state.
+pub struct Server {
+    socket_addr: SocketAddr,
+    world: Arc<Mutex<WorldState>>,
+    /// Generator that returns sequential unit IDs
+    unit_id_generator: Arc<Mutex<RangeFrom<u32>>>,
+    /// Generator that returns sequential client IDs
+    client_id_generator: Arc<Mutex<RangeFrom<u32>>>,
+}
+
+impl Server {
+    pub fn new<T: ToSocketAddrs>(addr: T,
+                                world_size: (u64, u64))
+                                -> IoResult<Server> {
+        let addr = try!(addr.to_socket_addrs()).next().unwrap();
+        let world = Arc::new(Mutex::new(WorldState::new(world_size.0, world_size.1)));
+        Ok(Server {
+            socket_addr: addr,
+            world: world,
+            client_id_generator: Arc::new(Mutex::new(0..)),
+            unit_id_generator: Arc::new(Mutex::new(0..)),
+        })
+    }
+
+    pub fn serve(&self) {
+        let tcp_listener = TcpListener::bind(self.socket_addr).unwrap();
+        println!("Start server: {:?}", tcp_listener);
+
+        let world_clone = self.world.clone();
+        thread::spawn(move || {
+            update_world(world_clone);
+        });
+
+        for stream in tcp_listener.incoming() {
+            match stream {
+                Ok(stream) => {
+                    let world_clone = self.world.clone();
+                    let client_id_generator_clone = self.client_id_generator.clone();
+                    let unit_id_generator_clone = self.unit_id_generator.clone();
+                    println!("Spawning thread...");
+                    thread::spawn(move || {
+                        handle_client(stream, world_clone,
+                                      client_id_generator_clone, unit_id_generator_clone);
+                    });
+                }
+                Err(e) => {
+                    println!("{:?}", e);
+                }
+            }
+        }
+    }
+}
+
 pub type SafeWorldState = Arc<Mutex<WorldState>>;
 
-pub fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
+pub fn handle_client(mut stream: TcpStream,
+                     world: SafeWorldState,
+                     client_id_generator: Arc<Mutex<RangeFrom<u32>>>,
+                     unit_id_generator: Arc<Mutex<RangeFrom<u32>>>) {
 
     // handle client hello
     let client_message: DecodingResult<Message> = decode_from(&mut stream, SizeLimit::Bounded(128));
@@ -24,19 +82,22 @@ pub fn handle_client(mut stream: TcpStream, world: SafeWorldState) {
                     // Get exclusive world access
                     let mut world_lock = world.lock().unwrap();
 
-                    // Get next free ID. This assumes the players list is
-                    // sorted ascending by ID.
-                    let id = world_lock.game.players.last()
-                                                    .map_or(0, |player| player.id.0 + 1);
-
                     // Create new player for the newly connected client
-                    let mut player = Player::new(id);
+                    let client_id = client_id_generator
+                        .lock().expect("Could not lock client_id_generator mutex")
+                        .next().expect("No more client IDs available!");
+                    let mut player = Player::new(client_id);
 
                     // Create four initial units for the player
-                    player.units.push(Unit::new_random([ 50,  50]));
-                    player.units.push(Unit::new_random([ 50, 100]));
-                    player.units.push(Unit::new_random([100,  50]));
-                    player.units.push(Unit::new_random([100, 100]));
+                    let coords = [
+                        [50, 50], [50, 100], [100, 50], [100, 100],
+                    ];
+                    for coord in coords.iter() {
+                        let unit_id = unit_id_generator
+                            .lock().expect("Could not lock unit_id_generator mutex")
+                            .next().expect("No more unit IDs available!");
+                        player.units.push(Unit::new(unit_id, *coord));
+                    }
 
                     // Add player to the world
                     let player_id = player.id;
