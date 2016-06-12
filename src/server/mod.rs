@@ -162,8 +162,8 @@ pub fn handle_client(mut stream: TcpStream,
                 Ok(message) => {
                     match message {
                         Message::Command(command) => {
-                            let world_lock = world_clone.lock().unwrap();
-                            handle_command(&mut command_stream, &world_lock, &command);
+                            let mut world_lock = world_clone.lock().unwrap();
+                            handle_command(&mut world_lock, &command);
                         },
                         _ => {
                             println!("Did receive unexpected message: {:?}", message);
@@ -197,10 +197,21 @@ pub fn handle_client(mut stream: TcpStream,
     }
 }
 
-pub fn handle_command(mut stream: &TcpStream, world: &WorldState, command: &Command) {
+pub fn handle_command(world: &mut WorldState, command: &Command) {
     println!("Did receive command {:?}", command);
     match command {
-        &Command::Move(id, target) => println!("Move {} to {:?}!", id, target),
+        &Command::Move(id, target) => {
+            for player in world.game.players.iter_mut() {
+                for unit in player.units.iter_mut() {
+                    if unit.id == id {
+                        println!("Found it :)");
+                        let speed = 0.0001;
+                        unit.speed_vector = [(target[0]-unit.position[0])*speed, (target[1]-unit.position[1])*speed];
+                    }
+                }
+            }
+            println!("Move {} to {:?}!", id, target);
+        }
     }
 }
 
