@@ -7,7 +7,7 @@ use std::fmt;
 
 
 /// A unit identifier.
-#[derive(RustcEncodable, RustcDecodable, PartialEq, Eq, Debug, Copy, Clone)]
+#[derive(RustcEncodable, RustcDecodable, PartialEq, Eq, Debug, Copy, Clone, Hash)]
 pub struct UnitId(pub u32);
 
 impl Into<UnitId> for u32 {

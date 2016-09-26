@@ -5,12 +5,13 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 use std::ops::RangeFrom;
+use std::collections::HashMap;
 
 use bincode::SizeLimit;
 use bincode::rustc_serialize::{decode_from, encode};
 use bincode::rustc_serialize::DecodingResult;
 
-use state::{WorldState, Player, Unit};
+use state::{WorldState, Player, Unit, UnitId};
 use network::{Message, Command};
 
 /// A `Server` instance holds global server state.
@@ -21,6 +22,9 @@ pub struct Server {
     unit_id_generator: Arc<Mutex<RangeFrom<u32>>>,
     /// Generator that returns sequential client IDs
     client_id_generator: Arc<Mutex<RangeFrom<u32>>>,
+
+    /// Map with active unit move commands
+    unit_targets: Arc<Mutex<HashMap<UnitId, [f64; 2]>>>,
 }
 
 impl Server {
@@ -34,6 +38,7 @@ impl Server {
             world: world,
             client_id_generator: Arc::new(Mutex::new(0..)),
             unit_id_generator: Arc::new(Mutex::new(0..)),
+            unit_targets: Arc::new(Mutex::new(HashMap::new())),
         })
     }
 
@@ -42,8 +47,9 @@ impl Server {
         println!("Start server: {:?}", tcp_listener);
 
         let world_clone = self.world.clone();
+        let unit_targets_clone = self.unit_targets.clone();
         thread::spawn(move || {
-            update_world(world_clone);
+            update_world(world_clone, unit_targets_clone);
         });
 
         for stream in tcp_listener.incoming() {
@@ -52,10 +58,11 @@ impl Server {
                     let world_clone = self.world.clone();
                     let client_id_generator_clone = self.client_id_generator.clone();
                     let unit_id_generator_clone = self.unit_id_generator.clone();
+                    let unit_targets = self.unit_targets.clone();
                     println!("Spawning thread...");
                     thread::spawn(move || {
                         handle_client(stream, world_clone,
-                                      client_id_generator_clone, unit_id_generator_clone);
+                                      client_id_generator_clone, unit_id_generator_clone, unit_targets);
                     });
                 }
                 Err(e) => {
@@ -67,11 +74,13 @@ impl Server {
 }
 
 pub type SafeWorldState = Arc<Mutex<WorldState>>;
+pub type SafeUnitTargets = Arc<Mutex<HashMap<UnitId, [f64; 2]>>>;
 
 pub fn handle_client(mut stream: TcpStream,
                      world: SafeWorldState,
                      client_id_generator: Arc<Mutex<RangeFrom<u32>>>,
-                     unit_id_generator: Arc<Mutex<RangeFrom<u32>>>) {
+                     unit_id_generator: Arc<Mutex<RangeFrom<u32>>>,
+                     unit_targets: SafeUnitTargets) {
 
     // handle client hello
     let client_message: DecodingResult<Message> = decode_from(&mut stream, SizeLimit::Bounded(128));
@@ -154,6 +163,7 @@ pub fn handle_client(mut stream: TcpStream,
 
     let mut command_stream = stream.try_clone().unwrap();
     let world_clone = world.clone();
+    let unit_targets_clone = unit_targets.clone();
     // Command receiver loop
     thread::spawn(move || {
         loop {
@@ -163,7 +173,8 @@ pub fn handle_client(mut stream: TcpStream,
                     match message {
                         Message::Command(command) => {
                             let mut world_lock = world_clone.lock().unwrap();
-                            handle_command(&mut world_lock, &command);
+                            let mut unit_targets_lock = unit_targets_clone.lock().unwrap();
+                            handle_command(&mut world_lock, &mut unit_targets_lock, &command);
                         },
                         _ => {
                             println!("Did receive unexpected message: {:?}", message);
@@ -192,12 +203,12 @@ pub fn handle_client(mut stream: TcpStream,
                 println!("Error: {:?}", e);
                 return;
             }
-            _ => thread::sleep(Duration::from_millis(1000)),
+            _ => thread::sleep(Duration::from_millis(10)),
         };
     }
 }
 
-pub fn handle_command(world: &mut WorldState, command: &Command) {
+pub fn handle_command(world: &mut WorldState, unit_targets: &mut HashMap<UnitId, [f64; 2]>, command: &Command) {
     println!("Did receive command {:?}", command);
     match command {
         &Command::Move(id, target) => {
@@ -205,8 +216,7 @@ pub fn handle_command(world: &mut WorldState, command: &Command) {
                 for unit in player.units.iter_mut() {
                     if unit.id == id {
                         println!("Found it :)");
-                        let speed = 0.0001;
-                        unit.speed_vector = [(target[0]-unit.position[0])*speed, (target[1]-unit.position[1])*speed];
+                        unit_targets.insert(id, target);
                     }
                 }
             }
@@ -215,17 +225,24 @@ pub fn handle_command(world: &mut WorldState, command: &Command) {
     }
 }
 
-pub fn update_world(world: SafeWorldState) {
+pub fn update_world(world: SafeWorldState, unit_targets: SafeUnitTargets) {
     loop {
         {
             let mut world_lock = world.lock().unwrap();
+            let mut unit_targets = unit_targets.lock().unwrap();
             for player in world_lock.game.players.iter_mut() {
                 for unit in player.units.iter_mut() {
-                    unit.update(500);
+                    if let Some(target) = unit_targets.get(&unit.id) {
+                        let speed = 0.0001;
+                        unit.speed_vector = [(target[0]-unit.position[0])*speed, (target[1]-unit.position[1])*speed];
+                    } else {
+                        unit.speed_vector = [0.0,0.0];
+                    }
+                    unit.update(5);
                 }
-                println!("{:?}", player);
+                //println!("{:?}", player);
             }
         }
-        thread::sleep(Duration::from_millis(500));
+        thread::sleep(Duration::from_millis(5));
     }
 }

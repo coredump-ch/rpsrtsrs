@@ -32,7 +32,8 @@ fn main() {
     // Create a new game and run it.
     let mut app = App::new(GlGraphics::new(opengl));
     let world_state = app.world_state.clone();
-    let mut network_client = NetworkClient::new(("127.0.0.1", 8080), world_state.clone());
+    let commands = app.commands.clone();
+    let mut network_client = NetworkClient::new(("127.0.0.1", 8080), world_state.clone(), commands);
 
     network_client.connect();
     network_client.update();
@@ -44,9 +45,17 @@ fn main() {
     while let Some(e) = events.next(&mut window) {
 
         let world_lock = world_state.lock().unwrap();
-        app.units = vec![];
-        for unit in world_lock.game.players[0].units.iter() {
-            app.units.push(Unit::new(unit.position.clone(), 0.0f64));
+        //app.units = vec![];
+        if let Some(player) = world_lock.game.players.get(0) {
+            for unit in player.units.iter() {
+                app.units.get_mut(unit.id.0 as usize)
+                    .map(|app_unit| app_unit.position = unit.position)
+                    .or_else(|| {
+                        app.units.push(Unit::new(unit.position.clone(), 0.0f64));
+                        None
+                    }
+                    );
+            }
         }
 
         if let Some(r) = e.render_args() {
