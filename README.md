@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/coredump-ch/rpsrtsrs.svg?branch=master)](https://travis-ci.org/coredump-ch/rpsrtsrs)
-
+[![Travis Build Status](https://travis-ci.org/coredump-ch/rpsrtsrs.svg?branch=master)](https://travis-ci.org/coredump-ch/rpsrtsrs)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/7cmtiuwdl5jwn8pj/branch/master?svg=true)](https://ci.appveyor.com/project/rnestler/rpsrtsrs/branch/master)
 # rpsrtsrs
 
 Rock-Paper-Scissors-Real-Time-Strategy game written in Rust :wink:
