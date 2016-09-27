@@ -1,7 +1,7 @@
 sudo: true
 language: rust
 rust:
-  - 1.8.0
+  - 1.9.0
   - stable
 before_script:
   - echo "yes" | sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu trusty main universe restricted multiverse"

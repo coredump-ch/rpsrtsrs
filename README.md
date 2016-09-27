@@ -22,8 +22,7 @@ In that form, they cannot attack anymore, but have a defense bonus.
 ## Prequisites
 
  * SDL 2 (`libsdl2-dev` on Ubuntu)
- * FreeType (`libfreetype6-dev` on Ubuntu)
- * Rust version 1.8.0 or higher
+ * Rust version 1.9.0 or higher
 
 ## Building
 
@@ -42,7 +41,9 @@ backend use any of the following:
 
 ### Windows
 
-You will need to install [freetype](https://github.com/PistonDevelopers/freetype-sys#for-windows-users)
+On windows currently the glutin backend is the easiest to get started with:
+
+    $ cargo build --no-default-features --features include_glutin
 
 ## Running
 
