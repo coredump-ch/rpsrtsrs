@@ -12,7 +12,7 @@ use state::{GameState, WorldState, UnitId, ClientId};
 #[derive(RustcEncodable, RustcDecodable, PartialEq, Debug)]
 pub enum Command {
     /// Move command with unit ID and target
-    Move(UnitId, [u64; 2]),
+    Move(UnitId, [f64; 2]),
 }
 
 /// Primary message type sent between server and client.

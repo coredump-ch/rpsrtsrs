@@ -5,6 +5,8 @@ extern crate docopt;
 
 use std::net::TcpStream;
 use std::ops::Deref;
+use std::io::Write;
+use std::thread;
 
 use rpsrtsrs::state::GameState;
 use rpsrtsrs::network::{Command, Message};
@@ -32,8 +34,8 @@ struct Args {
 
     cmd_read: bool,
     arg_id: Option<u32>,
-    arg_x: Option<u64>,
-    arg_y: Option<u64>,
+    arg_x: Option<f64>,
+    arg_y: Option<f64>,
 }
 
 fn main() {
@@ -83,5 +85,8 @@ fn main() {
                     &mut stream,
                     SizeLimit::Infinite)
             .unwrap();
+        stream.flush().unwrap();
     }
+
+    thread::sleep_ms(100);
 }

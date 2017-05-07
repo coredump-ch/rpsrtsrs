@@ -7,7 +7,7 @@ use std::fmt;
 
 
 /// A unit identifier.
-#[derive(RustcEncodable, RustcDecodable, PartialEq, Eq, Debug, Copy, Clone)]
+#[derive(RustcEncodable, RustcDecodable, PartialEq, Eq, Debug, Copy, Clone, Hash)]
 pub struct UnitId(pub u32);
 
 impl Into<UnitId> for u32 {
@@ -47,34 +47,34 @@ pub struct Unit {
 
     // TODO: Support negative coordinates
     /// X/Y position in the world in mm
-    pub position: [u64; 2],
+    pub position: [f64; 2],
 
     /// Angle of the unit in milli degrees
-    pub angle: u32,
+    pub angle: f64,
 
     /// Direction and speed of the movement. The angle of the movement may be different then the
     /// angle of the unit. The unit is mm per milli second.
-    pub speed_vector: [u64; 2],
+    pub speed_vector: [f64; 2],
 
     /// Health of the unit
     pub health: u64,
 }
 
 impl Unit {
-    pub fn new<T: Into<UnitId>>(id: T, position: [u64; 2]) -> Unit {
+    pub fn new<T: Into<UnitId>>(id: T, position: [f64; 2]) -> Unit {
         println!("Create unit at {:?}", position);
         Unit {
             id: id.into(),
             position: position,
-            angle: 0,
-            speed_vector: [0,0],
+            angle: 0.0f64,
+            speed_vector: [0.0f64, 0.0f64],
             health: 100_0000,
         }
     }
 
     pub fn update(&mut self, dt_ms: u64) {
-        self.position[0] += self.speed_vector[0] * dt_ms;
-        self.position[1] += self.speed_vector[1] * dt_ms;
+        self.position[0] += self.speed_vector[0] * dt_ms as f64;
+        self.position[1] += self.speed_vector[1] * dt_ms as f64;
     }
 }
 
