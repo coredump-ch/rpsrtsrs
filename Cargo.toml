@@ -10,7 +10,7 @@ piston2d-graphics = "0.17"
 piston2d-opengl_graphics = "0.33"
 bincode = "0.6"
 rustc-serialize = "0.3"
-docopt = "0.6"
+docopt = "0.7"
 
 [dependencies.pistoncore-sdl2_window]
 version = "0.35"
