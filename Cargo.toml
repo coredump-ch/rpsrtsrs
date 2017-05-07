@@ -8,8 +8,10 @@ rand = "0.3"
 piston = "0.25"
 piston2d-graphics = "0.17"
 piston2d-opengl_graphics = "0.33"
-bincode = "0.6"
+bincode = "0.8"
 rustc-serialize = "0.3"
+serde_derive = "1.0"
+serde = "1.0"
 docopt = "0.7"
 
 [dependencies.pistoncore-sdl2_window]

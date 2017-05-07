@@ -7,7 +7,7 @@ use std::fmt;
 
 
 /// A unit identifier.
-#[derive(RustcEncodable, RustcDecodable, PartialEq, Eq, Debug, Copy, Clone, Hash)]
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug, Copy, Clone, Hash)]
 pub struct UnitId(pub u32);
 
 impl Into<UnitId> for u32 {
@@ -23,7 +23,7 @@ impl fmt::Display for UnitId {
 }
 
 /// A client/player identifier.
-#[derive(RustcEncodable, RustcDecodable, PartialEq, Eq, Debug, Copy, Clone)]
+#[derive(Serialize, Deserialize, PartialEq, Eq, Debug, Copy, Clone)]
 pub struct ClientId(pub u32);
 
 impl Into<ClientId> for u32 {
@@ -40,7 +40,7 @@ impl fmt::Display for ClientId {
 
 
 /// The state of a single unit
-#[derive(RustcEncodable, RustcDecodable, PartialEq, Debug, Clone)]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 pub struct Unit {
     /// The unit identifier
     pub id: UnitId,
@@ -80,7 +80,7 @@ impl Unit {
 
 
 /// A player has an ID and consists of 0..N `Unit`s
-#[derive(RustcEncodable, RustcDecodable, PartialEq, Debug, Clone)]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 pub struct Player {
     pub id: ClientId,
     pub units: Vec<Unit>,
@@ -99,7 +99,7 @@ impl Player {
 ///
 /// This needs to be transferred to the client every time the game state
 /// changes.
-#[derive(RustcEncodable, RustcDecodable, PartialEq, Debug, Clone)]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 pub struct GameState {
     /// List of players
     pub players: Vec<Player>,
@@ -108,7 +108,7 @@ pub struct GameState {
 /// Data related to the entire world, like width and height.
 ///
 /// This needs to be transferred to the client only once, on connecting.
-#[derive(RustcEncodable, RustcDecodable, PartialEq, Debug, Clone)]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 pub struct WorldState {
     /// Width of the world in mm
     pub x: u64,

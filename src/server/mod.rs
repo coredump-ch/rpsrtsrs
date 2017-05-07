@@ -7,9 +7,7 @@ use std::time::Duration;
 use std::ops::RangeFrom;
 use std::collections::HashMap;
 
-use bincode::SizeLimit;
-use bincode::rustc_serialize::{decode_from, encode};
-use bincode::rustc_serialize::DecodingResult;
+use bincode::{serialize, deserialize_from, Infinite, Bounded};
 
 use state::{WorldState, Player, Unit, UnitId};
 use network::{Message, Command};
@@ -83,7 +81,7 @@ pub fn handle_client(mut stream: TcpStream,
                      unit_targets: SafeUnitTargets) {
 
     // handle client hello
-    let client_message: DecodingResult<Message> = decode_from(&mut stream, SizeLimit::Bounded(128));
+    let client_message = deserialize_from(&mut stream, Bounded(128));
     match client_message {
         Ok(message) => {
             match message {
@@ -113,9 +111,9 @@ pub fn handle_client(mut stream: TcpStream,
                     world_lock.game.players.push(player);
 
                     // Send ServerHello message
-                    let encoded: Vec<u8> = encode(
+                    let encoded: Vec<u8> = serialize(
                         &Message::ServerHello(player_id, world_lock.clone()),
-                        SizeLimit::Infinite
+                        Infinite
                     ).unwrap();
                     stream.write(&encoded).unwrap();
                 },
@@ -129,9 +127,9 @@ pub fn handle_client(mut stream: TcpStream,
                             println!("Found you :)");
 
                             // Send ServerHello message
-                            let encoded: Vec<u8> = encode(
+                            let encoded: Vec<u8> = serialize(
                                 &Message::ServerHello(id, world_lock.clone()),
-                                SizeLimit::Infinite
+                                Infinite
                             ).unwrap();
                             stream.write(&encoded).unwrap();
                         },
@@ -139,9 +137,9 @@ pub fn handle_client(mut stream: TcpStream,
                             println!("Reconnect to id {} not possible", id);
 
                             // Send Error message
-                            let encoded: Vec<u8> = encode(
+                            let encoded: Vec<u8> = serialize(
                                 &Message::Error,
-                                SizeLimit::Infinite).unwrap();
+                                Infinite).unwrap();
                             stream.write(&encoded).unwrap();
                             return  // Don't enter game loop
                         }
@@ -149,7 +147,7 @@ pub fn handle_client(mut stream: TcpStream,
                 },
                 _ => {
                     println!("Did not receive ClientHello: {:?}", message);
-                    let encoded: Vec<u8> = encode(&Message::Error, SizeLimit::Infinite).unwrap();
+                    let encoded: Vec<u8> = serialize(&Message::Error, Infinite).unwrap();
                     stream.write(&encoded).unwrap();
                     return  // Don't enter game loop
                 }
@@ -167,7 +165,7 @@ pub fn handle_client(mut stream: TcpStream,
     // Command receiver loop
     thread::spawn(move || {
         loop {
-            let client_message: DecodingResult<Message> = decode_from(&mut command_stream, SizeLimit::Bounded(128));
+            let client_message = deserialize_from(&mut command_stream, Bounded(128));
             match client_message {
                 Ok(message) => {
                     match message {
@@ -178,7 +176,7 @@ pub fn handle_client(mut stream: TcpStream,
                         },
                         _ => {
                             println!("Did receive unexpected message: {:?}", message);
-                            let encoded: Vec<u8> = encode(&Message::Error, SizeLimit::Infinite).unwrap();
+                            let encoded: Vec<u8> = serialize(&Message::Error, Infinite).unwrap();
                             command_stream.write(&encoded).unwrap();
                             return
                         },
@@ -196,7 +194,7 @@ pub fn handle_client(mut stream: TcpStream,
     loop {
         let encoded: Vec<u8> = {
             let world_lock = world.lock().unwrap();
-            encode(&world_lock.game, SizeLimit::Infinite).unwrap()
+            serialize(&world_lock.game, Infinite).unwrap()
         };
         match stream.write(&encoded) {
             Err(e) => {
