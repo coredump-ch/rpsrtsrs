@@ -49,3 +49,9 @@ The server sends the current gamestate to the client.
 
 Client sends a move command to the server.
 
+### References
+
+Here are some interesting links about networking in games:
+
+ - http://gafferongames.com/networking-for-game-programmers/what-every-programmer-needs-to-know-about-game-networking/
+
