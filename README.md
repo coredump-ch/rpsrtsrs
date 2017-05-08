@@ -22,7 +22,7 @@ In that form, they cannot attack anymore, but have a defense bonus.
 ## Prequisites
 
  * SDL 2 (`libsdl2-dev` on Ubuntu)
- * Rust version 1.15.0 or higher
+ * Rust version 1.16.0 or higher
 
 ## Building
 
