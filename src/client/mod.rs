@@ -9,9 +9,7 @@ use std::{thread, time};
 use std::net::TcpStream;
 use network::{Command, Message};
 
-use bincode::SizeLimit;
-use bincode::rustc_serialize::{decode_from, encode_into};
-use bincode::rustc_serialize::DecodingResult;
+use bincode::{serialize_into, deserialize_from, Infinite};
 
 use state::{WorldState, GameState};
 use shapes::Unit;
@@ -40,8 +38,8 @@ impl NetworkClient {
     // todo: Maybe return client_id here? Would allow the application to reconnect...
     pub fn connect(&mut self) {
         let mut stream = TcpStream::connect(self.server_addr).unwrap();
-        encode_into(&Message::ClientHello, &mut stream, SizeLimit::Infinite).unwrap();
-        let server_hello: DecodingResult<Message> = decode_from(&mut stream, SizeLimit::Infinite);
+        serialize_into(&mut stream, &Message::ClientHello, Infinite).unwrap();
+        let server_hello = deserialize_from(&mut stream, Infinite);
 
         self.stream = Some(stream);
         if let Ok(Message::ServerHello(_, world_state)) = server_hello {
@@ -67,7 +65,7 @@ impl NetworkClient {
                 command.map(|cmd| {
                     println!("Got command: {:?}", cmd);
                     //let cmd = Message::Command(Command::Move(0.into(), [100f64, 100f64]));
-                    encode_into(&Message::Command(cmd), &mut command_stream, SizeLimit::Infinite)
+                    serialize_into(&mut command_stream, &Message::Command(cmd), Infinite)
                         .map_err(|e|println!("Sending command failed: {}", e));
                 });
                 thread::sleep(time::Duration::from_millis(10));
@@ -78,8 +76,8 @@ impl NetworkClient {
         let world_state = self.world_state.clone();
         thread::spawn(move || {
             loop {
-                let game_state: DecodingResult<GameState> = decode_from(&mut game_state_stream,
-                                                                        SizeLimit::Infinite);
+                let game_state = deserialize_from(&mut game_state_stream,
+                                                  Infinite);
                 match game_state {
                     Ok(game) => {
                         //println!("{:?}", game);

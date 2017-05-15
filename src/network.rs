@@ -9,7 +9,7 @@ use state::{GameState, WorldState, UnitId, ClientId};
 ///
 /// A command is sent from the client to the server. Examples include the
 /// movement of a unit or the decision to attack another unit.
-#[derive(RustcEncodable, RustcDecodable, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub enum Command {
     /// Move command with unit ID and target
     Move(UnitId, [f64; 2]),
@@ -18,7 +18,7 @@ pub enum Command {
 /// Primary message type sent between server and client.
 ///
 /// This includes connection buildup and game state transfer.
-#[derive(RustcEncodable, RustcDecodable, PartialEq, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub enum Message {
     Error,
     ClientHello,

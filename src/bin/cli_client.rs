@@ -13,9 +13,8 @@ use rpsrtsrs::network::{Command, Message};
 
 use docopt::Docopt;
 
-use bincode::SizeLimit;
-use bincode::rustc_serialize::{decode_from, encode_into};
-use bincode::rustc_serialize::DecodingResult;
+use bincode::{serialize_into, deserialize_from, Infinite};
+use bincode::internal::Result;
 
 static USAGE: &'static str = "
 Usage: cli_client [-p PORT] [-i IP] [-r ID] (read|move <id> <x> <y>)
@@ -53,22 +52,22 @@ fn main() {
 
     match reconnect {
         Some(id) => {
-            encode_into(&Message::ClientReconnect(id.into()),
-                        &mut stream,
-                        SizeLimit::Infinite)
+            serialize_into(&mut stream,
+                           &Message::ClientReconnect(id.into()),
+                           Infinite)
                 .unwrap();
         }
         None => {
-            encode_into(&Message::ClientHello, &mut stream, SizeLimit::Infinite).unwrap();
+            serialize_into(&mut stream, &Message::ClientHello, Infinite).unwrap();
         }
     }
-    let server_hello: DecodingResult<Message> = decode_from(&mut stream, SizeLimit::Infinite);
+    let server_hello: Result<Message> = deserialize_from(&mut stream, Infinite);
     println!("{:?}", server_hello);
 
     if cmd_read {
         loop {
-            let game_state: DecodingResult<GameState> = decode_from(&mut stream,
-                                                                    SizeLimit::Infinite);
+            let game_state: Result<GameState> = deserialize_from(&mut stream,
+                                                                 Infinite);
             match game_state {
                 Ok(game) => println!("{:?}", game),
                 Err(e) => {
@@ -81,9 +80,9 @@ fn main() {
         let id = args.arg_id.expect("<id> missing");
         let x = args.arg_x.expect("<x> missing");
         let y = args.arg_y.expect("<y> missing");
-        encode_into(&Message::Command(Command::Move(id.into(), [x, y])),
-                    &mut stream,
-                    SizeLimit::Infinite)
+        serialize_into(&mut stream,
+                       &Message::Command(Command::Move(id.into(), [x, y])),
+                       Infinite)
             .unwrap();
         stream.flush().unwrap();
     }

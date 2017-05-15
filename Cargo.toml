@@ -5,23 +5,25 @@ authors = ["Raphael Nestler <raphael.nestler@gmail.com>"]
 
 [dependencies]
 rand = "0.3"
-piston = "0.25"
-piston2d-graphics = "0.17"
-piston2d-opengl_graphics = "0.33"
-bincode = "0.6"
+piston = "0.32"
+piston2d-graphics = "0.21"
+piston2d-opengl_graphics = "0.43"
+bincode = "0.8"
 rustc-serialize = "0.3"
-docopt = "0.6"
+serde_derive = "1.0"
+serde = "1.0"
+docopt = "0.7"
 
 [dependencies.pistoncore-sdl2_window]
-version = "0.35"
+version = "0.42"
 optional = true
 
 [dependencies.pistoncore-glfw_window]
-version = "0.25"
+version = "0.33"
 optional = true
 
 [dependencies.pistoncore-glutin_window]
-version = "0.30"
+version = "0.36"
 optional = true
 
 [features]
