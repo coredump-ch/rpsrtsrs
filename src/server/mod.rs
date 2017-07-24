@@ -227,7 +227,7 @@ pub fn update_world(world: SafeWorldState, unit_targets: SafeUnitTargets) {
     loop {
         {
             let mut world_lock = world.lock().unwrap();
-            let mut unit_targets = unit_targets.lock().unwrap();
+            let unit_targets = unit_targets.lock().unwrap();
             for player in world_lock.game.players.iter_mut() {
                 for unit in player.units.iter_mut() {
                     if let Some(target) = unit_targets.get(&unit.id) {

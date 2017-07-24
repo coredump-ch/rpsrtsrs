@@ -11,7 +11,7 @@ use network::{Command, Message};
 
 use bincode::{serialize_into, deserialize_from, Infinite};
 
-use state::{WorldState, GameState};
+use state::WorldState;
 use shapes::Unit;
 
 
@@ -51,7 +51,7 @@ impl NetworkClient {
     }
 
     pub fn update(self) {
-        let mut stream = self.stream.expect("Stream not here :(");
+        let stream = self.stream.expect("Stream not here :(");
         let mut command_stream = stream.try_clone().unwrap();
         let commands = self.commands.clone();
 
@@ -66,7 +66,7 @@ impl NetworkClient {
                     println!("Got command: {:?}", cmd);
                     //let cmd = Message::Command(Command::Move(0.into(), [100f64, 100f64]));
                     serialize_into(&mut command_stream, &Message::Command(cmd), Infinite)
-                        .map_err(|e|println!("Sending command failed: {}", e));
+                        .unwrap_or_else(|e|println!("Sending command failed: {}", e));
                 });
                 thread::sleep(time::Duration::from_millis(10));
             }
@@ -173,7 +173,7 @@ impl App {
         });
     }
 
-    pub fn update(&mut self, args: &UpdateArgs) {
+    pub fn update(&mut self, _: &UpdateArgs) {
         /*
         for s in &mut self.units {
             let diff = [s.target[0]-s.position[0], s.target[1]-s.position[1]];
