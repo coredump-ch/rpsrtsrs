@@ -1,5 +1,6 @@
 extern crate bincode;
-extern crate rustc_serialize;
+#[macro_use]
+extern crate serde_derive;
 extern crate rpsrtsrs;
 extern crate docopt;
 
@@ -25,7 +26,7 @@ Options:
     -r ID    Reconnect with the given ID
 ";
 
-#[derive(RustcDecodable, Debug)]
+#[derive(Deserialize, Debug)]
 struct Args {
     flag_p: u16,
     flag_i: String,
@@ -38,7 +39,7 @@ struct Args {
 }
 
 fn main() {
-    let args: Args = Docopt::new(USAGE).and_then(|d| d.decode())
+    let args: Args = Docopt::new(USAGE).and_then(|d| d.deserialize())
                                        .unwrap_or_else(|e| e.exit());
     println!("{:?}", args);
     let host = args.flag_i;
