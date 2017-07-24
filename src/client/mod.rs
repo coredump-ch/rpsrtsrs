@@ -11,7 +11,7 @@ use network::{Command, Message};
 
 use bincode::{serialize_into, deserialize_from, Infinite};
 
-use state::{WorldState, GameState};
+use state::WorldState;
 use shapes::Unit;
 
 
