@@ -7,8 +7,6 @@ extern crate rpsrtsrs;
 #[cfg(feature = "include_glfw")] extern crate glfw_window;
 #[cfg(feature = "include_glutin")] extern crate glutin_window;
 
-
-use std::f64::consts::PI;
 use piston::window::WindowSettings;
 use opengl_graphics::{ GlGraphics, OpenGL };
 use piston::input::*;
