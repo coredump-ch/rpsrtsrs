@@ -41,7 +41,7 @@ fn main() {
 
     let mut cursor = [0.0,0.0];
 
-    let mut events = Events::new(EventSettings::new().lazy(true));
+    let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut window) {
 
         let world_lock = world_state.lock().unwrap();
