@@ -176,13 +176,21 @@ impl App {
     }
 
     pub fn update(&mut self, _: &UpdateArgs) {
-        /*
-        for s in &mut self.units {
-            let diff = [s.target[0]-s.position[0], s.target[1]-s.position[1]];
-            s.position[0] += diff[0]/2.0*args.dt;
-            s.position[1] += diff[1]/2.0*args.dt;
+        let player = {
+            let world_lock = self.world_state.lock().unwrap();
+            world_lock.game.players.get(0).map(|v| v.clone())
+        };
+        if let Some(player) = player {
+            for unit in player.units.iter() {
+                self.units.get_mut(unit.id.0 as usize)
+                    .map(|app_unit| app_unit.position = unit.position)
+                    .or_else(|| {
+                        self.units.push(Unit::new(unit.position.clone(), 0.0f64));
+                        None
+                    }
+                    );
+            }
         }
-        */
     }
 
     pub fn on_button_press(&mut self, button: &Button) {
