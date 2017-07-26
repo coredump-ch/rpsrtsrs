@@ -5,6 +5,7 @@ dependencies = [
  "bincode 0.8.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "docopt 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "piston 0.32.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "piston-texture 0.5.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "piston2d-graphics 0.21.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "piston2d-opengl_graphics 0.45.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pistoncore-glfw_window 0.34.0 (registry+https://github.com/rust-lang/crates.io-index)",

@@ -3,6 +3,7 @@ use std::net::{SocketAddr, ToSocketAddrs};
 use std::f64::consts::PI;
 use std::collections::VecDeque;
 use opengl_graphics::GlGraphics;
+use opengl_graphics::glyph_cache::GlyphCache;
 use piston::input::{Button, MouseButton, RenderArgs, UpdateArgs};
 
 use std::{thread, time};
@@ -13,6 +14,7 @@ use bincode::{serialize_into, deserialize_from, Infinite};
 
 use state::WorldState;
 use shapes::Unit;
+use colors::{BLACK, YELLOW, ORANGE};
 
 
 pub struct NetworkClient {
@@ -95,6 +97,10 @@ impl NetworkClient {
     }
 }
 
+pub enum State {
+    Menu,
+    Running,
+}
 
 pub struct App {
     pub gl: GlGraphics, // OpenGL drawing backend.
@@ -102,6 +108,7 @@ pub struct App {
     pub units: Vec<Unit>,
     pub commands: Arc<Mutex<VecDeque<Command>>>,
     pub cursor: [f64; 2],
+    pub state: State,
 }
 
 impl App {
@@ -111,6 +118,7 @@ impl App {
             world_state: Arc::new(Mutex::new(WorldState::new(0, 0))),
             units: vec![],
             commands: Arc::new(Mutex::new(VecDeque::new())),
+            state: State::Menu,
             cursor: [0.0, 0.0],
         }
     }
@@ -122,14 +130,23 @@ impl App {
         };
     }
 
-    pub fn render(&mut self, args: &RenderArgs) {
+    fn render_menu(&mut self, args: &RenderArgs, cache: &mut GlyphCache) {
+        use graphics::{Text, clear, Transformed};
+        let text = Text::new_color(YELLOW, 64);
+        self.gl.draw(args.viewport(), |c, gl| {
+            // Clear the screen.
+            clear(BLACK, gl);
+            let transform = c.transform;
+
+            let transform = transform.trans(0.0, 100.0);
+            text.draw("Start", cache, &c.draw_state, transform, gl);
+        });
+    }
+
+    fn render_game(&mut self, args: &RenderArgs, _: &mut GlyphCache) {
         use graphics::{polygon, clear};
         use graphics::Transformed;
         use graphics::types::Polygon;
-
-        const BLACK:  [f32; 4] = [0.0, 0.0,  0.0,  1.0];
-        const YELLOW: [f32; 4] = [1.0, 1.0,  0.22, 1.0];
-        const ORANGE: [f32; 4] = [1.0, 0.61, 0.22, 1.0];
 
         const FRONT_THICKNESS: f64 = 5.0;
 
@@ -175,6 +192,13 @@ impl App {
         });
     }
 
+    pub fn render(&mut self, args: &RenderArgs, cache: &mut GlyphCache) {
+        match self.state {
+            State::Menu => self.render_menu(args, cache),
+            State::Running => self.render_game(args, cache),
+        }
+    }
+
     pub fn update(&mut self, _: &UpdateArgs) {
         let player = {
             let world_lock = self.world_state.lock().unwrap();
@@ -197,7 +221,14 @@ impl App {
 
     pub fn on_button_press(&mut self, button: &Button) {
         match button {
-            &Button::Keyboard(_) => {}
+            &Button::Keyboard(_) => {
+                match self.state {
+                    State::Menu => {
+                        self.state = State::Running;
+                    }
+                    State::Running => {}
+                }
+            }
             &Button::Mouse(button) => {
                 self.on_mouse_click(&button);
             }
