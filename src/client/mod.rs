@@ -3,7 +3,7 @@ use std::net::{SocketAddr, ToSocketAddrs};
 use std::f64::consts::PI;
 use std::collections::VecDeque;
 use opengl_graphics::GlGraphics;
-use piston::input::{RenderArgs, UpdateArgs};
+use piston::input::{Button, MouseButton, RenderArgs, UpdateArgs};
 
 use std::{thread, time};
 use std::net::TcpStream;
@@ -101,6 +101,7 @@ pub struct App {
     pub world_state: Arc<Mutex<WorldState>>,
     pub units: Vec<Unit>,
     pub commands: Arc<Mutex<VecDeque<Command>>>,
+    pub cursor: [f64; 2],
 }
 
 impl App {
@@ -110,6 +111,7 @@ impl App {
             world_state: Arc::new(Mutex::new(WorldState::new(0, 0))),
             units: vec![],
             commands: Arc::new(Mutex::new(VecDeque::new())),
+            cursor: [0.0, 0.0],
         }
     }
 
@@ -181,6 +183,29 @@ impl App {
             s.position[1] += diff[1]/2.0*args.dt;
         }
         */
+    }
+
+    pub fn on_button_press(&mut self, button: &Button) {
+        match button {
+            &Button::Keyboard(_) => {}
+            &Button::Mouse(button) => {
+                self.on_mouse_click(&button);
+            }
+            &Button::Controller(_) => {}
+        }
+    }
+
+    pub fn on_mouse_click(&mut self, button: &MouseButton) {
+        let cursor = self.cursor;
+        match *button {
+            MouseButton::Left  => self.select(cursor),
+            MouseButton::Right => self.move_selected(cursor),
+            _ => println!("Pressed mouse button '{:?}'", button),
+        }
+    }
+
+    pub fn on_mouse_move(&mut self, cursor: [f64; 2]) {
+        self.cursor = cursor;
     }
 
     pub fn move_selected(&mut self, position: [f64;2]) {

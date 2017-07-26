@@ -37,8 +37,6 @@ fn main() {
     network_client.update();
 
 
-    let mut cursor = [0.0,0.0];
-
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut window) {
 
@@ -59,16 +57,14 @@ fn main() {
         if let Some(r) = e.render_args() {
             app.render(&r);
         }
-        if let Some(Button::Mouse(button)) = e.press_args() {
-            match button {
-                MouseButton::Left  => app.select(cursor),
-                MouseButton::Right => app.move_selected(cursor),
-                _ => println!("Pressed mouse button '{:?}'", button),
-            }
+
+        if let Some(button) = e.press_args() {
+            app.on_button_press(&button);
         }
-        e.mouse_cursor(|x, y| {
-            cursor = [x, y];
-        });
+
+        if let Some(args) = e.mouse_cursor_args() {
+            app.on_mouse_move(args);
+        }
 
         if let Some(u) = e.update_args() {
             app.update(&u);
