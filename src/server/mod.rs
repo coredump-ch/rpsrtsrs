@@ -6,6 +6,7 @@ use std::thread;
 use std::time::Duration;
 use std::ops::RangeFrom;
 use std::collections::HashMap;
+use std::f64::consts::PI;
 
 use bincode::{serialize, deserialize_from, Infinite, Bounded};
 
@@ -33,8 +34,7 @@ impl Server {
         let world = Arc::new(Mutex::new(WorldState::new(world_size.0, world_size.1)));
         Ok(Server {
             socket_addr: addr,
-            world: world,
-            client_id_generator: Arc::new(Mutex::new(0..)),
+            world: world, client_id_generator: Arc::new(Mutex::new(0..)),
             unit_id_generator: Arc::new(Mutex::new(0..)),
             unit_targets: Arc::new(Mutex::new(HashMap::new())),
         })
@@ -214,6 +214,13 @@ pub fn handle_command(world: &mut WorldState, unit_targets: &mut HashMap<UnitId,
                 for unit in player.units.iter_mut() {
                     if unit.id == id {
                         println!("Found it :)");
+                        let dx = target[0] - unit.position[0];
+                        let dy = target[1] - unit.position[1];
+                        if dx.is_sign_negative() {
+                            unit.angle = (dy / dx).atan() + PI;
+                        } else {
+                            unit.angle = (dy / dx).atan();
+                        }
                         unit_targets.insert(id, target);
                     }
                 }
