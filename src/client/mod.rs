@@ -183,12 +183,14 @@ impl App {
         if let Some(player) = player {
             for unit in player.units.iter() {
                 self.units.get_mut(unit.id.0 as usize)
-                    .map(|app_unit| app_unit.position = unit.position)
+                    .map(|app_unit| {
+                        app_unit.position = unit.position;
+                        app_unit.rotation = unit.angle;
+                    })
                     .or_else(|| {
-                        self.units.push(Unit::new(unit.position.clone(), 0.0f64));
+                        self.units.push(Unit::new(unit.position.clone(), unit.angle));
                         None
-                    }
-                    );
+                    });
             }
         }
     }
