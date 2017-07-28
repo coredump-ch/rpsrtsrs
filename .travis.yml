@@ -1,13 +1,14 @@
-sudo: true
+dist: trusty
 language: rust
+addons:
+  apt:
+    packages:
+    - libsdl2-dev
 rust:
   - 1.18.0
   - stable
+cache: cargo
 before_script:
-  - echo "yes" | sudo add-apt-repository "deb http://archive.ubuntu.com/ubuntu trusty main universe restricted multiverse"
-  - |
-      sudo apt-get update -qq &&
-      sudo apt-get -qq install libsdl2-dev
   - |
       pip install 'travis-cargo<0.2' --user &&
       export PATH=$HOME/.local/bin:$PATH
