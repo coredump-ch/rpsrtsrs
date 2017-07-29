@@ -14,7 +14,6 @@ use piston::event_loop::*;
 #[cfg(feature = "include_sdl2")] use sdl2_window::Sdl2Window as Window;
 #[cfg(feature = "include_glfw")] use glfw_window::GlfwWindow as Window;
 #[cfg(feature = "include_glutin")] use glutin_window::GlutinWindow as Window;
-use rpsrtsrs::shapes::Unit;
 use rpsrtsrs::client::*;
 
 
@@ -36,39 +35,20 @@ fn main() {
     network_client.connect();
     network_client.update();
 
-
-    let mut cursor = [0.0,0.0];
-
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut window) {
-
-        let world_lock = world_state.lock().unwrap();
-        //app.units = vec![];
-        if let Some(player) = world_lock.game.players.get(0) {
-            for unit in player.units.iter() {
-                app.units.get_mut(unit.id.0 as usize)
-                    .map(|app_unit| app_unit.position = unit.position)
-                    .or_else(|| {
-                        app.units.push(Unit::new(unit.position.clone(), 0.0f64));
-                        None
-                    }
-                    );
-            }
-        }
 
         if let Some(r) = e.render_args() {
             app.render(&r);
         }
-        if let Some(Button::Mouse(button)) = e.press_args() {
-            match button {
-                MouseButton::Left  => app.select(cursor),
-                MouseButton::Right => app.move_selected(cursor),
-                _ => println!("Pressed mouse button '{:?}'", button),
-            }
+
+        if let Some(button) = e.press_args() {
+            app.on_button_press(&button);
         }
-        e.mouse_cursor(|x, y| {
-            cursor = [x, y];
-        });
+
+        if let Some(args) = e.mouse_cursor_args() {
+            app.on_mouse_move(args);
+        }
 
         if let Some(u) = e.update_args() {
             app.update(&u);
