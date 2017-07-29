@@ -4,7 +4,7 @@ use std::f64::consts::PI;
 use std::collections::VecDeque;
 use opengl_graphics::GlGraphics;
 use opengl_graphics::glyph_cache::GlyphCache;
-use piston::input::{Button, MouseButton, RenderArgs, UpdateArgs};
+use piston::input::{Button, Key, MouseButton, RenderArgs, UpdateArgs};
 
 use std::{thread, time};
 use std::net::TcpStream;
@@ -16,6 +16,9 @@ use state::WorldState;
 use shapes::Unit;
 use colors::{BLACK, YELLOW, ORANGE};
 
+pub mod menu;
+
+use self::menu::Menu;
 
 pub struct NetworkClient {
     pub world_state: Arc<Mutex<WorldState>>,
@@ -97,6 +100,7 @@ impl NetworkClient {
     }
 }
 
+#[derive(Clone, Copy, Debug)]
 pub enum State {
     Menu,
     Running,
@@ -109,6 +113,7 @@ pub struct App {
     pub commands: Arc<Mutex<VecDeque<Command>>>,
     pub cursor: [f64; 2],
     pub state: State,
+    menu: Menu,
 }
 
 impl App {
@@ -118,8 +123,9 @@ impl App {
             world_state: Arc::new(Mutex::new(WorldState::new(0, 0))),
             units: vec![],
             commands: Arc::new(Mutex::new(VecDeque::new())),
-            state: State::Menu,
             cursor: [0.0, 0.0],
+            state: State::Menu,
+            menu: Menu::new()
         }
     }
 
@@ -128,19 +134,6 @@ impl App {
         for u in &mut self.units {
             u.selected = u.is_hit(position);
         };
-    }
-
-    fn render_menu(&mut self, args: &RenderArgs, cache: &mut GlyphCache) {
-        use graphics::{Text, clear, Transformed};
-        let text = Text::new_color(YELLOW, 64);
-        self.gl.draw(args.viewport(), |c, gl| {
-            // Clear the screen.
-            clear(BLACK, gl);
-            let transform = c.transform;
-
-            let transform = transform.trans(0.0, 100.0);
-            text.draw("Start", cache, &c.draw_state, transform, gl);
-        });
     }
 
     fn render_game(&mut self, args: &RenderArgs, _: &mut GlyphCache) {
@@ -194,7 +187,7 @@ impl App {
 
     pub fn render(&mut self, args: &RenderArgs, cache: &mut GlyphCache) {
         match self.state {
-            State::Menu => self.render_menu(args, cache),
+            State::Menu => self.menu.render(args, &mut self.gl, cache), //self.render_menu(args, cache),
             State::Running => self.render_game(args, cache),
         }
     }
@@ -220,20 +213,37 @@ impl App {
     }
 
     pub fn on_button_press(&mut self, button: &Button) {
-        match button {
-            &Button::Keyboard(_) => {
-                match self.state {
-                    State::Menu => {
-                        self.state = State::Running;
+        match self.state {
+            State::Menu => {
+                match button {
+                    &Button::Keyboard(Key::Up) => {
+                        self.menu.previous();
                     }
-                    State::Running => {}
+                    &Button::Keyboard(Key::Down) => {
+                        self.menu.next();
+                    }
+                    &Button::Keyboard(Key::Return) => {
+                        match self.menu.get_selected_entry() {
+                            menu::Entries::Start => {
+                                self.state = State::Running;
+                            }
+                            menu::Entries::Exit => {
+                            }
+                        }
+                    }
+                    _ => { }
                 }
             }
-            &Button::Mouse(button) => {
-                self.on_mouse_click(&button);
+            State::Running => {
+                match button {
+                    &Button::Keyboard(_) => { }
+                    &Button::Mouse(button) => {
+                        self.on_mouse_click(&button);
+                    }
+                    &Button::Controller(_) => { }
+                }
             }
-            &Button::Controller(_) => {}
-        }
+        };
     }
 
     pub fn on_mouse_click(&mut self, button: &MouseButton) {
