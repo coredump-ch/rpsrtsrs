@@ -55,8 +55,8 @@ impl NetworkClient {
         }
     }
 
-    pub fn update(self) {
-        let stream = self.stream.expect("Stream not here :(");
+    pub fn update(&self) {
+        let stream = self.stream.as_ref().expect("Stream not here :(");
         let mut command_stream = stream.try_clone().unwrap();
         let commands = self.commands.clone();
 
