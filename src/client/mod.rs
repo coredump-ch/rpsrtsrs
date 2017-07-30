@@ -2,6 +2,7 @@ use std::sync::{Mutex, Arc};
 use std::net::{SocketAddr, ToSocketAddrs};
 use std::f64::consts::PI;
 use std::collections::VecDeque;
+use std::error::Error;
 use opengl_graphics::GlGraphics;
 use opengl_graphics::glyph_cache::GlyphCache;
 use piston::input::{Button, Key, MouseButton, RenderArgs, UpdateArgs};
@@ -12,7 +13,7 @@ use network::{Command, Message};
 
 use bincode::{serialize_into, deserialize_from, Infinite};
 
-use state::WorldState;
+use state::{ClientId, WorldState};
 use shapes::Unit;
 use colors::{BLACK, YELLOW, ORANGE};
 
@@ -41,9 +42,9 @@ impl NetworkClient {
     }
 
     // todo: Maybe return client_id here? Would allow the application to reconnect...
-    pub fn connect(&mut self) {
-        let mut stream = TcpStream::connect(self.server_addr).unwrap();
-        serialize_into(&mut stream, &Message::ClientHello, Infinite).unwrap();
+    pub fn connect(&mut self) -> Result<ClientId, Box<Error>>  {
+        let mut stream = TcpStream::connect(self.server_addr)?;
+        serialize_into(&mut stream, &Message::ClientHello, Infinite)?;
         let server_hello = deserialize_from(&mut stream, Infinite);
 
         self.stream = Some(stream);
@@ -53,6 +54,7 @@ impl NetworkClient {
         } else {
             panic!("Could not connect to server");
         }
+        Ok(0.into())
     }
 
     pub fn update(&self) {
@@ -114,6 +116,7 @@ pub struct App {
     pub cursor: [f64; 2],
     pub state: State,
     menu: Menu,
+    client_id: Option<ClientId>,
 }
 
 impl App {
@@ -125,14 +128,16 @@ impl App {
             commands: Arc::new(Mutex::new(VecDeque::new())),
             cursor: [0.0, 0.0],
             state: State::Menu,
-            menu: Menu::new()
+            menu: Menu::new(),
+            client_id: None,
         }
     }
 
-    pub fn start(&mut self) {
+    pub fn start(&mut self) -> Result<(), Box<Error>> {
         let mut network_client = NetworkClient::new(("127.0.0.1", 8080), self.world_state.clone(), self.commands.clone());
-        network_client.connect();
+        self.client_id = Some(network_client.connect()?);
         network_client.update();
+        Ok(())
     }
 
     pub fn select(&mut self, position: [f64;2]) {
@@ -230,8 +235,10 @@ impl App {
                     &Button::Keyboard(Key::Return) => {
                         match self.menu.get_selected_entry() {
                             menu::Entries::Start => {
-                                self.start();
-                                self.state = State::Running;
+                                // TODO: Proper error handling
+                                if self.start().is_ok() {
+                                    self.state = State::Running;
+                                }
                             }
                             menu::Entries::Exit => {
                             }
