@@ -11,7 +11,6 @@ dependencies = [
  "pistoncore-glutin_window 0.38.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "pistoncore-sdl2_window 0.43.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand 0.3.15 (registry+https://github.com/rust-lang/crates.io-index)",
- "rustc-serialize 0.3.24 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde 1.0.10 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_derive 1.0.10 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
