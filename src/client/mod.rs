@@ -129,6 +129,11 @@ impl App {
         }
     }
 
+    pub fn start(&mut self) {
+        let mut network_client = NetworkClient::new(("127.0.0.1", 8080), self.world_state.clone(), self.commands.clone());
+        network_client.connect();
+        network_client.update();
+    }
 
     pub fn select(&mut self, position: [f64;2]) {
         for u in &mut self.units {
@@ -225,6 +230,7 @@ impl App {
                     &Button::Keyboard(Key::Return) => {
                         match self.menu.get_selected_entry() {
                             menu::Entries::Start => {
+                                self.start();
                                 self.state = State::Running;
                             }
                             menu::Entries::Exit => {

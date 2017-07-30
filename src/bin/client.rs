@@ -39,12 +39,6 @@ fn main() {
 
     // Create a new game and run it.
     let mut app = App::new(GlGraphics::new(opengl));
-    let world_state = app.world_state.clone();
-    let commands = app.commands.clone();
-    let mut network_client = NetworkClient::new(("127.0.0.1", 8080), world_state.clone(), commands);
-
-    network_client.connect();
-    network_client.update();
 
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut window) {
