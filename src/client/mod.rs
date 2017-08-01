@@ -1,6 +1,5 @@
 use std::sync::{Mutex, Arc};
 use std::net::{SocketAddr, ToSocketAddrs};
-use std::f64::consts::PI;
 use std::collections::VecDeque;
 use std::error::Error;
 use opengl_graphics::GlGraphics;
@@ -13,9 +12,10 @@ use network::{Command, Message};
 
 use bincode::{serialize_into, deserialize_from, Infinite};
 
-use state::{ClientId, WorldState, GameState};
-use shapes::Unit;
-use colors::{BLACK, YELLOW, ORANGE};
+use state::{UnitId, ClientId, WorldState, GameState};
+use shapes::Shape;
+use colors;
+use colors::{BLACK, ORANGE};
 
 pub mod menu;
 pub mod error;
@@ -112,7 +112,7 @@ pub struct App {
     pub gl: GlGraphics, // OpenGL drawing backend.
     pub world_state: Option<WorldState>,
     pub game_state: Arc<Mutex<GameState>>,
-    pub units: Vec<Unit>,
+    pub selected_units: Vec<UnitId>,
     pub commands: Arc<Mutex<VecDeque<Command>>>,
     pub cursor: [f64; 2],
     pub state: State,
@@ -128,7 +128,7 @@ impl App {
             gl: gl,
             world_state: None,
             game_state: Arc::new(Mutex::new(GameState::new())),
-            units: vec![],
+            selected_units: vec![],
             commands: Arc::new(Mutex::new(VecDeque::new())),
             cursor: [0.0, 0.0],
             state: State::Menu,
@@ -152,9 +152,21 @@ impl App {
     }
 
     pub fn select(&mut self, position: [f64;2]) {
-        for u in &mut self.units {
-            u.selected = u.is_hit(position);
+
+        let player = {
+            let game_lock = self.game_state.lock().unwrap();
+            let index = self.client_id.unwrap_or(ClientId(0)).0 as usize;
+            game_lock.players.get(index).map(|v| v.clone())
         };
+
+        self.selected_units.truncate(0);
+        if let Some(player) = player {
+            for unit in player.units.iter() {
+                if unit.is_hit(50.0, position) {
+                    self.selected_units.push(unit.id);
+                }
+            }
+        }
     }
 
     fn render_game(&mut self, args: &RenderArgs, _: &mut GlyphCache) {
@@ -164,12 +176,16 @@ impl App {
 
         const FRONT_THICKNESS: f64 = 5.0;
 
-        let units = &self.units;
+        let game_state = {
+            let game_lock = self.game_state.lock().unwrap();
+            game_lock.clone()
+        };
 
         let world = self.world_state.as_ref().unwrap();
         let (wx, wy) = (world.x, world.y);
         let zoom = self.zoom;
         let scroll = self.scroll;
+        let selected_units = self.selected_units.clone();
 
         self.gl.draw(args.viewport(), |c, gl| {
 
@@ -191,66 +207,57 @@ impl App {
                 line(ORANGE, 1.0, *l, transform, gl);
             }
 
-            for s in units.iter() {
+            let size = 50.0;
+        
+            for i in 0..game_state.players.len() {
+                let ref player = game_state.players[i];
+                let color = &colors::PLAYERS[i % colors::PLAYERS.len()];
+                for s in player.units.iter() {
+                    // Create a triangle polygon. The initial orientation is facing east.
+                    let triangle: Polygon = &s.get_shape(size);
 
-                // Create a triangle polygon. The initial orientation is facing east.
-                let triangle: Polygon = &s.get_shape();
+                    // Create a border on the front of the polygon. This is a trapezoid.
+                    // Because the angle of the trapezoid side is 22.5°, we know that `dx` is always `2 * dy`.
+                    let front: Polygon = &[
+                        [size, size],                                           // Top right
+                        [size, 0.0],                                                 // Bottom right
+                        [size - FRONT_THICKNESS, FRONT_THICKNESS / 2.0],             // Bottom left
+                        [size - FRONT_THICKNESS, size - FRONT_THICKNESS / 2.0], // Top left
+                    ];
 
-                // Create a border on the front of the polygon. This is a trapezoid.
-                // Because the angle of the trapezoid side is 22.5°, we know that `dx` is always `2 * dy`.
-                let front: Polygon = &[
-                    [s.size, s.size],                                           // Top right
-                    [s.size, 0.0],                                                 // Bottom right
-                    [s.size - FRONT_THICKNESS, FRONT_THICKNESS / 2.0],             // Bottom left
-                    [s.size - FRONT_THICKNESS, s.size - FRONT_THICKNESS / 2.0], // Top left
-                ];
+                    // Rotate the front to match the unit
+                    let transform_front = transform.trans(s.position[0], s.position[1])
+                        .rot_rad(s.angle)
+                        .trans(-25.0, -25.0);
 
-                // Rotate the front to match the unit
-                let transform_front = transform.trans(s.state.position[0], s.state.position[1])
-                    .rot_rad(s.state.angle)
-                    .trans(-25.0, -25.0);
+                    // We don't need to apply any transformation to the units
+                    let transform_triangle = transform;
 
-                // We don't need to apply any transformation to the units
-                let transform_triangle = transform;
+                    // Draw the unit ORANGE if selected
+                    let selected = selected_units.iter().any(|id| id == &s.id);
+                    if selected {
+                        polygon(color.primary, triangle, transform_triangle, gl);
+                        polygon(color.secondary, front, transform_front, gl);
+                    } else {
+                        polygon(color.secondary, triangle, transform_triangle, gl);
+                        polygon(color.primary, front, transform_front, gl);
+                    }
 
-                // Draw the unit ORANGE if selected
-                if s.selected {
-                    polygon(ORANGE, triangle, transform_triangle, gl);
-                    polygon(YELLOW, front, transform_front, gl);
-                } else {
-                    polygon(YELLOW, triangle, transform_triangle, gl);
-                    polygon(ORANGE, front, transform_front, gl);
                 }
-
             }
         });
     }
 
     pub fn render(&mut self, args: &RenderArgs, cache: &mut GlyphCache) {
         match self.state {
-            State::Menu => self.menu.render(args, &mut self.gl, cache), //self.render_menu(args, cache),
+            State::Menu => self.menu.render(args, &mut self.gl, cache),
             State::Running => self.render_game(args, cache),
             State::Error(ref msg) => msg.render(args, &mut self.gl, cache),
         }
     }
 
     pub fn update(&mut self, _: &UpdateArgs) {
-        let player = {
-            let game_lock = self.game_state.lock().unwrap();
-            game_lock.players.get(0).map(|v| v.clone())
-        };
-        if let Some(player) = player {
-            for unit in player.units.iter() {
-                self.units.get_mut(unit.id.0 as usize)
-                    .map(|app_unit| {
-                        app_unit.state = unit.clone();
-                    })
-                    .or_else(|| {
-                        self.units.push(Unit::new(unit.clone()));
-                        None
-                    });
-            }
-        }
+        // TODO: Interpolate
     }
 
     pub fn on_button_press(&mut self, button: &Button) -> bool {
@@ -340,22 +347,9 @@ impl App {
     }
 
     pub fn move_selected(&mut self, position: [f64;2]) {
-        for i in 0..self.units.len() {
-            let s = &mut self.units[i];
-            if s.selected {
-                s.target = position;
-                let dx = position[0] - s.state.position[0];
-                let dy = position[1] - s.state.position[1];
-                if dx.is_sign_negative() {
-                    s.state.angle = (dy / dx).atan() + PI;
-                } else {
-                    s.state.angle = (dy / dx).atan();
-                }
-                let id = s.state.id;
-                let mut commands = self.commands.lock().unwrap();
-                commands.push_back(Command::Move(id, position));
-                println!("dx: {}, dy: {}, new angle: {}", dx, dy, s.state.angle);
-            }
+        for u in self.selected_units.iter() {
+            let mut commands = self.commands.lock().unwrap();
+            commands.push_back(Command::Move(*u, position));
         }
     }
 }

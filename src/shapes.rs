@@ -5,65 +5,49 @@ use self::graphics::math;
 use super::state;
 
 
-pub struct Unit {
-    pub state: state::Unit,
-    pub target: [f64; 2],
-    pub selected: bool,
-    pub size: f64,
+pub trait Shape {
+    fn get_shape(&self, size: f64) -> Triangle;
+
+    fn is_hit(&self, size: f64, position: [f64;2]) -> bool;
 }
 
-
-impl Unit {
-
-    pub fn new(state: state::Unit) -> Unit {
-        println!("Create unit at {:?} with angle {}", state.position, state.angle);
-        let target = state.position.clone();
-        Unit {
-            state: state,
-            target: target,
-            selected: false,
-            size: 50.0,
-        }
-    }
-
+impl Shape for state::Unit {
     /// Return the base shape of the unit.
-    pub fn get_shape(&self) -> Triangle {
+    fn get_shape(&self, size: f64) -> Triangle {
         // Base shape
         let mut triangle: Triangle = [
-            [0.0, self.size / 2.0], // Left
-            [self.size, self.size], // Top right
-            [self.size, 0.0],       // Bottom right
+            [0.0, size / 2.0], // Left
+            [size, size],      // Top right
+            [size, 0.0],       // Bottom right
         ];
 
         // Transformations
         for point in triangle.iter_mut() {
             // Translate center to zero point
-            *point = math::add(*point, [-self.size / 2.0, -self.size / 2.0]);
+            *point = math::add(*point, [-size / 2.0, -size / 2.0]);
 
             // Rotate
-            let rotation_matrix = math::rotate_radians(self.state.angle);
+            let rotation_matrix = math::rotate_radians(self.angle);
             *point = math::transform_vec(rotation_matrix, *point);
 
             // Translate to effective position
-            *point = math::add(*point, self.state.position);
+            *point = math::add(*point, self.position);
         }
 
         triangle
     }
 
     /// Calculate whether or not this unit is hit by the point at the specified position.
-    pub fn is_hit(&self, position: [f64;2]) -> bool {
-        let hitbox = self.get_shape();
+    fn is_hit(&self, size: f64, position: [f64;2]) -> bool {
+        let hitbox = self.get_shape(size);
         math::inside_triangle(hitbox, position)
     }
-
 }
-
 
 #[cfg(test)]
 mod test {
     use std::f64::consts::FRAC_PI_2;
-    use super::Unit;
+    use super::Shape;
     use super::state;
 
     #[test]
@@ -73,31 +57,31 @@ mod test {
         //    /\
         //   /__\
         //
-        let mut unit = Unit::new(state::Unit::new(0, [100.0, 100.0]));
-        unit.state.angle = FRAC_PI_2;
+        let mut unit = state::Unit::new(0, [100.0, 100.0]);
+        unit.angle = FRAC_PI_2;
 
         // The following points should be outside of the hitbox.
-        assert_eq!(unit.is_hit([0.0, 0.0]), false);
-        assert_eq!(unit.is_hit([unit.size, unit.size]), false);
+        assert_eq!(unit.is_hit(50.0, [0.0, 0.0]), false);
+        assert_eq!(unit.is_hit(50.0, [50.0, 50.0]), false);
 
         // The following five points should be inside the hitbox.
         //      .
         //     /.\
         //   ./_._\.
         //
-        let vertical_distance = unit.size / 2.0 - 1.0;
-        assert_eq!(unit.is_hit([100.0, 100.0]), true);
-        assert_eq!(unit.is_hit([100.0, 100.0 - vertical_distance]), true);
-        assert_eq!(unit.is_hit([100.0, 100.0 + vertical_distance]), true);
-        assert_eq!(unit.is_hit([100.0 - vertical_distance, 100.0 + vertical_distance]), true);
-        assert_eq!(unit.is_hit([100.0 + vertical_distance, 100.0 + vertical_distance]), true);
+        let vertical_distance = 50.0 / 2.0 - 1.0;
+        assert_eq!(unit.is_hit(50.0, [100.0, 100.0]), true);
+        assert_eq!(unit.is_hit(50.0, [100.0, 100.0 - vertical_distance]), true);
+        assert_eq!(unit.is_hit(50.0, [100.0, 100.0 + vertical_distance]), true);
+        assert_eq!(unit.is_hit(50.0, [100.0 - vertical_distance, 100.0 + vertical_distance]), true);
+        assert_eq!(unit.is_hit(50.0, [100.0 + vertical_distance, 100.0 + vertical_distance]), true);
 
         // The following two points should be outside the hitbox.
         //
         //  . /\ .
         //   /__\
         //
-        assert_eq!(unit.is_hit([100.0 - vertical_distance, 100.0]), false);
-        assert_eq!(unit.is_hit([100.0 + vertical_distance, 100.0]), false);
+        assert_eq!(unit.is_hit(50.0, [100.0 - vertical_distance, 100.0]), false);
+        assert_eq!(unit.is_hit(50.0, [100.0 + vertical_distance, 100.0]), false);
     }
 }
