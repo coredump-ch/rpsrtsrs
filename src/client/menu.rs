@@ -30,7 +30,7 @@ impl Menu {
         Menu { selected_entry: Entries::Start }
     }
 
-    pub fn render(&mut self, args: &RenderArgs, gl: &mut GlGraphics, cache: &mut GlyphCache) {
+    pub fn render(&self, args: &RenderArgs, gl: &mut GlGraphics, cache: &mut GlyphCache) {
         use graphics::{Text, clear, Transformed};
         let text = Text::new_color(YELLOW, 64);
         let text_selected = Text::new_color(ORANGE, 64);

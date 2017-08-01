@@ -18,6 +18,7 @@ use shapes::Unit;
 use colors::{BLACK, YELLOW, ORANGE};
 
 pub mod menu;
+pub mod error;
 
 use self::menu::Menu;
 
@@ -101,9 +102,10 @@ impl NetworkClient {
     }
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub enum State {
     Menu,
+    Error(error::Message),
     Running,
 }
 
@@ -198,6 +200,7 @@ impl App {
         match self.state {
             State::Menu => self.menu.render(args, &mut self.gl, cache), //self.render_menu(args, cache),
             State::Running => self.render_game(args, cache),
+            State::Error(ref msg) => msg.render(args, &mut self.gl, cache),
         }
     }
 
@@ -233,9 +236,13 @@ impl App {
                     &Button::Keyboard(Key::Return) => {
                         match self.menu.get_selected_entry() {
                             menu::Entries::Start => {
-                                // TODO: Proper error handling
-                                if self.start().is_ok() {
-                                    self.state = State::Running;
+                                match self.start() {
+                                    Ok(_) => {
+                                        self.state = State::Running;
+                                    }
+                                    Err(err) => {
+                                        self.state = State::Error(error::Message::new(err.description().into()));
+                                    }
                                 }
                             }
                             menu::Entries::Exit => {
@@ -252,6 +259,12 @@ impl App {
                         self.on_mouse_click(&button);
                     }
                     &Button::Controller(_) => { }
+                }
+            }
+            State::Error(_) => {
+                match button {
+                    &Button::Keyboard(_) => { self.state = State::Menu; }
+                    _ => { }
                 }
             }
         };
