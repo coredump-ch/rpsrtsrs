@@ -215,16 +215,27 @@ pub fn handle_client(mut stream: TcpStream,
     }
 }
 
-pub fn handle_command(_: &WorldState,
+pub fn handle_command(world: &WorldState,
                       game: &mut GameState,
                       unit_targets: &mut HashMap<UnitId, [f64; 2]>, command: &Command) {
     println!("Did receive command {:?}", command);
     match command {
-        &Command::Move(id, target) => {
+        &Command::Move(id, move_target) => {
             for player in game.players.iter_mut() {
                 for unit in player.units.iter_mut() {
                     if unit.id == id {
                         println!("Found it :)");
+                        let mut target = [0.0; 2];
+                        target[0] = if move_target[0] > world.x as f64 {
+                            world.x as f64
+                        } else {
+                            move_target[0]
+                        };
+                        target[1] = if move_target[1] > world.y as f64 {
+                            world.y as f64
+                        } else {
+                            move_target[1]
+                        };
                         let dx = target[0] - unit.position[0];
                         let dy = target[1] - unit.position[1];
                         if dx.is_sign_negative() {
@@ -236,7 +247,7 @@ pub fn handle_command(_: &WorldState,
                     }
                 }
             }
-            println!("Move {} to {:?}!", id, target);
+            println!("Move {} to {:?}!", id, move_target);
         }
     }
 }
