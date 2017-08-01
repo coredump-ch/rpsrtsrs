@@ -45,15 +45,14 @@ pub struct Unit {
     /// The unit identifier
     pub id: UnitId,
 
-    // TODO: Support negative coordinates
-    /// X/Y position in the world in mm
+    /// X/Y position in the world in m
     pub position: [f64; 2],
 
-    /// Angle of the unit in milli degrees
+    /// Angle of the unit in radiant
     pub angle: f64,
 
     /// Direction and speed of the movement. The angle of the movement may be different then the
-    /// angle of the unit. The unit is mm per milli second.
+    /// angle of the unit. The unit is m per milli second.
     pub speed_vector: [f64; 2],
 
     /// Health of the unit
@@ -116,9 +115,9 @@ impl GameState {
 /// This needs to be transferred to the client only once, on connecting.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 pub struct WorldState {
-    /// Width of the world in mm
+    /// Width of the world in m
     pub x: u64,
-    /// Height of the world in mm
+    /// Height of the world in m
     pub y: u64,
 }
 
