@@ -223,7 +223,7 @@ impl App {
         }
     }
 
-    pub fn on_button_press(&mut self, button: &Button) {
+    pub fn on_button_press(&mut self, button: &Button) -> bool {
         match self.state {
             State::Menu => {
                 match button {
@@ -246,6 +246,7 @@ impl App {
                                 }
                             }
                             menu::Entries::Exit => {
+                                return true;
                             }
                         }
                     }
@@ -268,6 +269,7 @@ impl App {
                 }
             }
         };
+        false
     }
 
     pub fn on_mouse_click(&mut self, button: &MouseButton) {

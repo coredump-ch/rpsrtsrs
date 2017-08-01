@@ -48,7 +48,9 @@ fn main() {
         }
 
         if let Some(button) = e.press_args() {
-            app.on_button_press(&button);
+            if app.on_button_press(&button) {
+                break;
+            }
         }
 
         if let Some(args) = e.mouse_cursor_args() {
