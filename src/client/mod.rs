@@ -117,6 +117,7 @@ pub struct App {
     pub cursor: [f64; 2],
     pub state: State,
     zoom: f64,
+    scroll: [f64; 2],
     menu: Menu,
     client_id: Option<ClientId>,
 }
@@ -132,6 +133,7 @@ impl App {
             cursor: [0.0, 0.0],
             state: State::Menu,
             zoom: 1.0,
+            scroll: [0.0, 0.0],
             menu: Menu::new(),
             client_id: None,
         }
@@ -167,10 +169,13 @@ impl App {
         let world = self.world_state.as_ref().unwrap();
         let (wx, wy) = (world.x as f64, world.y as f64);
         let zoom = self.zoom;
+        let scroll = self.scroll;
 
         self.gl.draw(args.viewport(), |c, gl| {
 
-            let transform = c.transform.scale(zoom, zoom);
+            let transform = c.transform
+                .scale(zoom, zoom)
+                .trans(scroll[0], scroll[1]);
 
             // Clear the screen.
             clear(BLACK, gl);
@@ -280,6 +285,18 @@ impl App {
             }
             State::Running => {
                 match button {
+                    &Button::Keyboard(Key::Up) => {
+                        self.scroll[1] += 10.0;
+                    }
+                    &Button::Keyboard(Key::Down) => {
+                        self.scroll[1] -= 10.0;
+                    }
+                    &Button::Keyboard(Key::Left) => {
+                        self.scroll[0] += 10.0;
+                    }
+                    &Button::Keyboard(Key::Right) => {
+                        self.scroll[0] -= 10.0;
+                    }
                     &Button::Keyboard(_) => { }
                     &Button::Mouse(button) => {
                         self.on_mouse_click(&button);
@@ -299,8 +316,8 @@ impl App {
 
     pub fn on_mouse_click(&mut self, button: &MouseButton) {
         let cursor = [
-            self.cursor[0] / self.zoom,
-            self.cursor[1] / self.zoom,
+            self.cursor[0] / self.zoom - self.scroll[0],
+            self.cursor[1] / self.zoom - self.scroll[1],
         ];
         match *button {
             MouseButton::Left  => self.select(cursor),
