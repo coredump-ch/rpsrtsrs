@@ -2,11 +2,11 @@
 extern crate graphics;
 use self::graphics::types::Triangle;
 use self::graphics::math;
+use super::state;
 
 
 pub struct Unit {
-    pub rotation: f64,
-    pub position: [f64; 2],
+    pub state: state::Unit,
     pub target: [f64; 2],
     pub selected: bool,
     pub size: f64,
@@ -15,12 +15,12 @@ pub struct Unit {
 
 impl Unit {
 
-    pub fn new(position: [f64;2], rotation: f64) -> Unit {
-        println!("Create unit at {:?} with rotation {}", position, rotation);
+    pub fn new(state: state::Unit) -> Unit {
+        println!("Create unit at {:?} with angle {}", state.position, state.angle);
+        let target = state.position.clone();
         Unit {
-            rotation: rotation,
-            position: position,
-            target: position,
+            state: state,
+            target: target,
             selected: false,
             size: 50.0,
         }
@@ -41,11 +41,11 @@ impl Unit {
             *point = math::add(*point, [-self.size / 2.0, -self.size / 2.0]);
 
             // Rotate
-            let rotation_matrix = math::rotate_radians(self.rotation);
+            let rotation_matrix = math::rotate_radians(self.state.angle);
             *point = math::transform_vec(rotation_matrix, *point);
 
             // Translate to effective position
-            *point = math::add(*point, self.position);
+            *point = math::add(*point, self.state.position);
         }
 
         triangle
@@ -64,6 +64,7 @@ impl Unit {
 mod test {
     use std::f64::consts::FRAC_PI_2;
     use super::Unit;
+    use super::state;
 
     #[test]
     fn test_hitbox() {
@@ -72,7 +73,8 @@ mod test {
         //    /\
         //   /__\
         //
-        let unit = Unit::new([100.0, 100.0], FRAC_PI_2);
+        let mut unit = Unit::new(state::Unit::new(0, [100.0, 100.0]));
+        unit.state.angle = FRAC_PI_2;
 
         // The following points should be outside of the hitbox.
         assert_eq!(unit.is_hit([0.0, 0.0]), false);
