@@ -174,8 +174,8 @@ impl App {
                 ];
 
                 // Rotate the front to match the unit
-                let transform_front = c.transform.trans(s.position[0], s.position[1])
-                    .rot_rad(s.rotation)
+                let transform_front = c.transform.trans(s.state.position[0], s.state.position[1])
+                    .rot_rad(s.state.angle)
                     .trans(-25.0, -25.0);
 
                 // We don't need to apply any transformation to the units
@@ -210,11 +210,10 @@ impl App {
             for unit in player.units.iter() {
                 self.units.get_mut(unit.id.0 as usize)
                     .map(|app_unit| {
-                        app_unit.position = unit.position;
-                        app_unit.rotation = unit.angle;
+                        app_unit.state = unit.clone();
                     })
                     .or_else(|| {
-                        self.units.push(Unit::new(unit.position.clone(), unit.angle));
+                        self.units.push(Unit::new(unit.clone()));
                         None
                     });
             }
@@ -276,17 +275,17 @@ impl App {
             let s = &mut self.units[i];
             if s.selected {
                 s.target = position;
-                let dx = position[0] - s.position[0];
-                let dy = position[1] - s.position[1];
+                let dx = position[0] - s.state.position[0];
+                let dy = position[1] - s.state.position[1];
                 if dx.is_sign_negative() {
-                    s.rotation = (dy / dx).atan() + PI;
+                    s.state.angle = (dy / dx).atan() + PI;
                 } else {
-                    s.rotation = (dy / dx).atan();
+                    s.state.angle = (dy / dx).atan();
                 }
-                let id = i as u32;
+                let id = s.state.id;
                 let mut commands = self.commands.lock().unwrap();
-                commands.push_back(Command::Move(id.into(), position));
-                println!("dx: {}, dy: {}, new rotation: {}", dx, dy, s.rotation);
+                commands.push_back(Command::Move(id, position));
+                println!("dx: {}, dy: {}, new angle: {}", dx, dy, s.state.angle);
             }
         }
     }
