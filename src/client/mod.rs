@@ -154,18 +154,32 @@ impl App {
     }
 
     fn render_game(&mut self, args: &RenderArgs, _: &mut GlyphCache) {
-        use graphics::{polygon, clear};
+        use graphics::{polygon, line, clear};
         use graphics::Transformed;
-        use graphics::types::Polygon;
+        use graphics::types::{Polygon, Line};
 
         const FRONT_THICKNESS: f64 = 5.0;
 
         let units = &self.units;
 
+        let world = self.world_state.as_ref().unwrap();
+        let (wx, wy) = (world.x as f64, world.y as f64);
+
         self.gl.draw(args.viewport(), |c, gl| {
 
             // Clear the screen.
             clear(BLACK, gl);
+
+            let world: [Line; 4] = [
+                [0.0, 0.0, wx,  0.0],
+                [wx,  0.0, wx,  wy],
+                [wx,  wy,  0.0, wy],
+                [0.0, wy,  0.0, 0.0],
+            ];
+
+            for l in world.iter() {
+                line(ORANGE, 1.0, *l, c.transform, gl);
+            }
 
             for s in units.iter() {
 
