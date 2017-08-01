@@ -13,7 +13,7 @@ use network::{Command, Message};
 
 use bincode::{serialize_into, deserialize_from, Infinite};
 
-use state::{ClientId, WorldState};
+use state::{ClientId, WorldState, GameState};
 use shapes::Unit;
 use colors::{BLACK, YELLOW, ORANGE};
 
@@ -24,18 +24,21 @@ use self::menu::Menu;
 
 pub struct NetworkClient {
     pub world_state: Arc<Mutex<WorldState>>,
+    pub game_state: Arc<Mutex<GameState>>,
     server_addr: SocketAddr,
     stream: Option<TcpStream>,
     commands: Arc<Mutex<VecDeque<Command>>>,
 }
 
 impl NetworkClient {
-    pub fn new<T: ToSocketAddrs>(server_addrs: T, world_state:
-                                 Arc<Mutex<WorldState>>,
+    pub fn new<T: ToSocketAddrs>(server_addrs: T,
+                                 world_state: Arc<Mutex<WorldState>>,
+                                 game_state: Arc<Mutex<GameState>>,
                                  commands: Arc<Mutex<VecDeque<Command>>>) -> NetworkClient {
         let server_addr = server_addrs.to_socket_addrs().unwrap().next().unwrap();
         NetworkClient {
             world_state: world_state,
+            game_state: game_state,
             server_addr: server_addr,
             stream: None,
             commands: commands,
@@ -80,16 +83,17 @@ impl NetworkClient {
         });
 
         let mut game_state_stream = stream.try_clone().unwrap();
-        let world_state = self.world_state.clone();
+        let game_state = self.game_state.clone();
         thread::spawn(move || {
             loop {
-                let game_state = deserialize_from(&mut game_state_stream,
-                                                  Infinite);
-                match game_state {
+                let game_state_server: Result<GameState,_> = deserialize_from(
+                    &mut game_state_stream,
+                    Infinite);
+                match game_state_server {
                     Ok(game) => {
                         //println!("{:?}", game);
-                        let mut world_state_lock = world_state.lock().unwrap();
-                        world_state_lock.game = game;
+                        let mut game_state_lock = game_state.lock().unwrap();
+                        *game_state_lock = game;
 
                     }
                     Err(e) => {
@@ -112,6 +116,7 @@ pub enum State {
 pub struct App {
     pub gl: GlGraphics, // OpenGL drawing backend.
     pub world_state: Arc<Mutex<WorldState>>,
+    pub game_state: Arc<Mutex<GameState>>,
     pub units: Vec<Unit>,
     pub commands: Arc<Mutex<VecDeque<Command>>>,
     pub cursor: [f64; 2],
@@ -125,6 +130,7 @@ impl App {
         App {
             gl: gl,
             world_state: Arc::new(Mutex::new(WorldState::new(0, 0))),
+            game_state: Arc::new(Mutex::new(GameState::new())),
             units: vec![],
             commands: Arc::new(Mutex::new(VecDeque::new())),
             cursor: [0.0, 0.0],
@@ -135,7 +141,11 @@ impl App {
     }
 
     pub fn start(&mut self) -> Result<(), Box<Error>> {
-        let mut network_client = NetworkClient::new(("127.0.0.1", 8080), self.world_state.clone(), self.commands.clone());
+        let mut network_client = NetworkClient::new(
+            ("127.0.0.1", 8080),
+            self.world_state.clone(),
+            self.game_state.clone(),
+            self.commands.clone());
         self.client_id = Some(network_client.connect()?);
         network_client.update();
         Ok(())
@@ -206,8 +216,8 @@ impl App {
 
     pub fn update(&mut self, _: &UpdateArgs) {
         let player = {
-            let world_lock = self.world_state.lock().unwrap();
-            world_lock.game.players.get(0).map(|v| v.clone())
+            let game_lock = self.game_state.lock().unwrap();
+            game_lock.players.get(0).map(|v| v.clone())
         };
         if let Some(player) = player {
             for unit in player.units.iter() {

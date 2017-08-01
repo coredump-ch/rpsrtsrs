@@ -105,6 +105,12 @@ pub struct GameState {
     pub players: Vec<Player>,
 }
 
+impl GameState {
+    pub fn new() -> GameState {
+        GameState{ players: vec![] }
+    }
+}
+
 /// Data related to the entire world, like width and height.
 ///
 /// This needs to be transferred to the client only once, on connecting.
@@ -114,7 +120,6 @@ pub struct WorldState {
     pub x: u64,
     /// Height of the world in mm
     pub y: u64,
-    pub game: GameState,
 }
 
 impl WorldState {
@@ -122,9 +127,6 @@ impl WorldState {
         WorldState {
             x: x,
             y: y,
-            game: GameState {
-                players: vec![],
-            }
         }
     }
 }
