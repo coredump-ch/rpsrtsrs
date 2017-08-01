@@ -23,7 +23,6 @@ pub mod error;
 use self::menu::Menu;
 
 pub struct NetworkClient {
-    pub world_state: Arc<Mutex<WorldState>>,
     pub game_state: Arc<Mutex<GameState>>,
     server_addr: SocketAddr,
     stream: Option<TcpStream>,
@@ -32,12 +31,10 @@ pub struct NetworkClient {
 
 impl NetworkClient {
     pub fn new<T: ToSocketAddrs>(server_addrs: T,
-                                 world_state: Arc<Mutex<WorldState>>,
                                  game_state: Arc<Mutex<GameState>>,
                                  commands: Arc<Mutex<VecDeque<Command>>>) -> NetworkClient {
         let server_addr = server_addrs.to_socket_addrs().unwrap().next().unwrap();
         NetworkClient {
-            world_state: world_state,
             game_state: game_state,
             server_addr: server_addr,
             stream: None,
@@ -45,16 +42,14 @@ impl NetworkClient {
         }
     }
 
-    pub fn connect(&mut self) -> Result<ClientId, Box<Error>>  {
+    pub fn connect(&mut self) -> Result<(ClientId, WorldState), Box<Error>>  {
         let mut stream = TcpStream::connect(self.server_addr)?;
         serialize_into(&mut stream, &Message::ClientHello, Infinite)?;
         let server_hello = deserialize_from(&mut stream, Infinite);
 
         self.stream = Some(stream);
         if let Ok(Message::ServerHello(client_id, world_state)) = server_hello {
-            let mut world_state_lock = self.world_state.lock().unwrap();
-            *world_state_lock = world_state;
-            Ok(client_id)
+            Ok((client_id, world_state))
         } else {
             Err("Could not connect to server".into())
         }
@@ -115,7 +110,7 @@ pub enum State {
 
 pub struct App {
     pub gl: GlGraphics, // OpenGL drawing backend.
-    pub world_state: Arc<Mutex<WorldState>>,
+    pub world_state: Option<WorldState>,
     pub game_state: Arc<Mutex<GameState>>,
     pub units: Vec<Unit>,
     pub commands: Arc<Mutex<VecDeque<Command>>>,
@@ -129,7 +124,7 @@ impl App {
     pub fn new(gl: GlGraphics) -> App {
         App {
             gl: gl,
-            world_state: Arc::new(Mutex::new(WorldState::new(0, 0))),
+            world_state: None,
             game_state: Arc::new(Mutex::new(GameState::new())),
             units: vec![],
             commands: Arc::new(Mutex::new(VecDeque::new())),
@@ -143,10 +138,11 @@ impl App {
     pub fn start(&mut self) -> Result<(), Box<Error>> {
         let mut network_client = NetworkClient::new(
             ("127.0.0.1", 8080),
-            self.world_state.clone(),
             self.game_state.clone(),
             self.commands.clone());
-        self.client_id = Some(network_client.connect()?);
+        let (client_id, world_state) = network_client.connect()?;
+        self.client_id = Some(client_id);
+        self.world_state = Some(world_state);
         network_client.update();
         Ok(())
     }
