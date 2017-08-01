@@ -13,7 +13,7 @@ use network::{Command, Message};
 
 use bincode::{serialize_into, deserialize_from, Infinite};
 
-use state::{ClientId, WorldState};
+use state::{ClientId, WorldState, GameState};
 use shapes::Unit;
 use colors::{BLACK, YELLOW, ORANGE};
 
@@ -23,35 +23,33 @@ pub mod error;
 use self::menu::Menu;
 
 pub struct NetworkClient {
-    pub world_state: Arc<Mutex<WorldState>>,
+    pub game_state: Arc<Mutex<GameState>>,
     server_addr: SocketAddr,
     stream: Option<TcpStream>,
     commands: Arc<Mutex<VecDeque<Command>>>,
 }
 
 impl NetworkClient {
-    pub fn new<T: ToSocketAddrs>(server_addrs: T, world_state:
-                                 Arc<Mutex<WorldState>>,
+    pub fn new<T: ToSocketAddrs>(server_addrs: T,
+                                 game_state: Arc<Mutex<GameState>>,
                                  commands: Arc<Mutex<VecDeque<Command>>>) -> NetworkClient {
         let server_addr = server_addrs.to_socket_addrs().unwrap().next().unwrap();
         NetworkClient {
-            world_state: world_state,
+            game_state: game_state,
             server_addr: server_addr,
             stream: None,
             commands: commands,
         }
     }
 
-    pub fn connect(&mut self) -> Result<ClientId, Box<Error>>  {
+    pub fn connect(&mut self) -> Result<(ClientId, WorldState), Box<Error>>  {
         let mut stream = TcpStream::connect(self.server_addr)?;
         serialize_into(&mut stream, &Message::ClientHello, Infinite)?;
         let server_hello = deserialize_from(&mut stream, Infinite);
 
         self.stream = Some(stream);
         if let Ok(Message::ServerHello(client_id, world_state)) = server_hello {
-            let mut world_state_lock = self.world_state.lock().unwrap();
-            *world_state_lock = world_state;
-            Ok(client_id)
+            Ok((client_id, world_state))
         } else {
             Err("Could not connect to server".into())
         }
@@ -80,16 +78,17 @@ impl NetworkClient {
         });
 
         let mut game_state_stream = stream.try_clone().unwrap();
-        let world_state = self.world_state.clone();
+        let game_state = self.game_state.clone();
         thread::spawn(move || {
             loop {
-                let game_state = deserialize_from(&mut game_state_stream,
-                                                  Infinite);
-                match game_state {
+                let game_state_server: Result<GameState,_> = deserialize_from(
+                    &mut game_state_stream,
+                    Infinite);
+                match game_state_server {
                     Ok(game) => {
                         //println!("{:?}", game);
-                        let mut world_state_lock = world_state.lock().unwrap();
-                        world_state_lock.game = game;
+                        let mut game_state_lock = game_state.lock().unwrap();
+                        *game_state_lock = game;
 
                     }
                     Err(e) => {
@@ -111,7 +110,8 @@ pub enum State {
 
 pub struct App {
     pub gl: GlGraphics, // OpenGL drawing backend.
-    pub world_state: Arc<Mutex<WorldState>>,
+    pub world_state: Option<WorldState>,
+    pub game_state: Arc<Mutex<GameState>>,
     pub units: Vec<Unit>,
     pub commands: Arc<Mutex<VecDeque<Command>>>,
     pub cursor: [f64; 2],
@@ -124,7 +124,8 @@ impl App {
     pub fn new(gl: GlGraphics) -> App {
         App {
             gl: gl,
-            world_state: Arc::new(Mutex::new(WorldState::new(0, 0))),
+            world_state: None,
+            game_state: Arc::new(Mutex::new(GameState::new())),
             units: vec![],
             commands: Arc::new(Mutex::new(VecDeque::new())),
             cursor: [0.0, 0.0],
@@ -135,8 +136,13 @@ impl App {
     }
 
     pub fn start(&mut self) -> Result<(), Box<Error>> {
-        let mut network_client = NetworkClient::new(("127.0.0.1", 8080), self.world_state.clone(), self.commands.clone());
-        self.client_id = Some(network_client.connect()?);
+        let mut network_client = NetworkClient::new(
+            ("127.0.0.1", 8080),
+            self.game_state.clone(),
+            self.commands.clone());
+        let (client_id, world_state) = network_client.connect()?;
+        self.client_id = Some(client_id);
+        self.world_state = Some(world_state);
         network_client.update();
         Ok(())
     }
@@ -148,18 +154,32 @@ impl App {
     }
 
     fn render_game(&mut self, args: &RenderArgs, _: &mut GlyphCache) {
-        use graphics::{polygon, clear};
+        use graphics::{polygon, line, clear};
         use graphics::Transformed;
-        use graphics::types::Polygon;
+        use graphics::types::{Polygon, Line};
 
         const FRONT_THICKNESS: f64 = 5.0;
 
         let units = &self.units;
 
+        let world = self.world_state.as_ref().unwrap();
+        let (wx, wy) = (world.x as f64, world.y as f64);
+
         self.gl.draw(args.viewport(), |c, gl| {
 
             // Clear the screen.
             clear(BLACK, gl);
+
+            let world: [Line; 4] = [
+                [0.0, 0.0, wx,  0.0],
+                [wx,  0.0, wx,  wy],
+                [wx,  wy,  0.0, wy],
+                [0.0, wy,  0.0, 0.0],
+            ];
+
+            for l in world.iter() {
+                line(ORANGE, 1.0, *l, c.transform, gl);
+            }
 
             for s in units.iter() {
 
@@ -206,8 +226,8 @@ impl App {
 
     pub fn update(&mut self, _: &UpdateArgs) {
         let player = {
-            let world_lock = self.world_state.lock().unwrap();
-            world_lock.game.players.get(0).map(|v| v.clone())
+            let game_lock = self.game_state.lock().unwrap();
+            game_lock.players.get(0).map(|v| v.clone())
         };
         if let Some(player) = player {
             for unit in player.units.iter() {

@@ -31,6 +31,6 @@ fn main() {
     let host = args.flag_i;
     let port = args.flag_p;
 
-    let server = Server::new((host.deref(), port), (80, 60)).expect("Could not initialize server");
+    let server = Server::new((host.deref(), port), (800, 600)).expect("Could not initialize server");
     server.serve();
 }

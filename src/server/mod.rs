@@ -10,13 +10,14 @@ use std::f64::consts::PI;
 
 use bincode::{serialize, deserialize_from, Infinite, Bounded};
 
-use state::{WorldState, Player, Unit, UnitId};
+use state::{WorldState, GameState, Player, Unit, UnitId};
 use network::{Message, Command};
 
 /// A `Server` instance holds global server state.
 pub struct Server {
     socket_addr: SocketAddr,
     world: Arc<Mutex<WorldState>>,
+    game: Arc<Mutex<GameState>>,
     /// Generator that returns sequential unit IDs
     unit_id_generator: Arc<Mutex<RangeFrom<u32>>>,
     /// Generator that returns sequential client IDs
@@ -32,9 +33,12 @@ impl Server {
                                 -> IoResult<Server> {
         let addr = try!(addr.to_socket_addrs()).next().unwrap();
         let world = Arc::new(Mutex::new(WorldState::new(world_size.0, world_size.1)));
+        let game = Arc::new(Mutex::new(GameState::new()));
         Ok(Server {
             socket_addr: addr,
-            world: world, client_id_generator: Arc::new(Mutex::new(0..)),
+            world: world,
+            game: game,
+            client_id_generator: Arc::new(Mutex::new(0..)),
             unit_id_generator: Arc::new(Mutex::new(0..)),
             unit_targets: Arc::new(Mutex::new(HashMap::new())),
         })
@@ -44,22 +48,23 @@ impl Server {
         let tcp_listener = TcpListener::bind(self.socket_addr).unwrap();
         println!("Start server: {:?}", tcp_listener);
 
-        let world_clone = self.world.clone();
+        let game_clone = self.game.clone();
         let unit_targets_clone = self.unit_targets.clone();
         thread::spawn(move || {
-            update_world(world_clone, unit_targets_clone);
+            update_world(game_clone, unit_targets_clone);
         });
 
         for stream in tcp_listener.incoming() {
             match stream {
                 Ok(stream) => {
                     let world_clone = self.world.clone();
+                    let game_clone = self.game.clone();
                     let client_id_generator_clone = self.client_id_generator.clone();
                     let unit_id_generator_clone = self.unit_id_generator.clone();
                     let unit_targets = self.unit_targets.clone();
                     println!("Spawning thread...");
                     thread::spawn(move || {
-                        handle_client(stream, world_clone,
+                        handle_client(stream, world_clone, game_clone,
                                       client_id_generator_clone, unit_id_generator_clone, unit_targets);
                     });
                 }
@@ -76,6 +81,7 @@ pub type SafeUnitTargets = Arc<Mutex<HashMap<UnitId, [f64; 2]>>>;
 
 pub fn handle_client(mut stream: TcpStream,
                      world: SafeWorldState,
+                     game: Arc<Mutex<GameState>>,
                      client_id_generator: Arc<Mutex<RangeFrom<u32>>>,
                      unit_id_generator: Arc<Mutex<RangeFrom<u32>>>,
                      unit_targets: SafeUnitTargets) {
@@ -87,7 +93,7 @@ pub fn handle_client(mut stream: TcpStream,
             match message {
                 Message::ClientHello => {
                     // Get exclusive world access
-                    let mut world_lock = world.lock().unwrap();
+                    let mut game_lock = game.lock().unwrap();
 
                     // Create new player for the newly connected client
                     let client_id = client_id_generator
@@ -108,11 +114,11 @@ pub fn handle_client(mut stream: TcpStream,
 
                     // Add player to the world
                     let player_id = player.id;
-                    world_lock.game.players.push(player);
+                    game_lock.players.push(player);
 
                     // Send ServerHello message
                     let encoded: Vec<u8> = serialize(
-                        &Message::ServerHello(player_id, world_lock.clone()),
+                        &Message::ServerHello(player_id, world.lock().unwrap().clone()),
                         Infinite
                     ).unwrap();
                     stream.write(&encoded).unwrap();
@@ -120,9 +126,10 @@ pub fn handle_client(mut stream: TcpStream,
                 Message::ClientReconnect(id) => {
                     // Get exclusive world access
                     let world_lock = world.lock().unwrap();
+                    let game_lock = game.lock().unwrap();
 
                     // Find player with specified id
-                    match world_lock.game.players.iter().find(|player| player.id == id) {
+                    match game_lock.players.iter().find(|player| player.id == id) {
                         Some(_) => {
                             println!("Found you :)");
 
@@ -161,6 +168,7 @@ pub fn handle_client(mut stream: TcpStream,
 
     let mut command_stream = stream.try_clone().unwrap();
     let world_clone = world.clone();
+    let game_clone = game.clone();
     let unit_targets_clone = unit_targets.clone();
     // Command receiver loop
     thread::spawn(move || {
@@ -170,9 +178,10 @@ pub fn handle_client(mut stream: TcpStream,
                 Ok(message) => {
                     match message {
                         Message::Command(command) => {
-                            let mut world_lock = world_clone.lock().unwrap();
+                            let world_lock = world_clone.lock().unwrap();
+                            let mut game_lock = game_clone.lock().unwrap();
                             let mut unit_targets_lock = unit_targets_clone.lock().unwrap();
-                            handle_command(&mut world_lock, &mut unit_targets_lock, &command);
+                            handle_command(&world_lock, &mut game_lock, &mut unit_targets_lock, &command);
                         },
                         _ => {
                             println!("Did receive unexpected message: {:?}", message);
@@ -193,8 +202,8 @@ pub fn handle_client(mut stream: TcpStream,
     // GameState loop
     loop {
         let encoded: Vec<u8> = {
-            let world_lock = world.lock().unwrap();
-            serialize(&world_lock.game, Infinite).unwrap()
+            let game_lock = game.lock().unwrap();
+            serialize(&*game_lock, Infinite).unwrap()
         };
         match stream.write(&encoded) {
             Err(e) => {
@@ -206,14 +215,27 @@ pub fn handle_client(mut stream: TcpStream,
     }
 }
 
-pub fn handle_command(world: &mut WorldState, unit_targets: &mut HashMap<UnitId, [f64; 2]>, command: &Command) {
+pub fn handle_command(world: &WorldState,
+                      game: &mut GameState,
+                      unit_targets: &mut HashMap<UnitId, [f64; 2]>, command: &Command) {
     println!("Did receive command {:?}", command);
     match command {
-        &Command::Move(id, target) => {
-            for player in world.game.players.iter_mut() {
+        &Command::Move(id, move_target) => {
+            for player in game.players.iter_mut() {
                 for unit in player.units.iter_mut() {
                     if unit.id == id {
                         println!("Found it :)");
+                        let mut target = [0.0; 2];
+                        target[0] = if move_target[0] > world.x as f64 {
+                            world.x as f64
+                        } else {
+                            move_target[0]
+                        };
+                        target[1] = if move_target[1] > world.y as f64 {
+                            world.y as f64
+                        } else {
+                            move_target[1]
+                        };
                         let dx = target[0] - unit.position[0];
                         let dy = target[1] - unit.position[1];
                         if dx.is_sign_negative() {
@@ -225,17 +247,17 @@ pub fn handle_command(world: &mut WorldState, unit_targets: &mut HashMap<UnitId,
                     }
                 }
             }
-            println!("Move {} to {:?}!", id, target);
+            println!("Move {} to {:?}!", id, move_target);
         }
     }
 }
 
-pub fn update_world(world: SafeWorldState, unit_targets: SafeUnitTargets) {
+pub fn update_world(game: Arc<Mutex<GameState>>, unit_targets: SafeUnitTargets) {
     loop {
         {
-            let mut world_lock = world.lock().unwrap();
+            let mut game_lock = game.lock().unwrap();
             let unit_targets = unit_targets.lock().unwrap();
-            for player in world_lock.game.players.iter_mut() {
+            for player in game_lock.players.iter_mut() {
                 for unit in player.units.iter_mut() {
                     if let Some(target) = unit_targets.get(&unit.id) {
                         let speed = 0.0001;
