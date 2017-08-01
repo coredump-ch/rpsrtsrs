@@ -116,13 +116,13 @@ impl GameState {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 pub struct WorldState {
     /// Width of the world in m
-    pub x: u64,
+    pub x: f64,
     /// Height of the world in m
-    pub y: u64,
+    pub y: f64,
 }
 
 impl WorldState {
-    pub fn new(x: u64, y: u64) -> WorldState {
+    pub fn new(x: f64, y: f64) -> WorldState {
         WorldState {
             x: x,
             y: y,

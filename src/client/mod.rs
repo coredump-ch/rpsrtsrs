@@ -167,7 +167,7 @@ impl App {
         let units = &self.units;
 
         let world = self.world_state.as_ref().unwrap();
-        let (wx, wy) = (world.x as f64, world.y as f64);
+        let (wx, wy) = (world.x, world.y);
         let zoom = self.zoom;
         let scroll = self.scroll;
 
