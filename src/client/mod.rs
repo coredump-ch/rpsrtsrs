@@ -116,6 +116,7 @@ pub struct App {
     pub commands: Arc<Mutex<VecDeque<Command>>>,
     pub cursor: [f64; 2],
     pub state: State,
+    zoom: f64,
     menu: Menu,
     client_id: Option<ClientId>,
 }
@@ -130,6 +131,7 @@ impl App {
             commands: Arc::new(Mutex::new(VecDeque::new())),
             cursor: [0.0, 0.0],
             state: State::Menu,
+            zoom: 1.0,
             menu: Menu::new(),
             client_id: None,
         }
@@ -164,8 +166,11 @@ impl App {
 
         let world = self.world_state.as_ref().unwrap();
         let (wx, wy) = (world.x as f64, world.y as f64);
+        let zoom = self.zoom;
 
         self.gl.draw(args.viewport(), |c, gl| {
+
+            let transform = c.transform.scale(zoom, zoom);
 
             // Clear the screen.
             clear(BLACK, gl);
@@ -178,7 +183,7 @@ impl App {
             ];
 
             for l in world.iter() {
-                line(ORANGE, 1.0, *l, c.transform, gl);
+                line(ORANGE, 1.0, *l, transform, gl);
             }
 
             for s in units.iter() {
@@ -196,12 +201,12 @@ impl App {
                 ];
 
                 // Rotate the front to match the unit
-                let transform_front = c.transform.trans(s.state.position[0], s.state.position[1])
+                let transform_front = transform.trans(s.state.position[0], s.state.position[1])
                     .rot_rad(s.state.angle)
                     .trans(-25.0, -25.0);
 
                 // We don't need to apply any transformation to the units
-                let transform_triangle = c.transform;
+                let transform_triangle = transform;
 
                 // Draw the unit ORANGE if selected
                 if s.selected {
@@ -293,7 +298,10 @@ impl App {
     }
 
     pub fn on_mouse_click(&mut self, button: &MouseButton) {
-        let cursor = self.cursor;
+        let cursor = [
+            self.cursor[0] / self.zoom,
+            self.cursor[1] / self.zoom,
+        ];
         match *button {
             MouseButton::Left  => self.select(cursor),
             MouseButton::Right => self.move_selected(cursor),
@@ -303,6 +311,15 @@ impl App {
 
     pub fn on_mouse_move(&mut self, cursor: [f64; 2]) {
         self.cursor = cursor;
+    }
+
+    pub fn on_mouse_scroll(&mut self, scroll: [f64; 2]) {
+        if scroll[1] > 0.0 {
+            self.zoom *= 1.5 * scroll[1];
+        } else {
+            self.zoom /= 1.5 * -scroll[1];
+        }
+        println!("zoom: {}", self.zoom);
     }
 
     pub fn move_selected(&mut self, position: [f64;2]) {
