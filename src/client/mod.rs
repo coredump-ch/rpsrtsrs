@@ -41,20 +41,19 @@ impl NetworkClient {
         }
     }
 
-    // todo: Maybe return client_id here? Would allow the application to reconnect...
     pub fn connect(&mut self) -> Result<ClientId, Box<Error>>  {
         let mut stream = TcpStream::connect(self.server_addr)?;
         serialize_into(&mut stream, &Message::ClientHello, Infinite)?;
         let server_hello = deserialize_from(&mut stream, Infinite);
 
         self.stream = Some(stream);
-        if let Ok(Message::ServerHello(_, world_state)) = server_hello {
+        if let Ok(Message::ServerHello(client_id, world_state)) = server_hello {
             let mut world_state_lock = self.world_state.lock().unwrap();
             *world_state_lock = world_state;
+            Ok(client_id)
         } else {
-            panic!("Could not connect to server");
+            Err("Could not connect to server".into())
         }
-        Ok(0.into())
     }
 
     pub fn update(&self) {
