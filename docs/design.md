@@ -55,3 +55,18 @@ Here are some interesting links about networking in games:
 
  - http://gafferongames.com/networking-for-game-programmers/what-every-programmer-needs-to-know-about-game-networking/
 
+# Notes
+
+## Server
+
+ * Lobby
+   * Players are allowd to connect
+   * Settings may be changed
+ * Running
+   * Players are only allowed to reconnect
+
+## Settings
+
+ * World shape, size
+ * Unit size, speed, HP
+

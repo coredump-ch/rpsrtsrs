@@ -29,7 +29,7 @@ pub struct Server {
 
 impl Server {
     pub fn new<T: ToSocketAddrs>(addr: T,
-                                world_size: (u64, u64))
+                                world_size: (f64, f64))
                                 -> IoResult<Server> {
         let addr = try!(addr.to_socket_addrs()).next().unwrap();
         let world = Arc::new(Mutex::new(WorldState::new(world_size.0, world_size.1)));
@@ -226,13 +226,17 @@ pub fn handle_command(world: &WorldState,
                     if unit.id == id {
                         println!("Found it :)");
                         let mut target = [0.0; 2];
-                        target[0] = if move_target[0] > world.x as f64 {
-                            world.x as f64
+                        target[0] = if move_target[0] > world.x {
+                            world.x
+                        } else if move_target[0] < 0.0 {
+                            0.0
                         } else {
                             move_target[0]
                         };
-                        target[1] = if move_target[1] > world.y as f64 {
-                            world.y as f64
+                        target[1] = if move_target[1] > world.y {
+                            world.y
+                        } else if move_target[1] < 0.0 {
+                            0.0
                         } else {
                             move_target[1]
                         };

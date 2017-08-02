@@ -57,6 +57,10 @@ fn main() {
             app.on_mouse_move(args);
         }
 
+        if let Some(args) = e.mouse_scroll_args() {
+            app.on_mouse_scroll(args);
+        }
+
         if let Some(u) = e.update_args() {
             app.update(&u);
         }
