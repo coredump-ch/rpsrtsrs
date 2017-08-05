@@ -261,7 +261,8 @@ pub fn update_world(game: Arc<Mutex<GameState>>, unit_targets: SafeUnitTargets) 
         {
             let mut game_lock = game.lock().unwrap();
             let unit_targets = unit_targets.lock().unwrap();
-            game_lock.update(&unit_targets, 5.0);
+            game_lock.update_targets(&unit_targets);
+            game_lock.update(5.0);
         }
         thread::sleep(Duration::from_millis(5));
     }

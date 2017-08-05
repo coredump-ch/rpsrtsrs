@@ -110,7 +110,7 @@ impl GameState {
         GameState{ players: vec![] }
     }
 
-    pub fn update(&mut self, unit_targets: &HashMap<UnitId, [f64; 2]>, dt: f64) {
+    pub fn update_targets(&mut self, unit_targets: &HashMap<UnitId, [f64; 2]>) {
         for player in self.players.iter_mut() {
             for unit in player.units.iter_mut() {
                 if let Some(target) = unit_targets.get(&unit.id) {
@@ -119,6 +119,13 @@ impl GameState {
                 } else {
                     unit.speed_vector = [0.0,0.0];
                 }
+            }
+        }
+    }
+
+    pub fn update(&mut self, dt: f64) {
+        for player in self.players.iter_mut() {
+            for unit in player.units.iter_mut() {
                 unit.update(dt);
             }
         }

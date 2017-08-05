@@ -254,7 +254,7 @@ impl App {
         }
     }
 
-    pub fn update(&mut self, _: &UpdateArgs) {
+    pub fn update(&mut self, args: &UpdateArgs) {
         // grab updated server state if it is available
         let game_state_option = {
             let mut game_state_lock = self.game_state_server.lock().unwrap();
@@ -263,7 +263,7 @@ impl App {
         if let Some(game_state) = game_state_option {
             self.game_state = game_state;
         } else {
-            // TODO: Interpolate
+            self.game_state.update(args.dt*1000.0);
         }
     }
 
