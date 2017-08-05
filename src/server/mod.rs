@@ -261,18 +261,8 @@ pub fn update_world(game: Arc<Mutex<GameState>>, unit_targets: SafeUnitTargets) 
         {
             let mut game_lock = game.lock().unwrap();
             let unit_targets = unit_targets.lock().unwrap();
-            for player in game_lock.players.iter_mut() {
-                for unit in player.units.iter_mut() {
-                    if let Some(target) = unit_targets.get(&unit.id) {
-                        let speed = 0.0001;
-                        unit.speed_vector = [(target[0]-unit.position[0])*speed, (target[1]-unit.position[1])*speed];
-                    } else {
-                        unit.speed_vector = [0.0,0.0];
-                    }
-                    unit.update(5);
-                }
-                //println!("{:?}", player);
-            }
+            game_lock.update_targets(&unit_targets);
+            game_lock.update(5.0);
         }
         thread::sleep(Duration::from_millis(5));
     }
