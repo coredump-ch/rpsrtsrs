@@ -4,6 +4,7 @@
 //! transferred from the server to the client over the network.
 use std::convert::Into;
 use std::fmt;
+use std::collections::HashMap;
 
 
 /// A unit identifier.
@@ -71,9 +72,9 @@ impl Unit {
         }
     }
 
-    pub fn update(&mut self, dt_ms: u64) {
-        self.position[0] += self.speed_vector[0] * dt_ms as f64;
-        self.position[1] += self.speed_vector[1] * dt_ms as f64;
+    pub fn update(&mut self, dt_ms: f64) {
+        self.position[0] += self.speed_vector[0] * dt_ms;
+        self.position[1] += self.speed_vector[1] * dt_ms;
     }
 }
 
@@ -107,6 +108,20 @@ pub struct GameState {
 impl GameState {
     pub fn new() -> GameState {
         GameState{ players: vec![] }
+    }
+
+    pub fn update(&mut self, unit_targets: &HashMap<UnitId, [f64; 2]>, dt: f64) {
+        for player in self.players.iter_mut() {
+            for unit in player.units.iter_mut() {
+                if let Some(target) = unit_targets.get(&unit.id) {
+                    let speed = 0.0001;
+                    unit.speed_vector = [(target[0]-unit.position[0])*speed, (target[1]-unit.position[1])*speed];
+                } else {
+                    unit.speed_vector = [0.0,0.0];
+                }
+                unit.update(dt);
+            }
+        }
     }
 }
 
