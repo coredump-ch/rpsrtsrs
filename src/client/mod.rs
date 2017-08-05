@@ -2,6 +2,7 @@ use std::sync::{Mutex, Arc};
 use std::net::{SocketAddr, ToSocketAddrs};
 use std::collections::VecDeque;
 use std::error::Error;
+use std::mem;
 use opengl_graphics::GlGraphics;
 use opengl_graphics::glyph_cache::GlyphCache;
 use piston::input::{Button, Key, MouseButton, RenderArgs, UpdateArgs};
@@ -23,7 +24,7 @@ pub mod error;
 use self::menu::Menu;
 
 pub struct NetworkClient {
-    pub game_state: Arc<Mutex<GameState>>,
+    pub game_state: Arc<Mutex<Option<GameState>>>,
     server_addr: SocketAddr,
     stream: Option<TcpStream>,
     commands: Arc<Mutex<VecDeque<Command>>>,
@@ -31,7 +32,7 @@ pub struct NetworkClient {
 
 impl NetworkClient {
     pub fn new<T: ToSocketAddrs>(server_addrs: T,
-                                 game_state: Arc<Mutex<GameState>>,
+                                 game_state: Arc<Mutex<Option<GameState>>>,
                                  commands: Arc<Mutex<VecDeque<Command>>>) -> NetworkClient {
         let server_addr = server_addrs.to_socket_addrs().unwrap().next().unwrap();
         NetworkClient {
@@ -88,7 +89,7 @@ impl NetworkClient {
                     Ok(game) => {
                         //println!("{:?}", game);
                         let mut game_state_lock = game_state.lock().unwrap();
-                        *game_state_lock = game;
+                        *game_state_lock = Some(game);
 
                     }
                     Err(e) => {
@@ -111,7 +112,8 @@ pub enum State {
 pub struct App {
     pub gl: GlGraphics, // OpenGL drawing backend.
     pub world_state: Option<WorldState>,
-    pub game_state: Arc<Mutex<GameState>>,
+    pub game_state_server: Arc<Mutex<Option<GameState>>>,
+    pub game_state: GameState,
     pub selected_units: Vec<UnitId>,
     pub commands: Arc<Mutex<VecDeque<Command>>>,
     pub cursor: [f64; 2],
@@ -127,7 +129,8 @@ impl App {
         App {
             gl: gl,
             world_state: None,
-            game_state: Arc::new(Mutex::new(GameState::new())),
+            game_state_server: Arc::new(Mutex::new(None)),
+            game_state: GameState::new(),
             selected_units: vec![],
             commands: Arc::new(Mutex::new(VecDeque::new())),
             cursor: [0.0, 0.0],
@@ -142,7 +145,7 @@ impl App {
     pub fn start(&mut self) -> Result<(), Box<Error>> {
         let mut network_client = NetworkClient::new(
             ("127.0.0.1", 8080),
-            self.game_state.clone(),
+            self.game_state_server.clone(),
             self.commands.clone());
         let (client_id, world_state) = network_client.connect()?;
         self.client_id = Some(client_id);
@@ -154,9 +157,8 @@ impl App {
     pub fn select(&mut self, position: [f64;2]) {
 
         let player = {
-            let game_lock = self.game_state.lock().unwrap();
             let index = self.client_id.unwrap_or(ClientId(0)).0 as usize;
-            game_lock.players.get(index).map(|v| v.clone())
+            self.game_state.players.get(index).map(|v| v.clone())
         };
 
         self.selected_units.truncate(0);
@@ -176,11 +178,7 @@ impl App {
 
         const FRONT_THICKNESS: f64 = 5.0;
 
-        let game_state = {
-            let game_lock = self.game_state.lock().unwrap();
-            game_lock.clone()
-        };
-
+        let game_state = &self.game_state;
         let world = self.world_state.as_ref().unwrap();
         let (wx, wy) = (world.x, world.y);
         let zoom = self.zoom;
@@ -257,7 +255,16 @@ impl App {
     }
 
     pub fn update(&mut self, _: &UpdateArgs) {
-        // TODO: Interpolate
+        // grab updated server state if it is available
+        let game_state_option = {
+            let mut game_state_lock = self.game_state_server.lock().unwrap();
+            mem::replace(&mut *game_state_lock, None)
+        };
+        if let Some(game_state) = game_state_option {
+            self.game_state = game_state;
+        } else {
+            // TODO: Interpolate
+        }
     }
 
     pub fn on_button_press(&mut self, button: &Button) -> bool {
