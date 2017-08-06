@@ -168,6 +168,17 @@ impl GameState {
             }
         }
     }
+
+    pub fn shoot(&mut self, id: UnitId) {
+        for player in self.players.iter_mut() {
+            for unit in player.units.iter() {
+                if unit.id == id {
+                    let bullet = unit.shoot(UNIT_SIZE, 0.1);
+                    player.bullets.push(bullet);
+                }
+            }
+        }
+    }
 }
 
 /// Data related to the entire world, like width and height.
