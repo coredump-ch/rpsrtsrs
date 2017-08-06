@@ -77,6 +77,38 @@ impl Unit {
         self.position[0] += self.speed_vector[0] * dt_ms;
         self.position[1] += self.speed_vector[1] * dt_ms;
     }
+
+    pub fn shoot(&self, size: f64, speed: f64) -> Bullet {
+        let position = [
+            self.position[0] + self.angle.cos() * size,
+            self.position[1] + self.angle.sin() * size,
+        ];
+        let speed = [
+            self.angle.cos() * speed,
+            self.angle.sin() * speed,
+        ];
+        Bullet::new(position, speed)
+    }
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
+pub struct Bullet {
+    pub position: [f64; 2],
+    pub speed_vector: [f64; 2],
+}
+
+impl Bullet {
+    pub fn new(position: [f64; 2], speed: [f64; 2]) -> Bullet {
+        Bullet {
+            position: position,
+            speed_vector: speed,
+        }
+    }
+
+    pub fn update(&mut self, dt_ms: f64) {
+        self.position[0] += self.speed_vector[0] * dt_ms;
+        self.position[1] += self.speed_vector[1] * dt_ms;
+    }
 }
 
 
@@ -85,6 +117,7 @@ impl Unit {
 pub struct Player {
     pub id: ClientId,
     pub units: Vec<Unit>,
+    pub bullets: Vec<Bullet>,
 }
 
 impl Player {
@@ -92,6 +125,7 @@ impl Player {
         Player {
             id: id.into(),
             units: vec![],
+            bullets: vec![],
         }
     }
 }
@@ -128,6 +162,9 @@ impl GameState {
         for player in self.players.iter_mut() {
             for unit in player.units.iter_mut() {
                 unit.update(dt);
+            }
+            for bullet in player.bullets.iter_mut() {
+                bullet.update(dt);
             }
         }
     }
