@@ -172,7 +172,7 @@ impl App {
     }
 
     fn render_game(&mut self, args: &RenderArgs, _: &mut GlyphCache) {
-        use graphics::{polygon, line, clear};
+        use graphics::{polygon, line, clear, ellipse};
         use graphics::Transformed;
         use graphics::types::{Polygon, Line};
 
@@ -239,6 +239,11 @@ impl App {
                         polygon(color.primary, front, transform_front, gl);
                     }
 
+                }
+
+                for b in player.bullets.iter() {
+                    let transform = transform.trans(b.position[0], b.position[1]);
+                    ellipse(color.primary, [0.0, 0.0, 1.0, 1.0], transform, gl);
                 }
             }
         });
