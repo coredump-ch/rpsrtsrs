@@ -314,6 +314,9 @@ impl App {
                     &Button::Keyboard(Key::Right) => {
                         self.scroll[0] -= 10.0;
                     }
+                    &Button::Keyboard(Key::F) => {
+                        self.shoot_selected();
+                    }
                     &Button::Keyboard(_) => { }
                     &Button::Mouse(button) => {
                         self.on_mouse_click(&button);
@@ -360,6 +363,13 @@ impl App {
         for u in self.selected_units.iter() {
             let mut commands = self.commands.lock().unwrap();
             commands.push_back(Command::Move(*u, position));
+        }
+    }
+
+    pub fn shoot_selected(&mut self) {
+        for u in self.selected_units.iter() {
+            let mut commands = self.commands.lock().unwrap();
+            commands.push_back(Command::Shoot(*u));
         }
     }
 }
