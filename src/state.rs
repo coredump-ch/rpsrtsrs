@@ -39,6 +39,7 @@ impl fmt::Display for ClientId {
     }
 }
 
+pub const UNIT_SIZE: f64 = 50.0;
 
 /// The state of a single unit
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
