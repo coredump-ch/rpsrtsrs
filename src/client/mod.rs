@@ -13,7 +13,7 @@ use network::{Command, Message};
 
 use bincode::{serialize_into, deserialize_from, Infinite};
 
-use state::{UnitId, ClientId, WorldState, GameState};
+use state::{UnitId, ClientId, WorldState, GameState, UNIT_SIZE};
 use shapes::Shape;
 use colors;
 use colors::{BLACK, ORANGE};
@@ -164,7 +164,7 @@ impl App {
         self.selected_units.truncate(0);
         if let Some(player) = player {
             for unit in player.units.iter() {
-                if unit.is_hit(50.0, position) {
+                if unit.is_hit(UNIT_SIZE, position) {
                     self.selected_units.push(unit.id);
                 }
             }
@@ -205,28 +205,26 @@ impl App {
                 line(ORANGE, 1.0, *l, transform, gl);
             }
 
-            let size = 50.0;
-        
             for i in 0..game_state.players.len() {
                 let ref player = game_state.players[i];
                 let color = &colors::PLAYERS[i % colors::PLAYERS.len()];
                 for s in player.units.iter() {
                     // Create a triangle polygon. The initial orientation is facing east.
-                    let triangle: Polygon = &s.get_shape(size);
+                    let triangle: Polygon = &s.get_shape(UNIT_SIZE);
 
                     // Create a border on the front of the polygon. This is a trapezoid.
                     // Because the angle of the trapezoid side is 22.5°, we know that `dx` is always `2 * dy`.
                     let front: Polygon = &[
-                        [size, size],                                           // Top right
-                        [size, 0.0],                                                 // Bottom right
-                        [size - FRONT_THICKNESS, FRONT_THICKNESS / 2.0],             // Bottom left
-                        [size - FRONT_THICKNESS, size - FRONT_THICKNESS / 2.0], // Top left
+                        [UNIT_SIZE, UNIT_SIZE],                                           // Top right
+                        [UNIT_SIZE, 0.0],                                                 // Bottom right
+                        [UNIT_SIZE - FRONT_THICKNESS, FRONT_THICKNESS / 2.0],             // Bottom left
+                        [UNIT_SIZE - FRONT_THICKNESS, UNIT_SIZE - FRONT_THICKNESS / 2.0], // Top left
                     ];
 
                     // Rotate the front to match the unit
                     let transform_front = transform.trans(s.position[0], s.position[1])
                         .rot_rad(s.angle)
-                        .trans(-25.0, -25.0);
+                        .trans(-0.5 * UNIT_SIZE, -0.5 * UNIT_SIZE);
 
                     // We don't need to apply any transformation to the units
                     let transform_triangle = transform;
