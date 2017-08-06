@@ -13,6 +13,8 @@ use state::{GameState, WorldState, UnitId, ClientId};
 pub enum Command {
     /// Move command with unit ID and target
     Move(UnitId, [f64; 2]),
+    /// Let the unit shoot
+    Shoot(UnitId),
 }
 
 /// Primary message type sent between server and client.
