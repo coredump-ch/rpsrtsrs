@@ -10,7 +10,7 @@ use std::f64::consts::PI;
 
 use bincode::{serialize, deserialize_from, Infinite, Bounded};
 
-use state::{WorldState, GameState, Player, Unit, UnitId, UNIT_SIZE};
+use state::{WorldState, GameState, Player, Unit, UnitId};
 use network::{Message, Command};
 
 /// A `Server` instance holds global server state.
@@ -254,14 +254,7 @@ pub fn handle_command(world: &WorldState,
             println!("Move {} to {:?}!", id, move_target);
         }
         &Command::Shoot(id) => {
-            for player in game.players.iter_mut() {
-                for unit in player.units.iter_mut() {
-                    if unit.id == id {
-                        let bullet = unit.shoot(UNIT_SIZE, 0.1);
-                        player.bullets.push(bullet);
-                    }
-                }
-            }
+            game.shoot(id);
         }
     }
 }
