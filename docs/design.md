@@ -12,19 +12,19 @@ The clients send commands to the server and receive the current gamestate.
 This is the state machine on the Server:
 
     ┏━━━━━━━┓   ┏━━━━━━━━━━━┓   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-    ┃*start*┠───►ClientHello┠───►ServerHello(ClientId, World)┠─╮
+    ┃*start*┠──►┃ClientHello┠──►┃ServerHello(ClientId, World)┠─╮
     ┗━━━━━━━┛   ┗━━━━━━━━━━━┛   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛ │
                                                                │
                 ┏━━━━━━━━━━━┓                                  │
-                ┃*connected*◄──────────────────────────────────┴──┬─╮
-                ┗┯━┯━━━━━━━━┛                                     │ │
-                 │ │                                              │ │
-                 │ │ ┏━━━━━━━━━━━━━━━━┓   ┏━━━━━━━━━━━━━━━━━━━━━┓ │ │
-                 │ ╰─►Command(Command)┠───►UpdateGamestate(Game)┠─╯ │
+                ┃*connected*┃◄─────────────────────────────────┴──┬─╮
+                ┗┯┯━━━━━━━━━┛                                     │ │
+                 ││                                               │ │
+                 ││  ┏━━━━━━━━━━━━━━━━┓   ┏━━━━━━━━━━━━━━━━━━━━━┓ │ │
+                 │╰─►┃Command(Command)┠──►┃UpdateGamestate(Game)┠─╯ │
                  │   ┗━━━━━━━━━━━━━━━━┛   ┗━━━━━━━━━━━━━━━━━━━━━┛   │
                  │                                                  │
                  │   ┏━━━━━━━━━━━━━━━━━━━━━━━━━┓                    │
-                 ╰───►ClientReconnect(ClientId)┠────────────────────╯
+                 ╰──►┃ClientReconnect(ClientId)┠────────────────────╯
                      ┗━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
 - Initially, the server waits for a `ClientHello` message.
