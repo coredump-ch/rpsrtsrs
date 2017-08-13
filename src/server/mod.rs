@@ -1,3 +1,5 @@
+extern crate rand;
+
 use std::io::Write;
 use std::io::Result as IoResult;
 use std::net::{TcpListener, TcpStream, SocketAddr, ToSocketAddrs};
@@ -8,9 +10,11 @@ use std::ops::RangeFrom;
 use std::collections::HashMap;
 use std::f64::consts::PI;
 
+use rand::Rng;
 use bincode::{serialize, deserialize_from, Infinite, Bounded};
 
-use state::{WorldState, GameState, Player, Unit, UnitId};
+use shapes::Shape;
+use state::{UNIT_SIZE, WorldState, GameState, Player, Unit, UnitId};
 use network::{Message, Command};
 
 /// A `Server` instance holds global server state.
@@ -101,15 +105,35 @@ pub fn handle_client(mut stream: TcpStream,
                         .next().expect("No more client IDs available!");
                     let mut player = Player::new(client_id);
 
-                    // Create four initial units for the player
-                    let coords = [
-                        [50.0f64, 50.0f64], [50.0f64, 100.0f64], [100.0f64, 50.0f64], [100.0f64, 100.0f64],
-                    ];
-                    for coord in coords.iter() {
+                    let mut rng = rand::thread_rng();
+                    for _ in 0..4 {
                         let unit_id = unit_id_generator
                             .lock().expect("Could not lock unit_id_generator mutex")
                             .next().expect("No more unit IDs available!");
-                        player.units.push(Unit::new(unit_id, *coord));
+
+                        // Try 42 times to create a new unit
+                        'outer: for _ in 0..42 {
+                            let position = [
+                                rng.next_f64() * world.x,
+                                rng.next_f64() * world.y,
+                            ];
+                            let new_unit = Unit::new(unit_id, position);
+                            for player in &game_lock.players {
+                                for unit in &player.units {
+                                    if unit.collision_detect(&new_unit, UNIT_SIZE) {
+                                        continue 'outer;
+                                    }
+                                }
+                            }
+                            for unit in &player.units {
+                                    if unit.collision_detect(&new_unit, UNIT_SIZE) {
+                                        continue 'outer;
+                                    }
+                            }
+                            // check if collision
+                            player.units.push(new_unit);
+                            break;
+                        }
                     }
 
                     // Add player to the world
