@@ -2,6 +2,7 @@
 extern crate graphics;
 use self::graphics::types::Triangle;
 use self::graphics::math;
+use self::graphics::math::{sub, square_len};
 use super::state;
 use std::f64;
 
@@ -10,6 +11,8 @@ pub trait Shape {
     fn get_shape(&self, size: f64) -> Triangle;
 
     fn is_hit(&self, size: f64, position: [f64;2]) -> bool;
+
+    fn collision_detect(&self, other: &Self, size: f64) -> bool;
 }
 
 impl Shape for state::Unit {
@@ -41,6 +44,11 @@ impl Shape for state::Unit {
     fn is_hit(&self, size: f64, position: [f64;2]) -> bool {
         let hitbox = self.get_shape(size);
         math::inside_triangle(hitbox, position)
+    }
+
+    fn collision_detect(&self, other: &Self, size: f64) -> bool {
+        let dv = sub(self.position, other.position);
+        square_len(dv) <= (2.0 * size * 2.0 * size)
     }
 }
 
