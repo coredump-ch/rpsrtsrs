@@ -3,6 +3,7 @@ extern crate graphics;
 use self::graphics::types::Triangle;
 use self::graphics::math;
 use super::state;
+use std::f64;
 
 
 pub trait Shape {
@@ -13,19 +14,18 @@ pub trait Shape {
 
 impl Shape for state::Unit {
     /// Return the base shape of the unit.
-    fn get_shape(&self, size: f64) -> Triangle {
-        // Base shape
+    fn get_shape(&self, radius: f64) -> Triangle {
+        // calculate side length
+        let a = radius * 3.0 / 3.0f64.sqrt();
+
         let mut triangle: Triangle = [
-            [0.0, size / 2.0], // Left
-            [size, size],      // Top right
-            [size, 0.0],       // Bottom right
+            [-radius,        0.0], // Left
+            [ radius*0.5,  a/2.0], // Top right
+            [ radius*0.5, -a/2.0], // Bottom right
         ];
 
         // Transformations
         for point in triangle.iter_mut() {
-            // Translate center to zero point
-            *point = math::add(*point, [-size / 2.0, -size / 2.0]);
-
             // Rotate
             let rotation_matrix = math::rotate_radians(self.angle);
             *point = math::transform_vec(rotation_matrix, *point);
