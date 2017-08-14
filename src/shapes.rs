@@ -21,6 +21,7 @@ impl Shape for state::Unit {
         // calculate side length
         let a = radius * 3.0 / 3.0f64.sqrt();
 
+        // <|
         let mut triangle: Triangle = [
             [-radius,        0.0], // Left
             [ radius*0.5,  a/2.0], // Top right
@@ -65,31 +66,34 @@ mod test {
         //    /\
         //   /__\
         //
-        let mut unit = state::Unit::new(0, [100.0, 100.0]);
+        let mut unit = state::Unit::new(0, [0.0, 0.0]);
         unit.angle = FRAC_PI_2;
 
+        let epsilon = 0.001;
+        let size = 1.0;
+        let a = size * 3.0 / 3.0f64.sqrt();
+
         // The following points should be outside of the hitbox.
-        assert_eq!(unit.is_hit(50.0, [0.0, 0.0]), false);
-        assert_eq!(unit.is_hit(50.0, [50.0, 50.0]), false);
+        assert_eq!(unit.is_hit(1.0, [a/2.0, epsilon]), false);
+        assert_eq!(unit.is_hit(1.0, [a/2.0, epsilon]), false);
 
         // The following five points should be inside the hitbox.
         //      .
         //     /.\
         //   ./_._\.
         //
-        let vertical_distance = 50.0 / 2.0 - 1.0;
-        assert_eq!(unit.is_hit(50.0, [100.0, 100.0]), true);
-        assert_eq!(unit.is_hit(50.0, [100.0, 100.0 - vertical_distance]), true);
-        assert_eq!(unit.is_hit(50.0, [100.0, 100.0 + vertical_distance]), true);
-        assert_eq!(unit.is_hit(50.0, [100.0 - vertical_distance, 100.0 + vertical_distance]), true);
-        assert_eq!(unit.is_hit(50.0, [100.0 + vertical_distance, 100.0 + vertical_distance]), true);
+        assert_eq!(unit.is_hit(1.0, [0.0, 0.0]), true);
+        assert_eq!(unit.is_hit(1.0, [0.0, -size + epsilon]), true);
+        assert_eq!(unit.is_hit(1.0, [0.0, size / 2.0 - epsilon]), true);
+        assert_eq!(unit.is_hit(1.0, [-a/2.0+epsilon, size / 2.0 - epsilon]), true);
+        assert_eq!(unit.is_hit(1.0, [ a/2.0-epsilon, size / 2.0 - epsilon]), true);
 
         // The following two points should be outside the hitbox.
         //
         //  . /\ .
         //   /__\
         //
-        assert_eq!(unit.is_hit(50.0, [100.0 - vertical_distance, 100.0]), false);
-        assert_eq!(unit.is_hit(50.0, [100.0 + vertical_distance, 100.0]), false);
+        assert_eq!(unit.is_hit(1.0, [a/2.0, 0.0]), false);
+        assert_eq!(unit.is_hit(1.0, [a/2.0, 0.0]), false);
     }
 }
