@@ -81,7 +81,7 @@ impl Unit {
         self.position[1] += self.speed_vector[1] * dt_ms;
     }
 
-    pub fn shoot(&self, size: f64, speed: f64) -> Bullet {
+    pub fn shoot(&self, size: f64, speed: f64) -> (Bullet, Laserbeam, Laserbeam) {
         let position = [
             self.position[0] + self.angle.cos() * size,
             self.position[1] + self.angle.sin() * size,
@@ -90,7 +90,11 @@ impl Unit {
             self.angle.cos() * speed,
             self.angle.sin() * speed,
         ];
-        Bullet::new(position, speed)
+        (
+            Bullet::new(position, speed),
+            Laserbeam::new(position, speed),
+            Laserbeam::new(position, speed),
+        )
     }
 }
 
@@ -111,6 +115,33 @@ impl Bullet {
     pub fn update(&mut self, dt_ms: f64) {
         self.position[0] += self.speed_vector[0] * dt_ms;
         self.position[1] += self.speed_vector[1] * dt_ms;
+    }
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
+pub struct Laserbeam {
+    pub position_start: [f64; 2],
+    pub position_head: [f64; 2],
+    pub speed_vector: [f64; 2],
+    pub length: f64,
+}
+
+impl Laserbeam {
+    pub fn new(position_start: [f64; 2], speed_vector: [f64; 2]) -> Self {
+        Laserbeam {
+            position_start: position_start,
+            position_head: position_start,
+            speed_vector: speed_vector,
+            length: 0.0,
+        }
+    }
+
+    // TODO: This should be a trait
+    pub fn update(&mut self, dt_ms: f64) {
+        let length_per_ms = 1.0;
+        self.length = self.length + (dt_ms * length_per_ms);
+        self.position_head[0] = self.position_start[0] + self.speed_vector[0] * self.length;
+        self.position_head[1] = self.position_start[1] + self.speed_vector[1] * self.length;
     }
 }
 
@@ -140,6 +171,7 @@ pub struct GameState {
     /// List of players
     pub players: Vec<Player>,
     pub bullets: Vec<Bullet>,
+    pub laserbeams: Vec<Laserbeam>,
 }
 
 impl GameState {
@@ -147,6 +179,7 @@ impl GameState {
         GameState{
             players: vec![],
             bullets: vec![],
+            laserbeams: vec![],
         }
     }
 
@@ -188,6 +221,14 @@ impl GameState {
             }
             self.bullets.push(bullet.clone());
         }
+        let mut laserbeams = mem::replace(&mut self.laserbeams, vec![]);
+        for beam in laserbeams.iter_mut() {
+            beam.update(dt);
+            self.laserbeams.push(beam.clone());
+            /*if beam.length > 9999.0 { // magic value do not change!!!!!!!!
+                self.laserbeams.push(beam.clone());
+            }*/
+        }
         for player in self.players.iter_mut() {
             let mut units = mem::replace(&mut player.units, vec![]);
             for unit in units.iter_mut() {
@@ -205,8 +246,11 @@ impl GameState {
         for player in self.players.iter_mut() {
             for unit in player.units.iter() {
                 if unit.id == id {
-                    let bullet = unit.shoot(UNIT_SIZE, 0.1);
+                    let (bullet, beam_left, beam_right) = unit.shoot(UNIT_SIZE, 0.1);
                     self.bullets.push(bullet);
+                    println!("shoot two beams");
+                    self.laserbeams.push(beam_left);
+                    self.laserbeams.push(beam_right);
                 }
             }
         }

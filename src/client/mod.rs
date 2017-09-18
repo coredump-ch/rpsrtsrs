@@ -255,7 +255,19 @@ impl App {
             }
             for b in game_state.bullets.iter() {
                 let transform = transform.trans(b.position[0], b.position[1]);
-                ellipse(WHITE, [0.0, 0.0, 1.0, 1.0], transform, gl);
+                ellipse(WHITE, [0.0, 0.0, 6.0, 6.0], transform, gl);
+            }
+            println!("{} laserbeams", game_state.laserbeams.len());
+            for beam in game_state.laserbeams.iter() {
+                println!("show laserbeam");
+                let transform = transform.trans(beam.position_start[0], beam.position_start[1]);
+                let l = [
+                    beam.position_start[0],
+                    beam.position_start[1],
+                    beam.position_head[0],
+                    beam.position_head[1],
+                ];
+                line(ORANGE, 1.0, l, transform, gl);
             }
         });
     }
