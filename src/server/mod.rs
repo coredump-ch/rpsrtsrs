@@ -50,8 +50,9 @@ impl Server {
 
         let game_clone = self.game.clone();
         let unit_targets_clone = self.unit_targets.clone();
+        let world_clone = self.world.clone();
         thread::spawn(move || {
-            update_world(game_clone, unit_targets_clone);
+            update_world(world_clone, game_clone, unit_targets_clone);
         });
 
         for stream in tcp_listener.incoming() {
@@ -256,13 +257,13 @@ pub fn handle_command(world: &WorldState,
     }
 }
 
-pub fn update_world(game: Arc<Mutex<GameState>>, unit_targets: SafeUnitTargets) {
+pub fn update_world(world: Arc<WorldState>, game: Arc<Mutex<GameState>>, unit_targets: SafeUnitTargets) {
     loop {
         {
             let mut game_lock = game.lock().unwrap();
             let unit_targets = unit_targets.lock().unwrap();
             game_lock.update_targets(&unit_targets);
-            game_lock.update(5.0);
+            game_lock.update(&*world, 5.0);
         }
         thread::sleep(Duration::from_millis(5));
     }

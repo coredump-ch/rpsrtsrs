@@ -16,7 +16,7 @@ use bincode::{serialize_into, deserialize_from, Infinite};
 use state::{UnitId, ClientId, WorldState, GameState, UNIT_SIZE};
 use shapes::Shape;
 use colors;
-use colors::{BLACK, ORANGE};
+use colors::{BLACK, ORANGE, WHITE};
 
 pub mod menu;
 pub mod error;
@@ -240,11 +240,10 @@ impl App {
                     }
 
                 }
-
-                for b in player.bullets.iter() {
-                    let transform = transform.trans(b.position[0], b.position[1]);
-                    ellipse(color.primary, [0.0, 0.0, 1.0, 1.0], transform, gl);
-                }
+            }
+            for b in game_state.bullets.iter() {
+                let transform = transform.trans(b.position[0], b.position[1]);
+                ellipse(WHITE, [0.0, 0.0, 1.0, 1.0], transform, gl);
             }
         });
     }
@@ -266,7 +265,9 @@ impl App {
         if let Some(game_state) = game_state_option {
             self.game_state = game_state;
         } else {
-            self.game_state.update(args.dt*1000.0);
+            if let Some(ref world) = self.world_state {
+                self.game_state.update(world, args.dt*1000.0);
+            }
         }
     }
 

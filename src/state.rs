@@ -5,6 +5,9 @@
 use std::convert::Into;
 use std::fmt;
 use std::collections::HashMap;
+use std::mem;
+
+use shapes::Shape;
 
 
 /// A unit identifier.
@@ -69,7 +72,7 @@ impl Unit {
             position: position,
             angle: 0.0f64,
             speed_vector: [0.0f64, 0.0f64],
-            health: 100_0000,
+            health: 100_000,
         }
     }
 
@@ -117,7 +120,6 @@ impl Bullet {
 pub struct Player {
     pub id: ClientId,
     pub units: Vec<Unit>,
-    pub bullets: Vec<Bullet>,
 }
 
 impl Player {
@@ -125,7 +127,6 @@ impl Player {
         Player {
             id: id.into(),
             units: vec![],
-            bullets: vec![],
         }
     }
 }
@@ -138,11 +139,15 @@ impl Player {
 pub struct GameState {
     /// List of players
     pub players: Vec<Player>,
+    pub bullets: Vec<Bullet>,
 }
 
 impl GameState {
     pub fn new() -> GameState {
-        GameState{ players: vec![] }
+        GameState{
+            players: vec![],
+            bullets: vec![],
+        }
     }
 
     pub fn update_targets(&mut self, unit_targets: &HashMap<UnitId, [f64; 2]>) {
@@ -158,13 +163,42 @@ impl GameState {
         }
     }
 
-    pub fn update(&mut self, dt: f64) {
-        for player in self.players.iter_mut() {
-            for unit in player.units.iter_mut() {
-                unit.update(dt);
+    pub fn update(&mut self, world: &WorldState, dt: f64) {
+        let mut bullets = mem::replace(&mut self.bullets, vec![]);
+        'bullet: for bullet in bullets.iter_mut() {
+            bullet.update(dt);
+            // still inside world?
+            if bullet.position[0] > world.x || bullet.position[1] > world.y ||
+                bullet.position[0] < 0.0 || bullet.position[1] < 0.0 {
+                    continue;
             }
-            for bullet in player.bullets.iter_mut() {
-                bullet.update(dt);
+
+            for player in self.players.iter_mut() {
+                for unit in player.units.iter_mut() {
+                    if unit.health > 0 && unit.is_hit(UNIT_SIZE, bullet.position) {
+                        if unit.health > 10000 {
+                            unit.health -= 10000;
+                        } else {
+                            unit.health = 0;
+                        }
+                        println!("hit: {}", unit.health);
+                        continue 'bullet;
+                    }
+                }
+            }
+            self.bullets.push(bullet.clone());
+        }
+        for player in self.players.iter_mut() {
+            // remove units and add them back if still alive to avoid changing the vector while
+            // iterating
+            let mut units = mem::replace(&mut player.units, vec![]);
+            for unit in units.iter_mut() {
+                if unit.health > 0 {
+                    unit.update(dt);
+                    player.units.push(unit.clone());
+                } else {
+                    println!("killed unit!");
+                }
             }
         }
     }
@@ -174,7 +208,7 @@ impl GameState {
             for unit in player.units.iter() {
                 if unit.id == id {
                     let bullet = unit.shoot(UNIT_SIZE, 0.1);
-                    player.bullets.push(bullet);
+                    self.bullets.push(bullet);
                 }
             }
         }
