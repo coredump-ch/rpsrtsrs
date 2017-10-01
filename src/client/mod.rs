@@ -1,27 +1,26 @@
+use std::thread;
+use std::time;
+use std::mem;
 use std::sync::{Mutex, Arc};
-use std::net::{SocketAddr, ToSocketAddrs};
+use std::net::{SocketAddr, ToSocketAddrs, TcpStream};
 use std::collections::VecDeque;
 use std::error::Error;
-use std::mem;
+
 use opengl_graphics::GlGraphics;
 use opengl_graphics::glyph_cache::GlyphCache;
 use piston::input::{Button, Key, MouseButton, RenderArgs, UpdateArgs};
-
-use std::{thread, time};
-use std::net::TcpStream;
-use network::{Command, Message};
-
 use bincode::{serialize_into, deserialize_from, Infinite};
 
+use network::{Command, Message};
 use state::{UnitId, ClientId, WorldState, GameState, UNIT_SIZE};
 use shapes::Shape;
-use colors;
-use colors::{BLACK, ORANGE, WHITE};
+use colors::{self, BLACK, ORANGE, WHITE};
 
 pub mod menu;
 pub mod error;
 
 use self::menu::Menu;
+
 
 pub struct NetworkClient {
     pub game_state: Arc<Mutex<Option<GameState>>>,
