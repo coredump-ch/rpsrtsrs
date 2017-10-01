@@ -7,6 +7,7 @@ use std::time::Duration;
 use std::ops::RangeFrom;
 use std::collections::HashMap;
 use std::f64::consts::PI;
+use std::ops::Deref;
 
 use bincode::{serialize, deserialize_from, Infinite, Bounded};
 
@@ -118,7 +119,7 @@ pub fn handle_client(mut stream: TcpStream,
 
                     // Send ServerHello message
                     let encoded: Vec<u8> = serialize(
-                        &Message::ServerHello(player_id, (*world).clone()),
+                        &Message::ServerHello(player_id, world.deref().clone()),
                         Infinite
                     ).unwrap();
                     stream.write(&encoded).unwrap();
@@ -134,7 +135,7 @@ pub fn handle_client(mut stream: TcpStream,
 
                             // Send ServerHello message
                             let encoded: Vec<u8> = serialize(
-                                &Message::ServerHello(id, (*world).clone()),
+                                &Message::ServerHello(id, world.deref().clone()),
                                 Infinite
                             ).unwrap();
                             stream.write(&encoded).unwrap();
