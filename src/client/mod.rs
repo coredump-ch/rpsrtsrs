@@ -7,7 +7,7 @@ use std::collections::VecDeque;
 use std::error::Error;
 
 use opengl_graphics::GlGraphics;
-use opengl_graphics::glyph_cache::GlyphCache;
+use opengl_graphics::GlyphCache;
 use piston::input::{Button, Key, MouseButton, RenderArgs, UpdateArgs};
 use bincode::{serialize_into, deserialize_from, Infinite};
 

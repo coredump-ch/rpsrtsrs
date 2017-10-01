@@ -5,9 +5,8 @@ authors = ["Raphael Nestler <raphael.nestler@gmail.com>"]
 
 [dependencies]
 rand = "0.3"
-piston = "0.32"
-piston2d-graphics = "0.21"
-piston2d-opengl_graphics = "0.45"
+piston = "0.34"
+piston2d-opengl_graphics = "0.47"
 piston-texture = "0.5"
 bincode = "0.8"
 serde_derive = "1.0"
@@ -16,20 +15,24 @@ docopt = "0.8"
 cgmath = { version = "0.15", features = ["serde"] }
 num = "0.1"
 
+[dependencies.piston2d-graphics]
+version = "0.22"
+#features = ["glyph_cache_rusttype"]
+
 [dependencies.pistoncore-sdl2_window]
-version = "0.43"
+version = "0.45"
 optional = true
 
 [dependencies.pistoncore-glfw_window]
-version = "0.34"
+version = "0.37"
 optional = true
 
 [dependencies.pistoncore-glutin_window]
-version = "0.38"
+version = "0.40"
 optional = true
 
 [features]
-default = ["include_sdl2"]
+default = ["include_glfw"]
 include_sdl2 = ["pistoncore-sdl2_window"]
 include_glfw = ["pistoncore-glfw_window"]
 include_glutin = ["pistoncore-glutin_window"]
