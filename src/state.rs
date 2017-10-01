@@ -5,7 +5,6 @@
 use std::convert::Into;
 use std::fmt;
 use std::collections::HashMap;
-use std::mem;
 
 use shapes::Shape;
 
@@ -164,41 +163,44 @@ impl GameState {
     }
 
     pub fn update(&mut self, world: &WorldState, dt: f64) {
-        let mut bullets = mem::replace(&mut self.bullets, vec![]);
-        'bullet: for bullet in bullets.iter_mut() {
-            bullet.update(dt);
-            // still inside world?
-            if bullet.position[0] > world.x || bullet.position[1] > world.y ||
-                bullet.position[0] < 0.0 || bullet.position[1] < 0.0 {
-                    continue;
-            }
 
-            for player in self.players.iter_mut() {
-                for unit in player.units.iter_mut() {
-                    if unit.health > 0 && unit.is_hit(UNIT_SIZE, bullet.position) {
-                        if unit.health > 10000 {
-                            unit.health -= 10000;
-                        } else {
-                            unit.health = 0;
+        for bullet in self.bullets.iter_mut() {
+            bullet.update(dt);
+        }
+
+        // waiting for non-lexical lifetimes...
+        {
+            let bullets = &mut self.bullets;
+            let players = &mut self.players;
+            bullets.retain(|bullet|{
+                // still inside world?
+                if bullet.position[0] > world.x || bullet.position[1] > world.y ||
+                    bullet.position[0] < 0.0 || bullet.position[1] < 0.0 {
+                        return false;
+                    }
+
+                for player in players.iter_mut() {
+                    for unit in player.units.iter_mut() {
+                        if unit.health > 0 && unit.is_hit(UNIT_SIZE, bullet.position) {
+                            if unit.health > 10000 {
+                                unit.health -= 10000;
+                            } else {
+                                unit.health = 0;
+                            }
+                            println!("hit: {}", unit.health);
+                            return false;
                         }
-                        println!("hit: {}", unit.health);
-                        continue 'bullet;
                     }
                 }
-            }
-            self.bullets.push(bullet.clone());
+                true
+            });
         }
+
+        // remove all units where health == 0
         for player in self.players.iter_mut() {
-            // remove units and add them back if still alive to avoid changing the vector while
-            // iterating
-            let mut units = mem::replace(&mut player.units, vec![]);
-            for unit in units.iter_mut() {
-                if unit.health > 0 {
-                    unit.update(dt);
-                    player.units.push(unit.clone());
-                } else {
-                    println!("killed unit!");
-                }
+            player.units.retain(|unit| unit.health > 0);
+            for unit in player.units.iter_mut() {
+                unit.update(dt);
             }
         }
     }
