@@ -316,7 +316,7 @@ impl App {
                         self.scroll[0] -= 10.0;
                     }
                     &Button::Keyboard(Key::F) => {
-                        self.shoot_selected();
+                        self.shoot();
                     }
                     &Button::Keyboard(_) => { }
                     &Button::Mouse(button) => {
@@ -367,7 +367,7 @@ impl App {
         }
     }
 
-    pub fn shoot_selected(&mut self) {
+    pub fn shoot(&mut self) {
         for u in self.selected_units.iter() {
             let mut commands = self.commands.lock().unwrap();
             commands.push_back(Command::Shoot(*u));
