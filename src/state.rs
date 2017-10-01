@@ -77,7 +77,7 @@ impl Unit {
     }
 
     pub fn update(&mut self, dt_ms: f64) {
-        self.position = self.speed_vector * dt_ms;
+        self.position += self.speed_vector * dt_ms;
     }
 
     pub fn shoot(&self, size: f64, speed: f64) -> Bullet {
@@ -108,7 +108,7 @@ impl Bullet {
     }
 
     pub fn update(&mut self, dt_ms: f64) {
-        self.position = self.speed_vector * dt_ms;
+        self.position += self.speed_vector * dt_ms;
     }
 }
 
@@ -233,5 +233,63 @@ impl WorldState {
             x: x,
             y: y,
         }
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_unit_update_stationary() {
+        //! The position of a unit should not change on update when no speed
+        //! vector is defined.
+        let pos = Vec2::new(20.0, 10.0);
+        let mut unit = Unit::new(1, pos);
+        assert_eq!(unit.position, pos);
+        unit.update(10.0);
+        assert_eq!(unit.position, pos);
+        unit.update(1000.0);
+        assert_eq!(unit.position, pos);
+    }
+
+    #[test]
+    fn test_unit_update_moving() {
+        //! The position of a unit should not change on update when no speed
+        //! vector is defined.
+        let mut unit = Unit::new(1, Vec2::new(20.0, 10.0));
+        unit.speed_vector = Vec2::new(1.0, 2.0);
+        assert_eq!(unit.position, Vec2::new(20.0, 10.0));
+        unit.update(1.0);
+        assert_eq!(unit.position, Vec2::new(21.0, 12.0));
+        unit.update(100.0);
+        assert_eq!(unit.position, Vec2::new(121.0, 212.0));
+    }
+
+    #[test]
+    fn test_bullet_update_stationary() {
+        //! The position of a bullet should not change on update when a zero
+        //! speed vector is defined.
+        let pos = Vec2::new(20.0, 10.0);
+        let speed = Vec2::new(0.0, 0.0);
+        let mut bullet = Bullet::new(pos, speed);
+        assert_eq!(bullet.position, pos);
+        bullet.update(10.0);
+        assert_eq!(bullet.position, pos);
+        bullet.update(1000.0);
+        assert_eq!(bullet.position, pos);
+    }
+
+    #[test]
+    fn test_bullet_update_moving() {
+        //! The position of a bullet should not change on update when no speed
+        //! vector is defined.
+        let mut bullet = Bullet::new(Vec2::new(20.0, 10.0), Vec2::new(1.0, 2.0));
+        assert_eq!(bullet.position, Vec2::new(20.0, 10.0));
+        bullet.update(1.0);
+        assert_eq!(bullet.position, Vec2::new(21.0, 12.0));
+        bullet.update(100.0);
+        assert_eq!(bullet.position, Vec2::new(121.0, 212.0));
     }
 }
