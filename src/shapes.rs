@@ -4,11 +4,13 @@ use self::graphics::types::Triangle;
 use self::graphics::math;
 use super::state;
 
+use common::Vec2;
+
 
 pub trait Shape {
     fn get_shape(&self, size: f64) -> Triangle;
 
-    fn is_hit(&self, size: f64, position: [f64;2]) -> bool;
+    fn is_hit(&self, size: f64, position: Vec2) -> bool;
 }
 
 impl Shape for state::Unit {
@@ -31,24 +33,24 @@ impl Shape for state::Unit {
             *point = math::transform_vec(rotation_matrix, *point);
 
             // Translate to effective position
-            *point = math::add(*point, self.position);
+            *point = math::add(*point, self.position.into());
         }
 
         triangle
     }
 
     /// Calculate whether or not this unit is hit by the point at the specified position.
-    fn is_hit(&self, size: f64, position: [f64;2]) -> bool {
+    fn is_hit(&self, size: f64, position: Vec2) -> bool {
         let hitbox = self.get_shape(size);
-        math::inside_triangle(hitbox, position)
+        math::inside_triangle(hitbox, position.into())
     }
 }
 
 #[cfg(test)]
 mod test {
     use std::f64::consts::FRAC_PI_2;
-    use super::Shape;
-    use super::state;
+
+    use super::{Shape, Vec2, state};
 
     #[test]
     fn test_hitbox() {
@@ -57,12 +59,12 @@ mod test {
         //    /\
         //   /__\
         //
-        let mut unit = state::Unit::new(0, [100.0, 100.0]);
+        let mut unit = state::Unit::new(0, Vec2::new(100.0, 100.0));
         unit.angle = FRAC_PI_2;
 
         // The following points should be outside of the hitbox.
-        assert_eq!(unit.is_hit(50.0, [0.0, 0.0]), false);
-        assert_eq!(unit.is_hit(50.0, [50.0, 50.0]), false);
+        assert_eq!(unit.is_hit(50.0, Vec2::new(0.0, 0.0)), false);
+        assert_eq!(unit.is_hit(50.0, Vec2::new(50.0, 50.0)), false);
 
         // The following five points should be inside the hitbox.
         //      .
@@ -70,18 +72,18 @@ mod test {
         //   ./_._\.
         //
         let vertical_distance = 50.0 / 2.0 - 1.0;
-        assert_eq!(unit.is_hit(50.0, [100.0, 100.0]), true);
-        assert_eq!(unit.is_hit(50.0, [100.0, 100.0 - vertical_distance]), true);
-        assert_eq!(unit.is_hit(50.0, [100.0, 100.0 + vertical_distance]), true);
-        assert_eq!(unit.is_hit(50.0, [100.0 - vertical_distance, 100.0 + vertical_distance]), true);
-        assert_eq!(unit.is_hit(50.0, [100.0 + vertical_distance, 100.0 + vertical_distance]), true);
+        assert_eq!(unit.is_hit(50.0, Vec2::new(100.0, 100.0)), true);
+        assert_eq!(unit.is_hit(50.0, Vec2::new(100.0, 100.0 - vertical_distance)), true);
+        assert_eq!(unit.is_hit(50.0, Vec2::new(100.0, 100.0 + vertical_distance)), true);
+        assert_eq!(unit.is_hit(50.0, Vec2::new(100.0 - vertical_distance, 100.0 + vertical_distance)), true);
+        assert_eq!(unit.is_hit(50.0, Vec2::new(100.0 + vertical_distance, 100.0 + vertical_distance)), true);
 
         // The following two points should be outside the hitbox.
         //
         //  . /\ .
         //   /__\
         //
-        assert_eq!(unit.is_hit(50.0, [100.0 - vertical_distance, 100.0]), false);
-        assert_eq!(unit.is_hit(50.0, [100.0 + vertical_distance, 100.0]), false);
+        assert_eq!(unit.is_hit(50.0, Vec2::new(100.0 - vertical_distance, 100.0)), false);
+        assert_eq!(unit.is_hit(50.0, Vec2::new(100.0 + vertical_distance, 100.0)), false);
     }
 }

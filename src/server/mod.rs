@@ -11,6 +11,7 @@ use std::ops::Deref;
 
 use bincode::{serialize, deserialize_from, Infinite, Bounded};
 
+use common::Vec2;
 use state::{WorldState, GameState, Player, Unit, UnitId};
 use network::{Message, Command};
 
@@ -25,7 +26,7 @@ pub struct Server {
     client_id_generator: Arc<Mutex<RangeFrom<u32>>>,
 
     /// Map with active unit move commands
-    unit_targets: Arc<Mutex<HashMap<UnitId, [f64; 2]>>>,
+    unit_targets: Arc<Mutex<HashMap<UnitId, Vec2>>>,
 }
 
 impl Server {
@@ -78,7 +79,7 @@ impl Server {
     }
 }
 
-pub type SafeUnitTargets = Arc<Mutex<HashMap<UnitId, [f64; 2]>>>;
+pub type SafeUnitTargets = Arc<Mutex<HashMap<UnitId, Vec2>>>;
 
 pub fn handle_client(mut stream: TcpStream,
                      world: Arc<WorldState>,
@@ -104,7 +105,10 @@ pub fn handle_client(mut stream: TcpStream,
 
                     // Create four initial units for the player
                     let coords = [
-                        [50.0f64, 50.0f64], [50.0f64, 100.0f64], [100.0f64, 50.0f64], [100.0f64, 100.0f64],
+                        Vec2::new(50.0, 50.0),
+                        Vec2::new(50.0, 100.0),
+                        Vec2::new(100.0, 50.0),
+                        Vec2::new(100.0, 100.0),
                     ];
                     for coord in coords.iter() {
                         let unit_id = unit_id_generator
@@ -216,7 +220,7 @@ pub fn handle_client(mut stream: TcpStream,
 
 pub fn handle_command(world: &WorldState,
                       game: &mut GameState,
-                      unit_targets: &mut HashMap<UnitId, [f64; 2]>, command: &Command) {
+                      unit_targets: &mut HashMap<UnitId, Vec2>, command: &Command) {
     println!("Did receive command {:?}", command);
     match command {
         &Command::Move(id, move_target) => {
@@ -224,6 +228,8 @@ pub fn handle_command(world: &WorldState,
                 for unit in player.units.iter_mut() {
                     if unit.id == id {
                         println!("Found it :)");
+                        // TODO: This can probably be cleaned up with cgmath
+                        // vector operations.
                         let mut target = [0.0; 2];
                         target[0] = if move_target[0] > world.x {
                             world.x
@@ -246,7 +252,7 @@ pub fn handle_command(world: &WorldState,
                         } else {
                             unit.angle = (dy / dx).atan();
                         }
-                        unit_targets.insert(id, target);
+                        unit_targets.insert(id, target.into());
                     }
                 }
             }

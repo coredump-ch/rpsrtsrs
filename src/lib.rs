@@ -6,10 +6,12 @@ extern crate piston;
 extern crate graphics;
 extern crate opengl_graphics;
 extern crate rand;
+extern crate cgmath;
 #[cfg(feature = "include_sdl2")] extern crate sdl2_window;
 #[cfg(feature = "include_glfw")] extern crate glfw_window;
 #[cfg(feature = "include_glutin")] extern crate glutin_window;
 
+pub mod common;
 pub mod shapes;
 pub mod state;
 pub mod network;

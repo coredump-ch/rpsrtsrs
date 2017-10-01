@@ -11,6 +11,7 @@ use opengl_graphics::glyph_cache::GlyphCache;
 use piston::input::{Button, Key, MouseButton, RenderArgs, UpdateArgs};
 use bincode::{serialize_into, deserialize_from, Infinite};
 
+use common::Vec2;
 use network::{Command, Message};
 use state::{UnitId, ClientId, WorldState, GameState, UNIT_SIZE};
 use shapes::Shape;
@@ -115,10 +116,10 @@ pub struct App {
     pub game_state: GameState,
     pub selected_units: Vec<UnitId>,
     pub commands: Arc<Mutex<VecDeque<Command>>>,
-    pub cursor: [f64; 2],
+    pub cursor: Vec2,
     pub state: State,
     zoom: f64,
-    scroll: [f64; 2],
+    scroll: Vec2,
     menu: Menu,
     client_id: Option<ClientId>,
 }
@@ -132,10 +133,10 @@ impl App {
             game_state: GameState::new(),
             selected_units: vec![],
             commands: Arc::new(Mutex::new(VecDeque::new())),
-            cursor: [0.0, 0.0],
+            cursor: Vec2::new(0.0, 0.0),
             state: State::Menu,
             zoom: 1.0,
-            scroll: [0.0, 0.0],
+            scroll: Vec2::new(0.0, 0.0),
             menu: Menu::new(),
             client_id: None,
         }
@@ -153,7 +154,7 @@ impl App {
         Ok(())
     }
 
-    pub fn select(&mut self, position: [f64;2]) {
+    pub fn select(&mut self, position: Vec2) {
 
         let player = {
             let index = self.client_id.unwrap_or(ClientId(0)).0 as usize;
@@ -188,7 +189,7 @@ impl App {
 
             let transform = c.transform
                 .scale(zoom, zoom)
-                .trans(scroll[0], scroll[1]);
+                .trans(scroll.x, scroll.y);
 
             // Clear the screen.
             clear(BLACK, gl);
@@ -221,7 +222,7 @@ impl App {
                     ];
 
                     // Rotate the front to match the unit
-                    let transform_front = transform.trans(s.position[0], s.position[1])
+                    let transform_front = transform.trans(s.position.x, s.position.y)
                         .rot_rad(s.angle)
                         .trans(-0.5 * UNIT_SIZE, -0.5 * UNIT_SIZE);
 
@@ -241,7 +242,7 @@ impl App {
                 }
             }
             for b in game_state.bullets.iter() {
-                let transform = transform.trans(b.position[0], b.position[1]);
+                let transform = transform.trans(b.position.x, b.position.y);
                 ellipse(WHITE, [0.0, 0.0, 1.0, 1.0], transform, gl);
             }
         });
@@ -303,16 +304,16 @@ impl App {
             State::Running => {
                 match button {
                     &Button::Keyboard(Key::Up) => {
-                        self.scroll[1] += 10.0;
+                        self.scroll.y += 10.0;
                     }
                     &Button::Keyboard(Key::Down) => {
-                        self.scroll[1] -= 10.0;
+                        self.scroll.y -= 10.0;
                     }
                     &Button::Keyboard(Key::Left) => {
-                        self.scroll[0] += 10.0;
+                        self.scroll.x += 10.0;
                     }
                     &Button::Keyboard(Key::Right) => {
-                        self.scroll[0] -= 10.0;
+                        self.scroll.x -= 10.0;
                     }
                     &Button::Keyboard(Key::F) => {
                         self.shoot();
@@ -335,10 +336,7 @@ impl App {
     }
 
     pub fn on_mouse_click(&mut self, button: &MouseButton) {
-        let cursor = [
-            self.cursor[0] / self.zoom - self.scroll[0],
-            self.cursor[1] / self.zoom - self.scroll[1],
-        ];
+        let cursor = self.cursor / self.zoom - self.scroll;
         match *button {
             MouseButton::Left  => self.select(cursor),
             MouseButton::Right => self.move_selected(cursor),
@@ -346,20 +344,20 @@ impl App {
         }
     }
 
-    pub fn on_mouse_move(&mut self, cursor: [f64; 2]) {
+    pub fn on_mouse_move(&mut self, cursor: Vec2) {
         self.cursor = cursor;
     }
 
-    pub fn on_mouse_scroll(&mut self, scroll: [f64; 2]) {
-        if scroll[1] > 0.0 {
-            self.zoom *= 1.5 * scroll[1];
+    pub fn on_mouse_scroll(&mut self, scroll: Vec2) {
+        if scroll.y > 0.0 {
+            self.zoom *= 1.5 * scroll.y;
         } else {
-            self.zoom /= 1.5 * -scroll[1];
+            self.zoom /= 1.5 * -scroll.y;
         }
         println!("zoom: {}", self.zoom);
     }
 
-    pub fn move_selected(&mut self, position: [f64;2]) {
+    pub fn move_selected(&mut self, position: Vec2) {
         for u in self.selected_units.iter() {
             let mut commands = self.commands.lock().unwrap();
             commands.push_back(Command::Move(*u, position));

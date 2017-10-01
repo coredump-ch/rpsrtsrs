@@ -3,6 +3,7 @@
 //! Everything related to the network protocol between the sever and the
 //! clients.
 
+use common::Vec2;
 use state::{GameState, WorldState, UnitId, ClientId};
 
 /// Commands alter the game state.
@@ -12,7 +13,7 @@ use state::{GameState, WorldState, UnitId, ClientId};
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub enum Command {
     /// Move command with unit ID and target
-    Move(UnitId, [f64; 2]),
+    Move(UnitId, Vec2),
     /// Let the unit shoot
     Shoot(UnitId),
 }

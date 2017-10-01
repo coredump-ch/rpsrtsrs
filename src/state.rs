@@ -6,6 +6,7 @@ use std::convert::Into;
 use std::fmt;
 use std::collections::HashMap;
 
+use common::Vec2;
 use shapes::Shape;
 
 
@@ -50,57 +51,56 @@ pub struct Unit {
     pub id: UnitId,
 
     /// X/Y position in the world in m
-    pub position: [f64; 2],
+    pub position: Vec2,
 
     /// Angle of the unit in radiant
     pub angle: f64,
 
     /// Direction and speed of the movement. The angle of the movement may be different then the
     /// angle of the unit. The unit is m per milli second.
-    pub speed_vector: [f64; 2],
+    pub speed_vector: Vec2,
 
     /// Health of the unit
     pub health: u64,
 }
 
 impl Unit {
-    pub fn new<T: Into<UnitId>>(id: T, position: [f64; 2]) -> Unit {
+    pub fn new<T: Into<UnitId>>(id: T, position: Vec2) -> Unit {
         println!("Create unit at {:?}", position);
         Unit {
             id: id.into(),
             position: position,
             angle: 0.0f64,
-            speed_vector: [0.0f64, 0.0f64],
+            speed_vector: Vec2::new(0.0, 0.0),
             health: 100_000,
         }
     }
 
     pub fn update(&mut self, dt_ms: f64) {
-        self.position[0] += self.speed_vector[0] * dt_ms;
-        self.position[1] += self.speed_vector[1] * dt_ms;
+        self.position = self.speed_vector * dt_ms;
     }
 
     pub fn shoot(&self, size: f64, speed: f64) -> Bullet {
-        let position = [
-            self.position[0] + self.angle.cos() * size,
-            self.position[1] + self.angle.sin() * size,
-        ];
-        let speed = [
+        let position = Vec2::new(
+            self.position.x + self.angle.cos() * size,
+            self.position.y + self.angle.sin() * size,
+        );
+        let speed = Vec2::new(
             self.angle.cos() * speed,
             self.angle.sin() * speed,
-        ];
+        );
         Bullet::new(position, speed)
     }
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
 pub struct Bullet {
-    pub position: [f64; 2],
-    pub speed_vector: [f64; 2],
+    pub position: Vec2,
+    pub speed_vector: Vec2,
 }
 
 impl Bullet {
-    pub fn new(position: [f64; 2], speed: [f64; 2]) -> Bullet {
+    pub fn new(position: Vec2, speed: Vec2) -> Bullet {
         Bullet {
             position: position,
             speed_vector: speed,
@@ -108,8 +108,7 @@ impl Bullet {
     }
 
     pub fn update(&mut self, dt_ms: f64) {
-        self.position[0] += self.speed_vector[0] * dt_ms;
-        self.position[1] += self.speed_vector[1] * dt_ms;
+        self.position = self.speed_vector * dt_ms;
     }
 }
 
@@ -149,14 +148,14 @@ impl GameState {
         }
     }
 
-    pub fn update_targets(&mut self, unit_targets: &HashMap<UnitId, [f64; 2]>) {
+    pub fn update_targets(&mut self, unit_targets: &HashMap<UnitId, Vec2>) {
         for player in self.players.iter_mut() {
             for unit in player.units.iter_mut() {
                 if let Some(target) = unit_targets.get(&unit.id) {
                     let speed = 0.0001;
-                    unit.speed_vector = [(target[0]-unit.position[0])*speed, (target[1]-unit.position[1])*speed];
+                    unit.speed_vector = (target - unit.position) * speed;
                 } else {
-                    unit.speed_vector = [0.0,0.0];
+                    unit.speed_vector = Vec2::new(0.0, 0.0);
                 }
             }
         }

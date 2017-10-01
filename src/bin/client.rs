@@ -54,11 +54,11 @@ fn main() {
         }
 
         if let Some(args) = e.mouse_cursor_args() {
-            app.on_mouse_move(args);
+            app.on_mouse_move(args.into());
         }
 
         if let Some(args) = e.mouse_scroll_args() {
-            app.on_mouse_scroll(args);
+            app.on_mouse_scroll(args.into());
         }
 
         if let Some(u) = e.update_args() {
