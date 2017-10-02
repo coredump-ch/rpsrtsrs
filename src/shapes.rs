@@ -26,7 +26,7 @@ impl Shape for state::Unit {
         // Transformations
         for point in triangle.iter_mut() {
             // Translate center to zero point
-            *point = math::add(*point, [-size / 2.0, -size / 2.0]);
+            *point = math::sub(*point, [size / 2.0, size / 2.0]);
 
             // Rotate
             let rotation_matrix = math::rotate_radians(self.angle);
