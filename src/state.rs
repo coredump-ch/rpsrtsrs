@@ -6,6 +6,8 @@ use std::convert::Into;
 use std::fmt;
 use std::collections::HashMap;
 
+use shapes::Shape;
+
 
 /// A unit identifier.
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug, Copy, Clone, Hash)]
@@ -39,6 +41,7 @@ impl fmt::Display for ClientId {
     }
 }
 
+pub const UNIT_SIZE: f64 = 50.0;
 
 /// The state of a single unit
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
@@ -68,7 +71,39 @@ impl Unit {
             position: position,
             angle: 0.0f64,
             speed_vector: [0.0f64, 0.0f64],
-            health: 100_0000,
+            health: 100_000,
+        }
+    }
+
+    pub fn update(&mut self, dt_ms: f64) {
+        self.position[0] += self.speed_vector[0] * dt_ms;
+        self.position[1] += self.speed_vector[1] * dt_ms;
+    }
+
+    pub fn shoot(&self, size: f64, speed: f64) -> Bullet {
+        let position = [
+            self.position[0] + self.angle.cos() * size,
+            self.position[1] + self.angle.sin() * size,
+        ];
+        let speed = [
+            self.angle.cos() * speed,
+            self.angle.sin() * speed,
+        ];
+        Bullet::new(position, speed)
+    }
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
+pub struct Bullet {
+    pub position: [f64; 2],
+    pub speed_vector: [f64; 2],
+}
+
+impl Bullet {
+    pub fn new(position: [f64; 2], speed: [f64; 2]) -> Bullet {
+        Bullet {
+            position: position,
+            speed_vector: speed,
         }
     }
 
@@ -103,11 +138,15 @@ impl Player {
 pub struct GameState {
     /// List of players
     pub players: Vec<Player>,
+    pub bullets: Vec<Bullet>,
 }
 
 impl GameState {
     pub fn new() -> GameState {
-        GameState{ players: vec![] }
+        GameState{
+            players: vec![],
+            bullets: vec![],
+        }
     }
 
     pub fn update_targets(&mut self, unit_targets: &HashMap<UnitId, [f64; 2]>) {
@@ -123,10 +162,56 @@ impl GameState {
         }
     }
 
-    pub fn update(&mut self, dt: f64) {
+    pub fn update(&mut self, world: &WorldState, dt: f64) {
+
+        for bullet in self.bullets.iter_mut() {
+            bullet.update(dt);
+        }
+
+        // waiting for non-lexical lifetimes...
+        {
+            let bullets = &mut self.bullets;
+            let players = &mut self.players;
+            bullets.retain(|bullet|{
+                // still inside world?
+                if bullet.position[0] > world.x || bullet.position[1] > world.y ||
+                    bullet.position[0] < 0.0 || bullet.position[1] < 0.0 {
+                        return false;
+                    }
+
+                for player in players.iter_mut() {
+                    for unit in player.units.iter_mut() {
+                        if unit.health > 0 && unit.is_hit(UNIT_SIZE, bullet.position) {
+                            if unit.health > 10000 {
+                                unit.health -= 10000;
+                            } else {
+                                unit.health = 0;
+                            }
+                            println!("hit: {}", unit.health);
+                            return false;
+                        }
+                    }
+                }
+                true
+            });
+        }
+
+        // remove all units where health == 0
         for player in self.players.iter_mut() {
+            player.units.retain(|unit| unit.health > 0);
             for unit in player.units.iter_mut() {
                 unit.update(dt);
+            }
+        }
+    }
+
+    pub fn shoot(&mut self, id: UnitId) {
+        for player in self.players.iter_mut() {
+            for unit in player.units.iter() {
+                if unit.id == id {
+                    let bullet = unit.shoot(UNIT_SIZE, 0.1);
+                    self.bullets.push(bullet);
+                }
             }
         }
     }
