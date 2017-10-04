@@ -229,11 +229,11 @@ pub fn handle_command(world: &WorldState,
                 for unit in player.units.iter_mut() {
                     if unit.id == id {
                         println!("Found it :)");
-                        let mut target = [0.0; 2];
-                        target[0] = clamp(move_target[0], 0.0, world.x);
-                        target[1] = clamp(move_target[1], 0.0, world.y);
-                        let dx = target[0] - unit.position[0];
-                        let dy = target[1] - unit.position[1];
+                        let mut target = Vec2::new(0.0, 0.0);
+                        target.x = clamp(move_target.x, 0.0, world.x);
+                        target.y = clamp(move_target.y, 0.0, world.y);
+                        let dx = target.x - unit.position.x;
+                        let dy = target.y - unit.position.y;
                         if dx.is_sign_negative() {
                             unit.angle = (dy / dx).atan() + PI;
                         } else {
