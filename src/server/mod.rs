@@ -14,6 +14,7 @@ use bincode::{serialize, deserialize_from, Infinite, Bounded};
 use common::Vec2;
 use state::{WorldState, GameState, Player, Unit, UnitId};
 use network::{Message, Command};
+use num::clamp;
 
 /// A `Server` instance holds global server state.
 pub struct Server {
@@ -228,23 +229,9 @@ pub fn handle_command(world: &WorldState,
                 for unit in player.units.iter_mut() {
                     if unit.id == id {
                         println!("Found it :)");
-                        // TODO: This can probably be cleaned up with cgmath
-                        // vector operations.
                         let mut target = [0.0; 2];
-                        target[0] = if move_target[0] > world.x {
-                            world.x
-                        } else if move_target[0] < 0.0 {
-                            0.0
-                        } else {
-                            move_target[0]
-                        };
-                        target[1] = if move_target[1] > world.y {
-                            world.y
-                        } else if move_target[1] < 0.0 {
-                            0.0
-                        } else {
-                            move_target[1]
-                        };
+                        target[0] = clamp(move_target[0], 0.0, world.x);
+                        target[1] = clamp(move_target[1], 0.0, world.y);
                         let dx = target[0] - unit.position[0];
                         let dy = target[1] - unit.position[1];
                         if dx.is_sign_negative() {
