@@ -9,6 +9,7 @@ use std::ops::Deref;
 use std::io::Write;
 use std::{thread, time};
 
+use rpsrtsrs::common::Vec2;
 use rpsrtsrs::state::GameState;
 use rpsrtsrs::network::{Command, Message};
 
@@ -82,7 +83,7 @@ fn main() {
         let x = args.arg_x.expect("<x> missing");
         let y = args.arg_y.expect("<y> missing");
         serialize_into(&mut stream,
-                       &Message::Command(Command::Move(id.into(), [x, y])),
+                       &Message::Command(Command::Move(id.into(), Vec2::new(x, y))),
                        Infinite)
             .unwrap();
         stream.flush().unwrap();

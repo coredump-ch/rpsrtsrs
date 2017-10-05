@@ -11,8 +11,10 @@ use std::ops::Deref;
 
 use bincode::{serialize, deserialize_from, Infinite, Bounded};
 
+use common::Vec2;
 use state::{WorldState, GameState, Player, Unit, UnitId};
 use network::{Message, Command};
+use num::clamp;
 
 /// A `Server` instance holds global server state.
 pub struct Server {
@@ -25,7 +27,7 @@ pub struct Server {
     client_id_generator: Arc<Mutex<RangeFrom<u32>>>,
 
     /// Map with active unit move commands
-    unit_targets: Arc<Mutex<HashMap<UnitId, [f64; 2]>>>,
+    unit_targets: Arc<Mutex<HashMap<UnitId, Vec2>>>,
 }
 
 impl Server {
@@ -78,7 +80,7 @@ impl Server {
     }
 }
 
-pub type SafeUnitTargets = Arc<Mutex<HashMap<UnitId, [f64; 2]>>>;
+pub type SafeUnitTargets = Arc<Mutex<HashMap<UnitId, Vec2>>>;
 
 pub fn handle_client(mut stream: TcpStream,
                      world: Arc<WorldState>,
@@ -104,7 +106,10 @@ pub fn handle_client(mut stream: TcpStream,
 
                     // Create four initial units for the player
                     let coords = [
-                        [50.0f64, 50.0f64], [50.0f64, 100.0f64], [100.0f64, 50.0f64], [100.0f64, 100.0f64],
+                        Vec2::new(50.0, 50.0),
+                        Vec2::new(50.0, 100.0),
+                        Vec2::new(100.0, 50.0),
+                        Vec2::new(100.0, 100.0),
                     ];
                     for coord in coords.iter() {
                         let unit_id = unit_id_generator
@@ -216,7 +221,7 @@ pub fn handle_client(mut stream: TcpStream,
 
 pub fn handle_command(world: &WorldState,
                       game: &mut GameState,
-                      unit_targets: &mut HashMap<UnitId, [f64; 2]>, command: &Command) {
+                      unit_targets: &mut HashMap<UnitId, Vec2>, command: &Command) {
     println!("Did receive command {:?}", command);
     match command {
         &Command::Move(id, move_target) => {
@@ -224,29 +229,17 @@ pub fn handle_command(world: &WorldState,
                 for unit in player.units.iter_mut() {
                     if unit.id == id {
                         println!("Found it :)");
-                        let mut target = [0.0; 2];
-                        target[0] = if move_target[0] > world.x {
-                            world.x
-                        } else if move_target[0] < 0.0 {
-                            0.0
-                        } else {
-                            move_target[0]
-                        };
-                        target[1] = if move_target[1] > world.y {
-                            world.y
-                        } else if move_target[1] < 0.0 {
-                            0.0
-                        } else {
-                            move_target[1]
-                        };
-                        let dx = target[0] - unit.position[0];
-                        let dy = target[1] - unit.position[1];
+                        let mut target = Vec2::new(0.0, 0.0);
+                        target.x = clamp(move_target.x, 0.0, world.x);
+                        target.y = clamp(move_target.y, 0.0, world.y);
+                        let dx = target.x - unit.position.x;
+                        let dy = target.y - unit.position.y;
                         if dx.is_sign_negative() {
                             unit.angle = (dy / dx).atan() + PI;
                         } else {
                             unit.angle = (dy / dx).atan();
                         }
-                        unit_targets.insert(id, target);
+                        unit_targets.insert(id, target.into());
                     }
                 }
             }
