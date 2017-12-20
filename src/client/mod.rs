@@ -122,10 +122,12 @@ pub struct App {
     scroll: Vec2,
     menu: Menu,
     client_id: Option<ClientId>,
+    server_ip: String,
+    server_port: u16,
 }
 
 impl App {
-    pub fn new(gl: GlGraphics) -> App {
+    pub fn new(gl: GlGraphics, server_ip: String, server_port: u16) -> App {
         App {
             gl: gl,
             world_state: None,
@@ -139,12 +141,14 @@ impl App {
             scroll: Vec2::new(0.0, 0.0),
             menu: Menu::new(),
             client_id: None,
+            server_ip,
+            server_port,
         }
     }
 
     pub fn start(&mut self) -> Result<(), Box<Error>> {
         let mut network_client = NetworkClient::new(
-            ("127.0.0.1", 8080),
+            (&*self.server_ip, self.server_port),
             self.game_state_server.clone(),
             self.commands.clone());
         let (client_id, world_state) = network_client.connect()?;
