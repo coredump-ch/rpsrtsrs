@@ -1,6 +1,5 @@
 extern crate bincode;
-#[macro_use]
-extern crate serde_derive;
+#[macro_use] extern crate serde_derive;
 extern crate rpsrtsrs;
 extern crate docopt;
 

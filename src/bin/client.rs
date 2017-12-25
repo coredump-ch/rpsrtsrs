@@ -1,4 +1,6 @@
 extern crate piston;
+#[macro_use] extern crate serde_derive;
+extern crate docopt;
 extern crate graphics;
 extern crate opengl_graphics;
 extern crate texture;
@@ -22,9 +24,28 @@ use piston::event_loop::*;
 
 use rpsrtsrs::client::*;
 
+static USAGE: &'static str = "
+Usage: client [-p PORT] [-i IP]
+
+Options:
+    -p PORT  The port to listen on [default: 8080].
+    -i IP    The ipv4 address to listen on [default: 127.0.0.1].
+    -r ID    Reconnect with the given ID
+";
+
+#[derive(Debug, Deserialize)]
+struct Args {
+    flag_p: u16,
+    flag_i: String,
+}
+
+
 
 fn main() {
     let opengl = OpenGL::V3_2;
+
+    let args: Args = docopt::Docopt::new(USAGE).and_then(|d| d.deserialize())
+                                       .unwrap_or_else(|e| e.exit());
 
     // Create an Glutin window.
     let mut window : Window = WindowSettings::new(
@@ -38,7 +59,7 @@ fn main() {
     let ref mut cache = GlyphCache::new(font_path, texture_settings).unwrap();
 
     // Create a new game and run it.
-    let mut app = App::new(GlGraphics::new(opengl));
+    let mut app = App::new(GlGraphics::new(opengl), args.flag_i, args.flag_p);
 
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut window) {
