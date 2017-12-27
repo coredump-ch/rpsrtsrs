@@ -98,4 +98,19 @@ mod test {
         assert_eq!(unit.is_hit(1.0, Vec2::new(a/2.0, 0.0)), false);
         assert_eq!(unit.is_hit(1.0, Vec2::new(a/2.0, 0.0)), false);
     }
+
+    #[test]
+    fn test_collision_detect() {
+        let unit_l = state::Unit::new(0, Vec2::new(0.0, 0.0));
+
+        {
+            let unit_r = state::Unit::new(0, Vec2::new(1.0, 0.0));
+            assert!(unit_l.collision_detect(&unit_r, 0.5));
+        }
+
+        {
+            let unit_r = state::Unit::new(0, Vec2::new(1.0, 0.0));
+            assert!(unit_l.collision_detect(&unit_r, 0.5));
+        }
+    }
 }
