@@ -5,7 +5,6 @@ addons:
     packages:
     - libsdl2-dev
 rust:
-  - 1.18.0
   - stable
 cache: cargo
 before_script:

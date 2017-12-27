@@ -14,7 +14,7 @@ use std::path::Path;
 
 use piston::window::WindowSettings;
 use opengl_graphics::{ GlGraphics, OpenGL };
-use opengl_graphics::glyph_cache::GlyphCache;
+use opengl_graphics::GlyphCache;
 use texture::TextureSettings;
 use piston::input::*;
 use piston::event_loop::*;
@@ -56,7 +56,7 @@ fn main() {
 
     let font_path = Path::new("assets/DejaVuSans.ttf");
     let texture_settings = TextureSettings::new();
-    let ref mut cache = GlyphCache::new(font_path, texture_settings).unwrap();
+    let ref mut cache = GlyphCache::new(font_path, (), texture_settings).unwrap();
 
     // Create a new game and run it.
     let mut app = App::new(GlGraphics::new(opengl), args.flag_i, args.flag_p);

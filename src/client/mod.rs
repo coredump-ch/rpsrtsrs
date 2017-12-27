@@ -7,7 +7,7 @@ use std::collections::VecDeque;
 use std::error::Error;
 
 use opengl_graphics::GlGraphics;
-use opengl_graphics::glyph_cache::GlyphCache;
+use opengl_graphics::GlyphCache;
 use piston::input::{Button, Key, MouseButton, RenderArgs, UpdateArgs};
 use bincode::{serialize_into, deserialize_from, Infinite};
 
@@ -15,7 +15,7 @@ use common::Vec2;
 use network::{Command, Message};
 use state::{UnitId, ClientId, WorldState, GameState, UNIT_SIZE};
 use shapes::Shape;
-use colors::{self, BLACK, ORANGE, WHITE};
+use colors::{self, BLACK, ORANGE, WHITE, TRANSPARENT_WHITE};
 
 pub mod menu;
 pub mod error;
@@ -124,6 +124,7 @@ pub struct App {
     client_id: Option<ClientId>,
     server_ip: String,
     server_port: u16,
+    debug: bool,
 }
 
 impl App {
@@ -143,6 +144,7 @@ impl App {
             client_id: None,
             server_ip,
             server_port,
+            debug: false,
         }
     }
 
@@ -188,6 +190,7 @@ impl App {
         let zoom = self.zoom;
         let scroll = self.scroll;
         let selected_units = self.selected_units.clone();
+        let debug = self.debug;
 
         self.gl.draw(args.viewport(), |c, gl| {
 
@@ -226,9 +229,13 @@ impl App {
                     ];
 
                     // Rotate the front to match the unit
-                    let transform_front = transform.trans(s.position.x, s.position.y)
+                    let transform_front = transform
+                        .trans(s.position.x, s.position.y)
                         .rot_rad(s.angle)
                         .trans(-0.5 * UNIT_SIZE, -0.5 * UNIT_SIZE);
+
+                    let transform_circle = transform
+                        .trans(s.position[0], s.position[1]);
 
                     // We don't need to apply any transformation to the units
                     let transform_triangle = transform;
@@ -241,6 +248,11 @@ impl App {
                     } else {
                         polygon(color.secondary, triangle, transform_triangle, gl);
                         polygon(color.primary, front, transform_front, gl);
+                    }
+                    if debug {
+                        ellipse(TRANSPARENT_WHITE,
+                                [-UNIT_SIZE, -UNIT_SIZE, 2.0*UNIT_SIZE, 2.0*UNIT_SIZE],
+                                transform_circle, gl);
                     }
 
                 }
@@ -321,6 +333,9 @@ impl App {
                     }
                     &Button::Keyboard(Key::F) => {
                         self.shoot();
+                    }
+                    &Button::Keyboard(Key::D) => {
+                        self.debug = !self.debug;
                     }
                     &Button::Keyboard(_) => { }
                     &Button::Mouse(button) => {

@@ -159,6 +159,40 @@ impl GameState {
                 }
             }
         }
+
+        // Check for collisions between all units
+        for p1 in 0..self.players.len() {
+            for u1 in 0..self.players[p1].units.len() {
+
+                for u2 in u1+1..self.players[p1].units.len() {
+                    if self.players[p1].units[u1].collision_detect(&self.players[p1].units[u2], UNIT_SIZE) {
+                        {
+                            let (s1, s2) = {
+                                let unit1 = &self.players[p1].units[u1];
+                                let unit2 = &self.players[p1].units[u2];
+                                unit1.collision_avoidance(unit2)
+                            };
+                            self.players[p1].units[u1].speed_vector = s1;
+                            self.players[p1].units[u2].speed_vector = s2;
+                        }
+                    }
+                }
+
+                for p2 in p1+1..self.players.len() {
+                    for u2 in 0..self.players[p2].units.len() {
+                        if self.players[p1].units[u1].collision_detect(&self.players[p2].units[u2], UNIT_SIZE) {
+                            let (s1, s2) = {
+                                let unit1 = &self.players[p1].units[u1];
+                                let unit2 = &self.players[p2].units[u2];
+                                unit1.collision_avoidance(unit2)
+                            };
+                            self.players[p1].units[u1].speed_vector = s1;
+                            self.players[p2].units[u2].speed_vector = s2;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     pub fn update(&mut self, world: &WorldState, dt: f64) {
