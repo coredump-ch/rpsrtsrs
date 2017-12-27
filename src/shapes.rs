@@ -2,7 +2,7 @@
 extern crate graphics;
 use self::graphics::types::Triangle;
 use self::graphics::math;
-use self::graphics::math::{sub, square_len};
+use self::graphics::math::{sub, square_len, mul_scalar};
 use super::state;
 use std::f64;
 
@@ -15,6 +15,8 @@ pub trait Shape {
     fn is_hit(&self, size: f64, position: Vec2) -> bool;
 
     fn collision_detect(&self, other: &Self, size: f64) -> bool;
+
+    fn collision_avoidance(&self, other: &Self) -> (Vec2, Vec2);
 }
 
 impl Shape for state::Unit {
@@ -52,6 +54,32 @@ impl Shape for state::Unit {
     fn collision_detect(&self, other: &Self, size: f64) -> bool {
         let dv = sub(self.position.into(), other.position.into());
         square_len(dv) <= (2.0 * size * 2.0 * size)
+    }
+
+
+    fn collision_avoidance(&self, other: &Self) -> (Vec2, Vec2) {
+        let d = sub(self.position.into(), other.position.into());
+
+        let xs: [f64; 2] = self.speed_vector.into();
+        let xo: [f64; 2] = other.speed_vector.into();
+
+        let foo = (xs[0] * d[0] + xs[1] * d[1]) / (d[0]*d[0] + d[1]*d[1]);
+        let ys = if foo < 0.0 {
+            let c = mul_scalar(d, foo);
+            sub(xs, c)
+        } else {
+            xs
+        };
+
+        let foo = (xo[0] * d[0] + xo[1] * d[1]) / (d[0]*d[0] + d[1]*d[1]);
+        let yo = if foo > 0.0 {
+            let c = mul_scalar(d, foo);
+            sub(xo, c)
+        } else {
+            xo
+        };
+
+        return (ys.into(), yo.into());
     }
 }
 
