@@ -1,0 +1,1 @@
+initSidebarItems({"constant":[["UNIT_SIZE",""]],"struct":[["Bullet",""],["ClientId","A client/player identifier."],["GameState","Data related to the current game."],["Player","A player has an ID and consists of 0..N `Unit`s"],["Unit","The state of a single unit"],["UnitId","A unit identifier."],["WorldState","Data related to the entire world, like width and height."]]});

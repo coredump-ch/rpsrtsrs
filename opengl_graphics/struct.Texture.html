@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Texture` struct in crate `opengl_graphics`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Texture">
+
+    <title>opengl_graphics::Texture - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css"
+          id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../dark.css">
+    <link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle">
+    <script src="../storage.js"></script>
+    
+
+    
+    
+</head>
+<body class="rustdoc struct">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
+        
+        <p class='location'>Struct Texture</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.new">new</a><a href="#method.get_id">get_id</a><a href="#method.empty">empty</a><a href="#method.from_memory_alpha">from_memory_alpha</a><a href="#method.from_path">from_path</a><a href="#method.from_image">from_image</a><a href="#method.update">update</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Drop">Drop</a><a href="#impl-ImageSize">ImageSize</a><a href="#impl-CreateTexture%3C()%3E">CreateTexture&lt;()&gt;</a><a href="#impl-UpdateTexture%3C()%3E">UpdateTexture&lt;()&gt;</a></div><a class="sidebar-title" href="#synthetic-implementations">Auto Trait Implementations</a><div class="sidebar-links"><a href="#impl-Send">Send</a><a href="#impl-Sync">Sync</a></div></div><p class='location'><a href='index.html'>opengl_graphics</a></p><script>window.sidebarCurrent = {name: 'Texture', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
+    </nav>
+
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../theme.js"></script>
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>opengl_graphics</a>::<wbr><a class="struct" href=''>Texture</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../src/opengl_graphics/texture.rs.html#61-65' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust struct'>pub struct Texture { /* fields omitted */ }</pre></div><div class='docblock'><p>Wraps OpenGL texture data.
+The texture gets deleted when running out of scope.</p>
+<p>In order to create a texture the function <code>GenTextures</code> must be loaded.
+This is done automatically by the window back-ends in Piston.</p>
+</div>
+                    <h2 id='methods' class='small-section-header'>
+                      Methods<a href='#methods' class='anchor'></a>
+                    </h2>
+                <h3 id='impl' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="struct" href="../opengl_graphics/struct.Texture.html" title="struct opengl_graphics::Texture">Texture</a></code><a href='#impl' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#67-137' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.new' class="method"><span id='new.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.new' class='fnname'>new</a>(id: <a class="type" href="../gl/types/type.GLuint.html" title="type gl::types::GLuint">GLuint</a>, width: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>, height: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#70-76' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Creates a new texture.</p>
+</div><h4 id='method.get_id' class="method"><span id='get_id.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.get_id' class='fnname'>get_id</a>(&amp;self) -&gt; <a class="type" href="../gl/types/type.GLuint.html" title="type gl::types::GLuint">GLuint</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#80-82' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Gets the OpenGL id of the texture.</p>
+</div><h4 id='method.empty' class="method"><span id='empty.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.empty' class='fnname'>empty</a>(settings: &amp;<a class="struct" href="../texture/struct.TextureSettings.html" title="struct texture::TextureSettings">TextureSettings</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;Self, <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#85-91' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Returns empty texture.</p>
+</div><h4 id='method.from_memory_alpha' class="method"><span id='from_memory_alpha.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.from_memory_alpha' class='fnname'>from_memory_alpha</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;width: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;height: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;settings: &amp;<a class="struct" href="../texture/struct.TextureSettings.html" title="struct texture::TextureSettings">TextureSettings</a><br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;Self, <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#94-102' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Loads image from memory, the format is 8-bit greyscale.</p>
+</div><h4 id='method.from_path' class="method"><span id='from_path.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.from_path' class='fnname'>from_path</a>&lt;P&gt;(path: P, settings: &amp;<a class="struct" href="../texture/struct.TextureSettings.html" title="struct texture::TextureSettings">TextureSettings</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;Self, <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt; <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;P: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.AsRef.html" title="trait core::convert::AsRef">AsRef</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/std/path/struct.Path.html" title="struct std::path::Path">Path</a>&gt;,&nbsp;</span></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#105-123' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Loads image by relative file name to the asset root.</p>
+</div><h4 id='method.from_image' class="method"><span id='from_image.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.from_image' class='fnname'>from_image</a>(img: &amp;<a class="type" href="../image/buffer/type.RgbaImage.html" title="type image::buffer::RgbaImage">RgbaImage</a>, settings: &amp;<a class="struct" href="../texture/struct.TextureSettings.html" title="struct texture::TextureSettings">TextureSettings</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#126-129' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Creates a texture from image.</p>
+</div><h4 id='method.update' class="method"><span id='update.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.update' class='fnname'>update</a>(&amp;mut self, img: &amp;<a class="type" href="../image/buffer/type.RgbaImage.html" title="type image::buffer::RgbaImage">RgbaImage</a>)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#132-136' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Updates image with a new one.</p>
+</div></div>
+            <h2 id='implementations' class='small-section-header'>
+              Trait Implementations<a href='#implementations' class='anchor'></a>
+            </h2>
+            <div id='implementations-list'>
+        <h3 id='impl-Drop' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html" title="trait core::ops::drop::Drop">Drop</a> for <a class="struct" href="../opengl_graphics/struct.Texture.html" title="struct opengl_graphics::Texture">Texture</a></code><a href='#impl-Drop' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#139-147' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.drop' class="method"><span id='drop.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html#tymethod.drop' class='fnname'>drop</a>(&amp;mut self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#140-146' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Executes the destructor for this type. <a href="https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html#tymethod.drop">Read more</a></p>
+</div></div><h3 id='impl-ImageSize' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="../texture/trait.ImageSize.html" title="trait texture::ImageSize">ImageSize</a> for <a class="struct" href="../opengl_graphics/struct.Texture.html" title="struct opengl_graphics::Texture">Texture</a></code><a href='#impl-ImageSize' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#149-153' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.get_size' class="method"><span id='get_size.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../texture/trait.ImageSize.html#tymethod.get_size' class='fnname'>get_size</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>, <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#150-152' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Get the image size.</p>
+</div><h4 id='method.get_width' class="method"><span id='get_width.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../texture/trait.ImageSize.html#method.get_width' class='fnname'>get_width</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/texture/lib.rs.html#20-23' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Gets the image width.</p>
+</div><h4 id='method.get_height' class="method"><span id='get_height.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../texture/trait.ImageSize.html#method.get_height' class='fnname'>get_height</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/texture/lib.rs.html#27-30' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Gets the image height.</p>
+</div></div><h3 id='impl-CreateTexture%3C()%3E' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="../texture/trait.CreateTexture.html" title="trait texture::CreateTexture">CreateTexture</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>&gt; for <a class="struct" href="../opengl_graphics/struct.Texture.html" title="struct opengl_graphics::Texture">Texture</a></code><a href='#impl-CreateTexture%3C()%3E' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#155-193' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='associatedtype.Error' class="type"><span id='Error.t' class='invisible'><code>type <a href='../texture/trait.CreateTexture.html#associatedtype.Error' class="type">Error</a> = <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code></span></h4>
+<div class='docblock'><p>The error when creating texture.</p>
+</div><h4 id='method.create' class="method"><span id='create.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../texture/trait.CreateTexture.html#tymethod.create' class='fnname'>create</a>&lt;S:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 2]</a>&gt;&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;_factory: &amp;mut <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;_format: <a class="enum" href="../texture/enum.Format.html" title="enum texture::Format">Format</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;memory: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;size: S, <br>&nbsp;&nbsp;&nbsp;&nbsp;settings: &amp;<a class="struct" href="../texture/struct.TextureSettings.html" title="struct texture::TextureSettings">TextureSettings</a><br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;Self, Self::<a class="type" href="../texture/trait.CreateTexture.html#associatedtype.Error" title="type texture::CreateTexture::Error">Error</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#158-192' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Create texture from memory.</p>
+</div></div><h3 id='impl-UpdateTexture%3C()%3E' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="../texture/trait.UpdateTexture.html" title="trait texture::UpdateTexture">UpdateTexture</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>&gt; for <a class="struct" href="../opengl_graphics/struct.Texture.html" title="struct opengl_graphics::Texture">Texture</a></code><a href='#impl-UpdateTexture%3C()%3E' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#195-222' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='associatedtype.Error-1' class="type"><span id='Error.t-1' class='invisible'><code>type <a href='../texture/trait.UpdateTexture.html#associatedtype.Error' class="type">Error</a> = <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code></span></h4>
+<div class='docblock'><p>The error when updating texture.</p>
+</div><h4 id='method.update-1' class="method"><span id='update.v-1' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../texture/trait.UpdateTexture.html#tymethod.update' class='fnname'>update</a>&lt;O:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 2]</a>&gt;, S:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 2]</a>&gt;&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;mut self, <br>&nbsp;&nbsp;&nbsp;&nbsp;_factory: &amp;mut <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;_format: <a class="enum" href="../texture/enum.Format.html" title="enum texture::Format">Format</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;memory: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u8.html">u8</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">]</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;offset: O, <br>&nbsp;&nbsp;&nbsp;&nbsp;size: S<br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.unit.html">()</a>, Self::<a class="type" href="../texture/trait.UpdateTexture.html#associatedtype.Error" title="type texture::UpdateTexture::Error">Error</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/opengl_graphics/texture.rs.html#198-221' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Update the texture. <a href="../texture/trait.UpdateTexture.html#tymethod.update">Read more</a></p>
+</div></div></div>
+                <h2 id='synthetic-implementations' class='small-section-header'>
+                  Auto Trait Implementations<a href='#synthetic-implementations' class='anchor'></a>
+                </h2>
+                <div id='synthetic-implementations-list'>
+            <h3 id='impl-Send' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> for <a class="struct" href="../opengl_graphics/struct.Texture.html" title="struct opengl_graphics::Texture">Texture</a></code><a href='#impl-Send' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div><h3 id='impl-Sync' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a> for <a class="struct" href="../opengl_graphics/struct.Texture.html" title="struct opengl_graphics::Texture">Texture</a></code><a href='#impl-Sync' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt><kbd>?</kbd></dt>
+                    <dd>Show this help dialog</dd>
+                    <dt><kbd>S</kbd></dt>
+                    <dd>Focus the search field</dd>
+                    <dt><kbd>↑</kbd></dt>
+                    <dd>Move up in search results</dd>
+                    <dt><kbd>↓</kbd></dt>
+                    <dd>Move down in search results</dd>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
+                    <dd>Go to active search result</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "opengl_graphics";
+    </script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `WindowHint` enum in crate `glfw`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, WindowHint">
+
+    <title>glfw::WindowHint - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css"
+          id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../dark.css">
+    <link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle">
+    <script src="../storage.js"></script>
+    
+
+    
+    
+</head>
+<body class="rustdoc enum">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
+        
+        <p class='location'>Enum WindowHint</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#variants">Variants</a><div class="sidebar-links"><a href="#variant.RedBits">RedBits</a><a href="#variant.GreenBits">GreenBits</a><a href="#variant.BlueBits">BlueBits</a><a href="#variant.AlphaBits">AlphaBits</a><a href="#variant.DepthBits">DepthBits</a><a href="#variant.StencilBits">StencilBits</a><a href="#variant.AccumRedBits">AccumRedBits</a><a href="#variant.AccumGreenBits">AccumGreenBits</a><a href="#variant.AccumBlueBits">AccumBlueBits</a><a href="#variant.AccumAlphaBits">AccumAlphaBits</a><a href="#variant.AuxBuffers">AuxBuffers</a><a href="#variant.Stereo">Stereo</a><a href="#variant.Samples">Samples</a><a href="#variant.SRgbCapable">SRgbCapable</a><a href="#variant.RefreshRate">RefreshRate</a><a href="#variant.ClientApi">ClientApi</a><a href="#variant.ContextVersionMajor">ContextVersionMajor</a><a href="#variant.ContextVersionMinor">ContextVersionMinor</a><a href="#variant.ContextVersion">ContextVersion</a><a href="#variant.ContextRobustness">ContextRobustness</a><a href="#variant.OpenGlForwardCompat">OpenGlForwardCompat</a><a href="#variant.OpenGlDebugContext">OpenGlDebugContext</a><a href="#variant.OpenGlProfile">OpenGlProfile</a><a href="#variant.Resizable">Resizable</a><a href="#variant.Visible">Visible</a><a href="#variant.Decorated">Decorated</a><a href="#variant.AutoIconify">AutoIconify</a><a href="#variant.Floating">Floating</a><a href="#variant.ContextNoError">ContextNoError</a><a href="#variant.ContextCreationApi">ContextCreationApi</a><a href="#variant.ContextReleaseBehavior">ContextReleaseBehavior</a><a href="#variant.DoubleBuffer">DoubleBuffer</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Copy">Copy</a><a href="#impl-Clone">Clone</a><a href="#impl-Eq">Eq</a><a href="#impl-PartialEq">PartialEq</a><a href="#impl-Ord">Ord</a><a href="#impl-PartialOrd">PartialOrd</a><a href="#impl-Hash">Hash</a><a href="#impl-Debug">Debug</a></div><a class="sidebar-title" href="#synthetic-implementations">Auto Trait Implementations</a><div class="sidebar-links"><a href="#impl-Send">Send</a><a href="#impl-Sync">Sync</a></div></div><p class='location'><a href='index.html'>glfw</a></p><script>window.sidebarCurrent = {name: 'WindowHint', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
+    </nav>
+
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../theme.js"></script>
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Enum <a href='index.html'>glfw</a>::<wbr><a class="enum" href=''>WindowHint</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../src/glfw/lib.rs.html#1310-1427' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust enum'>pub enum WindowHint {
+    RedBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    GreenBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    BlueBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    AlphaBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    DepthBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    StencilBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    AccumRedBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    AccumGreenBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    AccumBlueBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    AccumAlphaBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    AuxBuffers(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    Stereo(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>),
+    Samples(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    SRgbCapable(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>),
+    RefreshRate(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;),
+    ClientApi(<a class="enum" href="../glfw/enum.ClientApiHint.html" title="enum glfw::ClientApiHint">ClientApiHint</a>),
+    ContextVersionMajor(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>),
+    ContextVersionMinor(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>),
+    ContextVersion(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,&nbsp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>),
+    ContextRobustness(<a class="enum" href="../glfw/enum.ContextRobustnessHint.html" title="enum glfw::ContextRobustnessHint">ContextRobustnessHint</a>),
+    OpenGlForwardCompat(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>),
+    OpenGlDebugContext(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>),
+    OpenGlProfile(<a class="enum" href="../glfw/enum.OpenGlProfileHint.html" title="enum glfw::OpenGlProfileHint">OpenGlProfileHint</a>),
+    Resizable(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>),
+    Visible(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>),
+    Decorated(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>),
+    AutoIconify(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>),
+    Floating(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>),
+    ContextNoError(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>),
+    ContextCreationApi(<a class="enum" href="../glfw/enum.ContextCreationApi.html" title="enum glfw::ContextCreationApi">ContextCreationApi</a>),
+    ContextReleaseBehavior(<a class="enum" href="../glfw/enum.ContextReleaseBehavior.html" title="enum glfw::ContextReleaseBehavior">ContextReleaseBehavior</a>),
+    DoubleBuffer(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>),
+}</pre></div><div class='docblock'><p>Window hints that can be set using the <code>window_hint</code> function.</p>
+</div><h2 id='variants' class='variants small-section-header'>
+                   Variants<a href='#variants' class='anchor'></a></h2>
+<span id="variant.RedBits" class="variant small-section-header"><a href="#variant.RedBits" class="anchor field"></a><span id='RedBits.v' class='invisible'><code>RedBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired bit depth of the red component of the default framebuffer.</p>
+</div><span id="variant.GreenBits" class="variant small-section-header"><a href="#variant.GreenBits" class="anchor field"></a><span id='GreenBits.v' class='invisible'><code>GreenBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired bit depth of the green component of the default framebuffer.</p>
+</div><span id="variant.BlueBits" class="variant small-section-header"><a href="#variant.BlueBits" class="anchor field"></a><span id='BlueBits.v' class='invisible'><code>BlueBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired bit depth of the blue component of the default framebuffer.</p>
+</div><span id="variant.AlphaBits" class="variant small-section-header"><a href="#variant.AlphaBits" class="anchor field"></a><span id='AlphaBits.v' class='invisible'><code>AlphaBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired bit depth of the alpha component of the default framebuffer.</p>
+</div><span id="variant.DepthBits" class="variant small-section-header"><a href="#variant.DepthBits" class="anchor field"></a><span id='DepthBits.v' class='invisible'><code>DepthBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired bit depth of the depth component of the default framebuffer.</p>
+</div><span id="variant.StencilBits" class="variant small-section-header"><a href="#variant.StencilBits" class="anchor field"></a><span id='StencilBits.v' class='invisible'><code>StencilBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired bit depth of the stencil component of the default framebuffer.</p>
+</div><span id="variant.AccumRedBits" class="variant small-section-header"><a href="#variant.AccumRedBits" class="anchor field"></a><span id='AccumRedBits.v' class='invisible'><code>AccumRedBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired bit depth of the red component of the accumulation framebuffer.</p>
+</div><span id="variant.AccumGreenBits" class="variant small-section-header"><a href="#variant.AccumGreenBits" class="anchor field"></a><span id='AccumGreenBits.v' class='invisible'><code>AccumGreenBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired bit depth of the green component of the accumulation framebuffer.</p>
+</div><span id="variant.AccumBlueBits" class="variant small-section-header"><a href="#variant.AccumBlueBits" class="anchor field"></a><span id='AccumBlueBits.v' class='invisible'><code>AccumBlueBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired bit depth of the blue component of the accumulation framebuffer.</p>
+</div><span id="variant.AccumAlphaBits" class="variant small-section-header"><a href="#variant.AccumAlphaBits" class="anchor field"></a><span id='AccumAlphaBits.v' class='invisible'><code>AccumAlphaBits(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired bit depth of the alpha component of the accumulation framebuffer.</p>
+</div><span id="variant.AuxBuffers" class="variant small-section-header"><a href="#variant.AuxBuffers" class="anchor field"></a><span id='AuxBuffers.v' class='invisible'><code>AuxBuffers(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired number of auxiliary buffers.</p>
+</div><span id="variant.Stereo" class="variant small-section-header"><a href="#variant.Stereo" class="anchor field"></a><span id='Stereo.v' class='invisible'><code>Stereo(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></span><div class='docblock'><p>Specifies whether to use stereoscopic rendering.</p>
+</div><span id="variant.Samples" class="variant small-section-header"><a href="#variant.Samples" class="anchor field"></a><span id='Samples.v' class='invisible'><code>Samples(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired number of samples to use for multisampling. Zero
+disables multisampling.</p>
+</div><span id="variant.SRgbCapable" class="variant small-section-header"><a href="#variant.SRgbCapable" class="anchor field"></a><span id='SRgbCapable.v' class='invisible'><code>SRgbCapable(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></span><div class='docblock'><p>Specifies whether the framebuffer should be sRGB capable.</p>
+</div><span id="variant.RefreshRate" class="variant small-section-header"><a href="#variant.RefreshRate" class="anchor field"></a><span id='RefreshRate.v' class='invisible'><code>RefreshRate(<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>&gt;)</code></span></span><div class='docblock'><p>Specifies the desired refresh rate for full screen windows. If set to <code>None</code>,
+the highest available refresh rate will be used.</p>
+<p>This hint is ignored for windowed mode windows.</p>
+</div><span id="variant.ClientApi" class="variant small-section-header"><a href="#variant.ClientApi" class="anchor field"></a><span id='ClientApi.v' class='invisible'><code>ClientApi(<a class="enum" href="../glfw/enum.ClientApiHint.html" title="enum glfw::ClientApiHint">ClientApiHint</a>)</code></span></span><div class='docblock'><p>Specifies which <code>ClientApi</code> to create the context for.</p>
+</div><span id="variant.ContextVersionMajor" class="variant small-section-header"><a href="#variant.ContextVersionMajor" class="anchor field"></a><span id='ContextVersionMajor.v' class='invisible'><code>ContextVersionMajor(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>)</code></span></span><div class='docblock'><p>Specifies the major client API version that the created context must be
+compatible with.</p>
+<p>Window creation will fail if the resulting OpenGL version is less than
+the one requested.</p>
+</div><span id="variant.ContextVersionMinor" class="variant small-section-header"><a href="#variant.ContextVersionMinor" class="anchor field"></a><span id='ContextVersionMinor.v' class='invisible'><code>ContextVersionMinor(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>)</code></span></span><div class='docblock'><p>Specifies the minor client API version that the created context must be
+compatible with.</p>
+<p>Window creation will fail if the resulting OpenGL version is less than
+the one requested.</p>
+</div><span id="variant.ContextVersion" class="variant small-section-header"><a href="#variant.ContextVersion" class="anchor field"></a><span id='ContextVersion.v' class='invisible'><code>ContextVersion(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,&nbsp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>)</code></span></span><div class='docblock'><p>Specifies the client API version that the created context must be
+compatible with. This is the same as successive calls to <code>window_hint</code>
+function with the <code>ContextVersionMajor</code> and <code>ContextVersionMinor</code> hints.</p>
+<p>Window creation will fail if the resulting OpenGL version is less than
+the one requested.</p>
+<p>If <code>ContextVersion(1, 0)</code> is requested, <em>most</em> drivers will provide the
+highest available context.</p>
+</div><span id="variant.ContextRobustness" class="variant small-section-header"><a href="#variant.ContextRobustness" class="anchor field"></a><span id='ContextRobustness.v' class='invisible'><code>ContextRobustness(<a class="enum" href="../glfw/enum.ContextRobustnessHint.html" title="enum glfw::ContextRobustnessHint">ContextRobustnessHint</a>)</code></span></span><div class='docblock'><p>Specifies the <code>ContextRobustness</code> strategy to be used.</p>
+</div><span id="variant.OpenGlForwardCompat" class="variant small-section-header"><a href="#variant.OpenGlForwardCompat" class="anchor field"></a><span id='OpenGlForwardCompat.v' class='invisible'><code>OpenGlForwardCompat(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></span><div class='docblock'><p>Specifies whether the OpenGL context should be forward-compatible, i.e.
+one where all functionality deprecated in the requested version of
+OpenGL is removed. This may only be used if the requested OpenGL version
+is 3.0 or above.</p>
+<p>If another client API is requested, this hint is ignored.</p>
+</div><span id="variant.OpenGlDebugContext" class="variant small-section-header"><a href="#variant.OpenGlDebugContext" class="anchor field"></a><span id='OpenGlDebugContext.v' class='invisible'><code>OpenGlDebugContext(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></span><div class='docblock'><p>Specifies whether to create a debug OpenGL context, which may have
+additional error and performance issue reporting functionality.</p>
+<p>If another client API is requested, this hint is ignored.</p>
+</div><span id="variant.OpenGlProfile" class="variant small-section-header"><a href="#variant.OpenGlProfile" class="anchor field"></a><span id='OpenGlProfile.v' class='invisible'><code>OpenGlProfile(<a class="enum" href="../glfw/enum.OpenGlProfileHint.html" title="enum glfw::OpenGlProfileHint">OpenGlProfileHint</a>)</code></span></span><div class='docblock'><p>Specifies which OpenGL profile to create the context for. If requesting
+an OpenGL version below 3.2, <code>OpenGlAnyProfile</code> must be used.</p>
+<p>If another client API is requested, this hint is ignored.</p>
+</div><span id="variant.Resizable" class="variant small-section-header"><a href="#variant.Resizable" class="anchor field"></a><span id='Resizable.v' class='invisible'><code>Resizable(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></span><div class='docblock'><p>Specifies whether the window will be resizable by the user. Even if this
+is set to <code>false</code>, the window can still be resized using the
+<code>Window::set_size</code> function.</p>
+<p>This hint is ignored for fullscreen windows.</p>
+</div><span id="variant.Visible" class="variant small-section-header"><a href="#variant.Visible" class="anchor field"></a><span id='Visible.v' class='invisible'><code>Visible(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></span><div class='docblock'><p>Specifies whether the window will be visible on creation.</p>
+<p>This hint is ignored for fullscreen windows.</p>
+</div><span id="variant.Decorated" class="variant small-section-header"><a href="#variant.Decorated" class="anchor field"></a><span id='Decorated.v' class='invisible'><code>Decorated(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></span><div class='docblock'><p>Specifies whether the window will have platform-specific decorations
+such as a border, a close widget, etc.</p>
+<p>This hint is ignored for full screen windows.</p>
+</div><span id="variant.AutoIconify" class="variant small-section-header"><a href="#variant.AutoIconify" class="anchor field"></a><span id='AutoIconify.v' class='invisible'><code>AutoIconify(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></span><div class='docblock'><p>Specifies whether the (full screen) window will automatically iconify
+and restore the previous video mode on input focus loss.</p>
+<p>This hint is ignored for windowed mode windows.</p>
+</div><span id="variant.Floating" class="variant small-section-header"><a href="#variant.Floating" class="anchor field"></a><span id='Floating.v' class='invisible'><code>Floating(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></span><div class='docblock'><p>Specifies whether the window will be floating above other regular
+windows, also called topmost or always-on-top.</p>
+<p>This hint is ignored for full screen windows.</p>
+</div><span id="variant.ContextNoError" class="variant small-section-header"><a href="#variant.ContextNoError" class="anchor field"></a><span id='ContextNoError.v' class='invisible'><code>ContextNoError(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></span><div class='docblock'><p>Specifies whether the OpenGL or OpenGL ES contexts do not emit errors,
+allowing for better performance in some situations.</p>
+</div><span id="variant.ContextCreationApi" class="variant small-section-header"><a href="#variant.ContextCreationApi" class="anchor field"></a><span id='ContextCreationApi.v' class='invisible'><code>ContextCreationApi(<a class="enum" href="../glfw/enum.ContextCreationApi.html" title="enum glfw::ContextCreationApi">ContextCreationApi</a>)</code></span></span><div class='docblock'><p>Specifies which context creation API to use to create the context.</p>
+</div><span id="variant.ContextReleaseBehavior" class="variant small-section-header"><a href="#variant.ContextReleaseBehavior" class="anchor field"></a><span id='ContextReleaseBehavior.v' class='invisible'><code>ContextReleaseBehavior(<a class="enum" href="../glfw/enum.ContextReleaseBehavior.html" title="enum glfw::ContextReleaseBehavior">ContextReleaseBehavior</a>)</code></span></span><div class='docblock'><p>Specifies the behavior of the OpenGL pipeline when a context is transferred between threads</p>
+</div><span id="variant.DoubleBuffer" class="variant small-section-header"><a href="#variant.DoubleBuffer" class="anchor field"></a><span id='DoubleBuffer.v' class='invisible'><code>DoubleBuffer(<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></span><div class='docblock'><p>Specifies whether the framebuffer should be double buffered.</p>
+<p>You nearly always want to use double buffering.</p>
+<p>Note that setting this to false will make <code>swap_buffers</code> do nothing useful,
+and your scene will have to be displayed some other way.</p>
+</div>
+            <h2 id='implementations' class='small-section-header'>
+              Trait Implementations<a href='#implementations' class='anchor'></a>
+            </h2>
+            <div id='implementations-list'>
+        <h3 id='impl-Copy' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a> for <a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a></code><a href='#impl-Copy' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'></div><h3 id='impl-Clone' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a></code><a href='#impl-Clone' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/clone.rs.html#117-119' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div><h3 id='impl-Eq' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html" title="trait core::cmp::Eq">Eq</a> for <a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a></code><a href='#impl-Eq' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'></div><h3 id='impl-PartialEq' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html" title="trait core::cmp::PartialEq">PartialEq</a> for <a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a></code><a href='#impl-PartialEq' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.eq' class="method"><span id='eq.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class="method"><span id='ne.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div><h3 id='impl-Ord' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.Ord.html" title="trait core::cmp::Ord">Ord</a> for <a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a></code><a href='#impl-Ord' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.cmp' class="method"><span id='cmp.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.Ord.html#tymethod.cmp' class='fnname'>cmp</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/cmp/enum.Ordering.html" title="enum core::cmp::Ordering">Ordering</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>This method returns an <code>Ordering</code> between <code>self</code> and <code>other</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.Ord.html#tymethod.cmp">Read more</a></p>
+</div><h4 id='method.max' class="method"><span id='max.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.Ord.html#method.max' class='fnname'>max</a>(self, other: Self) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.21.0'>1.21.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/cmp.rs.html#461-464' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Compares and returns the maximum of two values. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.Ord.html#method.max">Read more</a></p>
+</div><h4 id='method.min' class="method"><span id='min.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.Ord.html#method.min' class='fnname'>min</a>(self, other: Self) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.21.0'>1.21.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/cmp.rs.html#477-480' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Compares and returns the minimum of two values. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.Ord.html#method.min">Read more</a></p>
+</div></div><h3 id='impl-PartialOrd' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html" title="trait core::cmp::PartialOrd">PartialOrd</a> for <a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a></code><a href='#impl-PartialOrd' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.partial_cmp' class="method"><span id='partial_cmp.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html#tymethod.partial_cmp' class='fnname'>partial_cmp</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/cmp/enum.Ordering.html" title="enum core::cmp::Ordering">Ordering</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>This method returns an ordering between <code>self</code> and <code>other</code> values if one exists. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html#tymethod.partial_cmp">Read more</a></p>
+</div><h4 id='method.lt' class="method"><span id='lt.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html#method.lt' class='fnname'>lt</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>This method tests less than (for <code>self</code> and <code>other</code>) and is used by the <code>&lt;</code> operator. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html#method.lt">Read more</a></p>
+</div><h4 id='method.le' class="method"><span id='le.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html#method.le' class='fnname'>le</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>This method tests less than or equal to (for <code>self</code> and <code>other</code>) and is used by the <code>&lt;=</code> operator. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html#method.le">Read more</a></p>
+</div><h4 id='method.gt' class="method"><span id='gt.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html#method.gt' class='fnname'>gt</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>This method tests greater than (for <code>self</code> and <code>other</code>) and is used by the <code>&gt;</code> operator. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html#method.gt">Read more</a></p>
+</div><h4 id='method.ge' class="method"><span id='ge.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html#method.ge' class='fnname'>ge</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>This method tests greater than or equal to (for <code>self</code> and <code>other</code>) and is used by the <code>&gt;=</code> operator. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html#method.ge">Read more</a></p>
+</div></div><h3 id='impl-Hash' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html" title="trait core::hash::Hash">Hash</a> for <a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a></code><a href='#impl-Hash' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.hash' class="method"><span id='hash.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#tymethod.hash' class='fnname'>hash</a>&lt;__H:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html" title="trait core::hash::Hasher">Hasher</a>&gt;(&amp;self, __arg_0: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>__H)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Feeds this value into the given [<code>Hasher</code>]. <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#tymethod.hash">Read more</a></p>
+</div><h4 id='method.hash_slice' class="method"><span id='hash_slice.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#method.hash_slice' class='fnname'>hash_slice</a>&lt;H&gt;(data: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.slice.html">&amp;[Self]</a>, state: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>H) <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;H: <a class="trait" href="https://doc.rust-lang.org/nightly/core/hash/trait.Hasher.html" title="trait core::hash::Hasher">Hasher</a>,&nbsp;</span></code></span></td><td><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.3.0'>1.3.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/hash/mod.rs.html#203-209' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Feeds a slice of this type into the given [<code>Hasher</code>]. <a href="https://doc.rust-lang.org/nightly/core/hash/trait.Hash.html#method.hash_slice">Read more</a></p>
+</div></div><h3 id='impl-Debug' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html" title="trait core::fmt::Debug">Debug</a> for <a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a></code><a href='#impl-Debug' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.fmt' class="method"><span id='fmt.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class="struct" href="https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html" title="struct core::fmt::Formatter">Formatter</a>) -&gt; <a class="type" href="https://doc.rust-lang.org/nightly/core/fmt/type.Result.html" title="type core::fmt::Result">Result</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw/lib.rs.html#1309' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Formats the value using the given formatter. <a href="https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt">Read more</a></p>
+</div></div></div>
+                <h2 id='synthetic-implementations' class='small-section-header'>
+                  Auto Trait Implementations<a href='#synthetic-implementations' class='anchor'></a>
+                </h2>
+                <div id='synthetic-implementations-list'>
+            <h3 id='impl-Send' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> for <a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a></code><a href='#impl-Send' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div><h3 id='impl-Sync' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a> for <a class="enum" href="../glfw/enum.WindowHint.html" title="enum glfw::WindowHint">WindowHint</a></code><a href='#impl-Sync' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt><kbd>?</kbd></dt>
+                    <dd>Show this help dialog</dd>
+                    <dt><kbd>S</kbd></dt>
+                    <dd>Focus the search field</dd>
+                    <dt><kbd>↑</kbd></dt>
+                    <dd>Move up in search results</dd>
+                    <dt><kbd>↓</kbd></dt>
+                    <dd>Move down in search results</dd>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
+                    <dd>Go to active search result</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "glfw";
+    </script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

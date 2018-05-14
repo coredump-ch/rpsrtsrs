@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["Command","Commands alter the game state."],["Message","Primary message type sent between server and client."]]});

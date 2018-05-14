@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Array` trait in crate `cgmath`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Array">
+
+    <title>cgmath::prelude::Array - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css"
+          id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../../dark.css">
+    <link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle">
+    <script src="../../storage.js"></script>
+    
+
+    
+    
+</head>
+<body class="rustdoc trait">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
+        
+        <p class='location'>Trait Array</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#associated-types">Associated Types</a><div class="sidebar-links"><a href="#associatedtype.Element">Element</a></div><a class="sidebar-title" href="#required-methods">Required Methods</a><div class="sidebar-links"><a href="#tymethod.from_value">from_value</a><a href="#tymethod.sum">sum</a><a href="#tymethod.product">product</a></div><a class="sidebar-title" href="#provided-methods">Provided Methods</a><div class="sidebar-links"><a href="#method.as_ptr">as_ptr</a><a href="#method.as_mut_ptr">as_mut_ptr</a><a href="#method.swap_elements">swap_elements</a></div><a class="sidebar-title" href="#implementors">Implementors</a></div><p class='location'><a href='../index.html'>cgmath</a>::<wbr><a href='index.html'>prelude</a></p><script>window.sidebarCurrent = {name: 'Array', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
+    </nav>
+
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../../theme.js"></script>
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Trait <a href='../index.html'>cgmath</a>::<wbr><a href='index.html'>prelude</a>::<wbr><a class="trait" href=''>Array</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../src/cgmath/structure.rs.html#31-75' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust trait'>pub trait Array <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/index/trait.Index.html" title="trait core::ops::index::Index">Index</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, Output = Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a>&gt;,<br>&nbsp;&nbsp;&nbsp;&nbsp;Self: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/index/trait.IndexMut.html" title="trait core::ops::index::IndexMut">IndexMut</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, Output = Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a>&gt;,&nbsp;</span>{
+    type <a href='#associatedtype.Element' class="type">Element</a>: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>;
+    fn <a href='#tymethod.from_value' class='fnname'>from_value</a>(value: Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a>) -&gt; Self;
+<div class='item-spacer'></div>    fn <a href='#tymethod.sum' class='fnname'>sum</a>(self) -&gt; Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a><br>&nbsp;&nbsp;&nbsp; <span class="where">where<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a>: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/arith/trait.Add.html" title="trait core::ops::arith::Add">Add</a>&lt;Output = Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a>&gt;</span>;
+<div class='item-spacer'></div>    fn <a href='#tymethod.product' class='fnname'>product</a>(self) -&gt; Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a><br>&nbsp;&nbsp;&nbsp; <span class="where">where<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a>: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/arith/trait.Mul.html" title="trait core::ops::arith::Mul">Mul</a>&lt;Output = Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a>&gt;</span>;
+
+    fn <a href='#method.as_ptr' class='fnname'>as_ptr</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*const </a>Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a> { ... }
+<div class='item-spacer'></div>    fn <a href='#method.as_mut_ptr' class='fnname'>as_mut_ptr</a>(&amp;mut self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a>Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a> { ... }
+<div class='item-spacer'></div>    fn <a href='#method.swap_elements' class='fnname'>swap_elements</a>(&amp;mut self, i: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, j: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>) { ... }
+}</pre></div><div class='docblock'><p>An array containing elements of type <code>Element</code></p>
+</div>
+            <h2 id='associated-types' class='small-section-header'>
+              Associated Types<a href='#associated-types' class='anchor'></a>
+            </h2>
+            <div class='methods'>
+        <h3 id='associatedtype.Element' class='method'><span id='Element.t' class='invisible'><code>type <a href='#associatedtype.Element' class="type">Element</a>: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a></code></span></h3></div>
+            <h2 id='required-methods' class='small-section-header'>
+              Required Methods<a href='#required-methods' class='anchor'></a>
+            </h2>
+            <div class='methods'>
+        <h3 id='tymethod.from_value' class='method'><span id='from_value.v' class='invisible'><code>fn <a href='#tymethod.from_value' class='fnname'>from_value</a>(value: Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a>) -&gt; Self</code></span></h3><div class='docblock'><p>Construct a vector from a single value, replicating it.</p>
+
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">cgmath</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">cgmath</span>::<span class="ident">Vector3</span>;
+
+<span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">Vector3</span>::<span class="ident">from_value</span>(<span class="number">1</span>),
+           <span class="ident">Vector3</span>::<span class="ident">new</span>(<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>));</pre>
+</div><h3 id='tymethod.sum' class='method'><span id='sum.v' class='invisible'><code>fn <a href='#tymethod.sum' class='fnname'>sum</a>(self) -&gt; Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a> <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a>: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/arith/trait.Add.html" title="trait core::ops::arith::Add">Add</a>&lt;Output = Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a>&gt;,&nbsp;</span></code></span></h3><div class='docblock'><p>The sum of the elements of the array.</p>
+</div><h3 id='tymethod.product' class='method'><span id='product.v' class='invisible'><code>fn <a href='#tymethod.product' class='fnname'>product</a>(self) -&gt; Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a> <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a>: <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/arith/trait.Mul.html" title="trait core::ops::arith::Mul">Mul</a>&lt;Output = Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a>&gt;,&nbsp;</span></code></span></h3><div class='docblock'><p>The product of the elements of the array.</p>
+</div></div>
+            <h2 id='provided-methods' class='small-section-header'>
+              Provided Methods<a href='#provided-methods' class='anchor'></a>
+            </h2>
+            <div class='methods'>
+        <h3 id='method.as_ptr' class='method'><span id='as_ptr.v' class='invisible'><code>fn <a href='#method.as_ptr' class='fnname'>as_ptr</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*const </a>Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a></code></span></h3><div class='docblock'><p>Get the pointer to the first element of the array.</p>
+</div><h3 id='method.as_mut_ptr' class='method'><span id='as_mut_ptr.v' class='invisible'><code>fn <a href='#method.as_mut_ptr' class='fnname'>as_mut_ptr</a>(&amp;mut self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.pointer.html">*mut </a>Self::<a class="type" href="../../cgmath/prelude/trait.Array.html#associatedtype.Element" title="type cgmath::prelude::Array::Element">Element</a></code></span></h3><div class='docblock'><p>Get a mutable pointer to the first element of the array.</p>
+</div><h3 id='method.swap_elements' class='method'><span id='swap_elements.v' class='invisible'><code>fn <a href='#method.swap_elements' class='fnname'>swap_elements</a>(&amp;mut self, i: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, j: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>)</code></span></h3><div class='docblock'><p>Swap the elements at indices <code>i</code> and <code>j</code> in-place.</p>
+</div></div>
+        <h2 id='implementors' class='small-section-header'>
+          Implementors<a href='#implementors' class='anchor'></a>
+        </h2>
+        <ul class='item-list' id='implementors-list'>
+    <li><table class='table-display'><tbody><tr><td><code>impl&lt;S:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>&gt; Array for <a class="struct" href="../../cgmath/struct.Vector1.html" title="struct cgmath::Vector1">Vector1</a>&lt;S&gt;<span class="where fmt-newline">  type <a href='#associatedtype.Element' class="type">Element</a> = S;</span></code><td><div class='out-of-band'><a class='srclink' href='../../src/cgmath/vector.rs.html#129-146' title='goto source code'>[src]</a></div></td></tr></tbody></table></li>
+<li><table class='table-display'><tbody><tr><td><code>impl&lt;S:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>&gt; Array for <a class="struct" href="../../cgmath/struct.Vector2.html" title="struct cgmath::Vector2">Vector2</a>&lt;S&gt;<span class="where fmt-newline">  type <a href='#associatedtype.Element' class="type">Element</a> = S;</span></code><td><div class='out-of-band'><a class='srclink' href='../../src/cgmath/vector.rs.html#129-146' title='goto source code'>[src]</a></div></td></tr></tbody></table></li>
+<li><table class='table-display'><tbody><tr><td><code>impl&lt;S:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>&gt; Array for <a class="struct" href="../../cgmath/struct.Vector3.html" title="struct cgmath::Vector3">Vector3</a>&lt;S&gt;<span class="where fmt-newline">  type <a href='#associatedtype.Element' class="type">Element</a> = S;</span></code><td><div class='out-of-band'><a class='srclink' href='../../src/cgmath/vector.rs.html#129-146' title='goto source code'>[src]</a></div></td></tr></tbody></table></li>
+<li><table class='table-display'><tbody><tr><td><code>impl&lt;S:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a>&gt; Array for <a class="struct" href="../../cgmath/struct.Vector4.html" title="struct cgmath::Vector4">Vector4</a>&lt;S&gt;<span class="where fmt-newline">  type <a href='#associatedtype.Element' class="type">Element</a> = S;</span></code><td><div class='out-of-band'><a class='srclink' href='../../src/cgmath/vector.rs.html#129-146' title='goto source code'>[src]</a></div></td></tr></tbody></table></li>
+<li><table class='table-display'><tbody><tr><td><code>impl&lt;S:&nbsp;<a class="trait" href="../../cgmath/trait.BaseNum.html" title="trait cgmath::BaseNum">BaseNum</a>&gt; Array for <a class="struct" href="../../cgmath/struct.Point1.html" title="struct cgmath::Point1">Point1</a>&lt;S&gt;<span class="where fmt-newline">  type <a href='#associatedtype.Element' class="type">Element</a> = S;</span></code><td><div class='out-of-band'><a class='srclink' href='../../src/cgmath/point.rs.html#103-120' title='goto source code'>[src]</a></div></td></tr></tbody></table></li>
+<li><table class='table-display'><tbody><tr><td><code>impl&lt;S:&nbsp;<a class="trait" href="../../cgmath/trait.BaseNum.html" title="trait cgmath::BaseNum">BaseNum</a>&gt; Array for <a class="struct" href="../../cgmath/struct.Point2.html" title="struct cgmath::Point2">Point2</a>&lt;S&gt;<span class="where fmt-newline">  type <a href='#associatedtype.Element' class="type">Element</a> = S;</span></code><td><div class='out-of-band'><a class='srclink' href='../../src/cgmath/point.rs.html#103-120' title='goto source code'>[src]</a></div></td></tr></tbody></table></li>
+<li><table class='table-display'><tbody><tr><td><code>impl&lt;S:&nbsp;<a class="trait" href="../../cgmath/trait.BaseNum.html" title="trait cgmath::BaseNum">BaseNum</a>&gt; Array for <a class="struct" href="../../cgmath/struct.Point3.html" title="struct cgmath::Point3">Point3</a>&lt;S&gt;<span class="where fmt-newline">  type <a href='#associatedtype.Element' class="type">Element</a> = S;</span></code><td><div class='out-of-band'><a class='srclink' href='../../src/cgmath/point.rs.html#103-120' title='goto source code'>[src]</a></div></td></tr></tbody></table></li>
+</ul><script type="text/javascript">window.inlined_types=new Set([]);</script><script type="text/javascript" async
+                         src="../../implementors/cgmath/prelude/trait.Array.js">
+                 </script></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt><kbd>?</kbd></dt>
+                    <dd>Show this help dialog</dd>
+                    <dt><kbd>S</kbd></dt>
+                    <dd>Focus the search field</dd>
+                    <dt><kbd>↑</kbd></dt>
+                    <dd>Move up in search results</dd>
+                    <dt><kbd>↓</kbd></dt>
+                    <dd>Move down in search results</dd>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
+                    <dd>Go to active search result</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "cgmath";
+    </script>
+    <script src="../../main.js"></script>
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

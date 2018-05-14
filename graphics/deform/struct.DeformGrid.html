@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `DeformGrid` struct in crate `graphics`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, DeformGrid">
+
+    <title>graphics::deform::DeformGrid - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css"
+          id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../../dark.css">
+    <link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle">
+    <script src="../../storage.js"></script>
+    
+
+    
+    
+</head>
+<body class="rustdoc struct">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
+        
+        <p class='location'>Struct DeformGrid</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#fields">Fields</a><div class="sidebar-links"><a href="#structfield.cols">cols</a><a href="#structfield.rows">rows</a><a href="#structfield.rect">rect</a><a href="#structfield.vertices">vertices</a><a href="#structfield.indices">indices</a><a href="#structfield.texture_coords">texture_coords</a><a href="#structfield.ps">ps</a><a href="#structfield.qs">qs</a><a href="#structfield.wis">wis</a></div><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.new">new</a><a href="#method.set_current">set_current</a><a href="#method.set_original">set_original</a><a href="#method.reset_control_points">reset_control_points</a><a href="#method.reset_vertices_and_texture_coords">reset_vertices_and_texture_coords</a><a href="#method.hit">hit</a><a href="#method.draw_image">draw_image</a><a href="#method.draw_image_tri">draw_image_tri</a><a href="#method.add_control_point">add_control_point</a><a href="#method.draw_vertical_lines">draw_vertical_lines</a><a href="#method.draw_horizontal_lines">draw_horizontal_lines</a><a href="#method.update">update</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Clone">Clone</a></div><a class="sidebar-title" href="#synthetic-implementations">Auto Trait Implementations</a><div class="sidebar-links"><a href="#impl-Send">Send</a><a href="#impl-Sync">Sync</a></div></div><p class='location'><a href='../index.html'>graphics</a>::<wbr><a href='index.html'>deform</a></p><script>window.sidebarCurrent = {name: 'DeformGrid', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
+    </nav>
+
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../../theme.js"></script>
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>graphics</a>::<wbr><a href='index.html'>deform</a>::<wbr><a class="struct" href=''>DeformGrid</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../src/graphics/deform.rs.html#10-29' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust struct'>pub struct DeformGrid {
+    pub cols: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>,
+    pub rows: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>,
+    pub rect: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 4]</a>,
+    pub vertices: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="type" href="../../graphics/math/type.Vec2d.html" title="type graphics::math::Vec2d">Vec2d</a>&gt;,
+    pub indices: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>&gt;,
+    pub texture_coords: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 2]</a>&gt;,
+    pub ps: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 2]</a>&gt;,
+    pub qs: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 2]</a>&gt;,
+    pub wis: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a>&gt;,
+}</pre></div><div class='docblock'><p>Represents a deformed grid.</p>
+</div><h2 id='fields' class='fields small-section-header'>
+                       Fields<a href='#fields' class='anchor'></a></h2><span id="structfield.cols" class="structfield small-section-header">
+                           <a href="#structfield.cols" class="anchor field"></a>
+                           <span id="cols.v" class='invisible'>
+                           <code>cols: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a></code>
+                           </span></span><div class='docblock'><p>The number of columns in the grid.</p>
+</div><span id="structfield.rows" class="structfield small-section-header">
+                           <a href="#structfield.rows" class="anchor field"></a>
+                           <span id="rows.v" class='invisible'>
+                           <code>rows: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a></code>
+                           </span></span><div class='docblock'><p>The number of rows in the grid.</p>
+</div><span id="structfield.rect" class="structfield small-section-header">
+                           <a href="#structfield.rect" class="anchor field"></a>
+                           <span id="rect.v" class='invisible'>
+                           <code>rect: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 4]</a></code>
+                           </span></span><div class='docblock'><p>The grid undeformed, which is a plain rectangle.</p>
+</div><span id="structfield.vertices" class="structfield small-section-header">
+                           <a href="#structfield.vertices" class="anchor field"></a>
+                           <span id="vertices.v" class='invisible'>
+                           <code>vertices: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="type" href="../../graphics/math/type.Vec2d.html" title="type graphics::math::Vec2d">Vec2d</a>&gt;</code>
+                           </span></span><div class='docblock'><p>The vertices, deformed.</p>
+</div><span id="structfield.indices" class="structfield small-section-header">
+                           <a href="#structfield.indices" class="anchor field"></a>
+                           <span id="indices.v" class='invisible'>
+                           <code>indices: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>&gt;</code>
+                           </span></span><div class='docblock'><p>The triangle indices.</p>
+</div><span id="structfield.texture_coords" class="structfield small-section-header">
+                           <a href="#structfield.texture_coords" class="anchor field"></a>
+                           <span id="texture_coords.v" class='invisible'>
+                           <code>texture_coords: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f32.html">f32</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 2]</a>&gt;</code>
+                           </span></span><div class='docblock'><p>The texture coordinates.</p>
+</div><span id="structfield.ps" class="structfield small-section-header">
+                           <a href="#structfield.ps" class="anchor field"></a>
+                           <span id="ps.v" class='invisible'>
+                           <code>ps: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 2]</a>&gt;</code>
+                           </span></span><div class='docblock'><p>Initial position of control points.</p>
+</div><span id="structfield.qs" class="structfield small-section-header">
+                           <a href="#structfield.qs" class="anchor field"></a>
+                           <span id="qs.v" class='invisible'>
+                           <code>qs: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">[</a><a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.array.html">; 2]</a>&gt;</code>
+                           </span></span><div class='docblock'><p>The current position of control points.</p>
+</div><span id="structfield.wis" class="structfield small-section-header">
+                           <a href="#structfield.wis" class="anchor field"></a>
+                           <span id="wis.v" class='invisible'>
+                           <code>wis: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a>&gt;</code>
+                           </span></span><div class='docblock'><p>A weight computation buffer, one for each control point.</p>
+</div>
+                    <h2 id='methods' class='small-section-header'>
+                      Methods<a href='#methods' class='anchor'></a>
+                    </h2>
+                <h3 id='impl' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="struct" href="../../graphics/deform/struct.DeformGrid.html" title="struct graphics::deform::DeformGrid">DeformGrid</a></code><a href='#impl' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#31-367' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.new' class="method"><span id='new.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.new' class='fnname'>new</a>(rect: <a class="type" href="../../graphics/types/type.Rectangle.html" title="type graphics::types::Rectangle">Rectangle</a>, cols: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, rows: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>) -&gt; <a class="struct" href="../../graphics/deform/struct.DeformGrid.html" title="struct graphics::deform::DeformGrid">DeformGrid</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#33-76' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Creates a new DeformGrid.</p>
+</div><h4 id='method.set_current' class="method"><span id='set_current.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.set_current' class='fnname'>set_current</a>(&amp;mut self, i: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, pos: <a class="type" href="../../graphics/math/type.Vec2d.html" title="type graphics::math::Vec2d">Vec2d</a>)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#80-82' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Sets current control position.</p>
+</div><h4 id='method.set_original' class="method"><span id='set_original.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.set_original' class='fnname'>set_original</a>(&amp;mut self, i: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>, pos: <a class="type" href="../../graphics/math/type.Vec2d.html" title="type graphics::math::Vec2d">Vec2d</a>)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#86-88' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Sets original control position.</p>
+</div><h4 id='method.reset_control_points' class="method"><span id='reset_control_points.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.reset_control_points' class='fnname'>reset_control_points</a>(&amp;mut self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#91-98' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Removes all control points.</p>
+</div><h4 id='method.reset_vertices_and_texture_coords' class="method"><span id='reset_vertices_and_texture_coords.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.reset_vertices_and_texture_coords' class='fnname'>reset_vertices_and_texture_coords</a>(&amp;mut self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#101-121' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Sets vertices and texture coords back to default.</p>
+</div><h4 id='method.hit' class="method"><span id='hit.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.hit' class='fnname'>hit</a>(&amp;self, pos: <a class="type" href="../../graphics/math/type.Vec2d.html" title="type graphics::math::Vec2d">Vec2d</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="type" href="../../graphics/math/type.Vec2d.html" title="type graphics::math::Vec2d">Vec2d</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#126-168' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Finds original coordinate.
+If the deformed grid is overlapping itself, multiple hits might occur.
+Returns the first hit it finds.</p>
+</div><h4 id='method.draw_image' class="method"><span id='draw_image.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.draw_image' class='fnname'>draw_image</a>&lt;G&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;texture: &amp;&lt;G as <a class="trait" href="../../graphics/trait.Graphics.html" title="trait graphics::Graphics">Graphics</a>&gt;::<a class="type" href="../../graphics/trait.Graphics.html#associatedtype.Texture" title="type graphics::Graphics::Texture">Texture</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;draw_state: &amp;<a class="struct" href="../../graphics/draw_state/struct.DrawState.html" title="struct graphics::draw_state::DrawState">DrawState</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;transform: <a class="type" href="../../graphics/math/type.Matrix2d.html" title="type graphics::math::Matrix2d">Matrix2d</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;g: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>G<br>) <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;G: <a class="trait" href="../../graphics/trait.Graphics.html" title="trait graphics::Graphics">Graphics</a>,&nbsp;</span></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#172-180' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Draws deformed image using default method.</p>
+</div><h4 id='method.draw_image_tri' class="method"><span id='draw_image_tri.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.draw_image_tri' class='fnname'>draw_image_tri</a>&lt;G&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;texture: &amp;&lt;G as <a class="trait" href="../../graphics/trait.Graphics.html" title="trait graphics::Graphics">Graphics</a>&gt;::<a class="type" href="../../graphics/trait.Graphics.html#associatedtype.Texture" title="type graphics::Graphics::Texture">Texture</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;draw_state: &amp;<a class="struct" href="../../graphics/draw_state/struct.DrawState.html" title="struct graphics::draw_state::DrawState">DrawState</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;transform: <a class="type" href="../../graphics/math/type.Matrix2d.html" title="type graphics::math::Matrix2d">Matrix2d</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;g: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>G<br>) <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;G: <a class="trait" href="../../graphics/trait.Graphics.html" title="trait graphics::Graphics">Graphics</a>,&nbsp;</span></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#183-217' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Draws deformed image using triangulation.</p>
+</div><h4 id='method.add_control_point' class="method"><span id='add_control_point.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.add_control_point' class='fnname'>add_control_point</a>(&amp;mut self, pos: <a class="type" href="../../graphics/math/type.Vec2d.html" title="type graphics::math::Vec2d">Vec2d</a>)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#220-224' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Adds a control point, in original coordinates.</p>
+</div><h4 id='method.draw_vertical_lines' class="method"><span id='draw_vertical_lines.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.draw_vertical_lines' class='fnname'>draw_vertical_lines</a>&lt;G&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;line: &amp;<a class="struct" href="../../graphics/line/struct.Line.html" title="struct graphics::line::Line">Line</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;draw_state: &amp;<a class="struct" href="../../graphics/draw_state/struct.DrawState.html" title="struct graphics::draw_state::DrawState">DrawState</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;transform: <a class="type" href="../../graphics/math/type.Matrix2d.html" title="type graphics::math::Matrix2d">Matrix2d</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;g: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>G<br>) <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;G: <a class="trait" href="../../graphics/trait.Graphics.html" title="trait graphics::Graphics">Graphics</a>,&nbsp;</span></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#227-248' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Draw vertical grid lines.</p>
+</div><h4 id='method.draw_horizontal_lines' class="method"><span id='draw_horizontal_lines.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.draw_horizontal_lines' class='fnname'>draw_horizontal_lines</a>&lt;G&gt;(<br>&nbsp;&nbsp;&nbsp;&nbsp;&amp;self, <br>&nbsp;&nbsp;&nbsp;&nbsp;line: &amp;<a class="struct" href="../../graphics/line/struct.Line.html" title="struct graphics::line::Line">Line</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;draw_state: &amp;<a class="struct" href="../../graphics/draw_state/struct.DrawState.html" title="struct graphics::draw_state::DrawState">DrawState</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;transform: <a class="type" href="../../graphics/math/type.Matrix2d.html" title="type graphics::math::Matrix2d">Matrix2d</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;g: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut </a>G<br>) <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;G: <a class="trait" href="../../graphics/trait.Graphics.html" title="trait graphics::Graphics">Graphics</a>,&nbsp;</span></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#251-272' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Draw horizontal grid lines.</p>
+</div><h4 id='method.update' class="method"><span id='update.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.update' class='fnname'>update</a>(&amp;mut self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#275-366' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Updates the grid, by deforming the vertices.</p>
+</div></div>
+            <h2 id='implementations' class='small-section-header'>
+              Trait Implementations<a href='#implementations' class='anchor'></a>
+            </h2>
+            <div id='implementations-list'>
+        <h3 id='impl-Clone' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="struct" href="../../graphics/deform/struct.DeformGrid.html" title="struct graphics::deform::DeformGrid">DeformGrid</a></code><a href='#impl-Clone' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#9' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="struct" href="../../graphics/deform/struct.DeformGrid.html" title="struct graphics::deform::DeformGrid">DeformGrid</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/deform.rs.html#9' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/clone.rs.html#117-119' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div></div>
+                <h2 id='synthetic-implementations' class='small-section-header'>
+                  Auto Trait Implementations<a href='#synthetic-implementations' class='anchor'></a>
+                </h2>
+                <div id='synthetic-implementations-list'>
+            <h3 id='impl-Send' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> for <a class="struct" href="../../graphics/deform/struct.DeformGrid.html" title="struct graphics::deform::DeformGrid">DeformGrid</a></code><a href='#impl-Send' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div><h3 id='impl-Sync' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a> for <a class="struct" href="../../graphics/deform/struct.DeformGrid.html" title="struct graphics::deform::DeformGrid">DeformGrid</a></code><a href='#impl-Sync' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt><kbd>?</kbd></dt>
+                    <dd>Show this help dialog</dd>
+                    <dt><kbd>S</kbd></dt>
+                    <dd>Focus the search field</dd>
+                    <dt><kbd>↑</kbd></dt>
+                    <dd>Move up in search results</dd>
+                    <dt><kbd>↓</kbd></dt>
+                    <dd>Move down in search results</dd>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
+                    <dd>Go to active search result</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "graphics";
+    </script>
+    <script src="../../main.js"></script>
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

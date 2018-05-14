@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `EaseFunction` enum in crate `interpolation`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, EaseFunction">
+
+    <title>interpolation::EaseFunction - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css"
+          id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../dark.css">
+    <link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle">
+    <script src="../storage.js"></script>
+    
+
+    
+    
+</head>
+<body class="rustdoc enum">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
+        
+        <p class='location'>Enum EaseFunction</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#variants">Variants</a><div class="sidebar-links"><a href="#variant.QuadraticIn">QuadraticIn</a><a href="#variant.QuadraticOut">QuadraticOut</a><a href="#variant.QuadraticInOut">QuadraticInOut</a><a href="#variant.CubicIn">CubicIn</a><a href="#variant.CubicOut">CubicOut</a><a href="#variant.CubicInOut">CubicInOut</a><a href="#variant.QuarticIn">QuarticIn</a><a href="#variant.QuarticOut">QuarticOut</a><a href="#variant.QuarticInOut">QuarticInOut</a><a href="#variant.QuinticIn">QuinticIn</a><a href="#variant.QuinticOut">QuinticOut</a><a href="#variant.QuinticInOut">QuinticInOut</a><a href="#variant.SineIn">SineIn</a><a href="#variant.SineOut">SineOut</a><a href="#variant.SineInOut">SineInOut</a><a href="#variant.CircularIn">CircularIn</a><a href="#variant.CircularOut">CircularOut</a><a href="#variant.CircularInOut">CircularInOut</a><a href="#variant.ExponentialIn">ExponentialIn</a><a href="#variant.ExponentialOut">ExponentialOut</a><a href="#variant.ExponentialInOut">ExponentialInOut</a><a href="#variant.ElasticIn">ElasticIn</a><a href="#variant.ElasticOut">ElasticOut</a><a href="#variant.ElasticInOut">ElasticInOut</a><a href="#variant.BackIn">BackIn</a><a href="#variant.BackOut">BackOut</a><a href="#variant.BackInOut">BackInOut</a><a href="#variant.BounceIn">BounceIn</a><a href="#variant.BounceOut">BounceOut</a><a href="#variant.BounceInOut">BounceInOut</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Copy">Copy</a><a href="#impl-Clone">Clone</a><a href="#impl-PartialEq">PartialEq</a></div><a class="sidebar-title" href="#synthetic-implementations">Auto Trait Implementations</a><div class="sidebar-links"><a href="#impl-Send">Send</a><a href="#impl-Sync">Sync</a></div></div><p class='location'><a href='index.html'>interpolation</a></p><script>window.sidebarCurrent = {name: 'EaseFunction', ty: 'enum', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
+    </nav>
+
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../theme.js"></script>
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Enum <a href='index.html'>interpolation</a>::<wbr><a class="enum" href=''>EaseFunction</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../src/interpolation/ease.rs.html#5-45' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust enum'>pub enum EaseFunction {
+    QuadraticIn,
+    QuadraticOut,
+    QuadraticInOut,
+    CubicIn,
+    CubicOut,
+    CubicInOut,
+    QuarticIn,
+    QuarticOut,
+    QuarticInOut,
+    QuinticIn,
+    QuinticOut,
+    QuinticInOut,
+    SineIn,
+    SineOut,
+    SineInOut,
+    CircularIn,
+    CircularOut,
+    CircularInOut,
+    ExponentialIn,
+    ExponentialOut,
+    ExponentialInOut,
+    ElasticIn,
+    ElasticOut,
+    ElasticInOut,
+    BackIn,
+    BackOut,
+    BackInOut,
+    BounceIn,
+    BounceOut,
+    BounceInOut,
+}</pre></div><h2 id='variants' class='variants small-section-header'>
+                   Variants<a href='#variants' class='anchor'></a></h2>
+<span id="variant.QuadraticIn" class="variant small-section-header"><a href="#variant.QuadraticIn" class="anchor field"></a><span id='QuadraticIn.v' class='invisible'><code>QuadraticIn</code></span></span><span id="variant.QuadraticOut" class="variant small-section-header"><a href="#variant.QuadraticOut" class="anchor field"></a><span id='QuadraticOut.v' class='invisible'><code>QuadraticOut</code></span></span><span id="variant.QuadraticInOut" class="variant small-section-header"><a href="#variant.QuadraticInOut" class="anchor field"></a><span id='QuadraticInOut.v' class='invisible'><code>QuadraticInOut</code></span></span><span id="variant.CubicIn" class="variant small-section-header"><a href="#variant.CubicIn" class="anchor field"></a><span id='CubicIn.v' class='invisible'><code>CubicIn</code></span></span><span id="variant.CubicOut" class="variant small-section-header"><a href="#variant.CubicOut" class="anchor field"></a><span id='CubicOut.v' class='invisible'><code>CubicOut</code></span></span><span id="variant.CubicInOut" class="variant small-section-header"><a href="#variant.CubicInOut" class="anchor field"></a><span id='CubicInOut.v' class='invisible'><code>CubicInOut</code></span></span><span id="variant.QuarticIn" class="variant small-section-header"><a href="#variant.QuarticIn" class="anchor field"></a><span id='QuarticIn.v' class='invisible'><code>QuarticIn</code></span></span><span id="variant.QuarticOut" class="variant small-section-header"><a href="#variant.QuarticOut" class="anchor field"></a><span id='QuarticOut.v' class='invisible'><code>QuarticOut</code></span></span><span id="variant.QuarticInOut" class="variant small-section-header"><a href="#variant.QuarticInOut" class="anchor field"></a><span id='QuarticInOut.v' class='invisible'><code>QuarticInOut</code></span></span><span id="variant.QuinticIn" class="variant small-section-header"><a href="#variant.QuinticIn" class="anchor field"></a><span id='QuinticIn.v' class='invisible'><code>QuinticIn</code></span></span><span id="variant.QuinticOut" class="variant small-section-header"><a href="#variant.QuinticOut" class="anchor field"></a><span id='QuinticOut.v' class='invisible'><code>QuinticOut</code></span></span><span id="variant.QuinticInOut" class="variant small-section-header"><a href="#variant.QuinticInOut" class="anchor field"></a><span id='QuinticInOut.v' class='invisible'><code>QuinticInOut</code></span></span><span id="variant.SineIn" class="variant small-section-header"><a href="#variant.SineIn" class="anchor field"></a><span id='SineIn.v' class='invisible'><code>SineIn</code></span></span><span id="variant.SineOut" class="variant small-section-header"><a href="#variant.SineOut" class="anchor field"></a><span id='SineOut.v' class='invisible'><code>SineOut</code></span></span><span id="variant.SineInOut" class="variant small-section-header"><a href="#variant.SineInOut" class="anchor field"></a><span id='SineInOut.v' class='invisible'><code>SineInOut</code></span></span><span id="variant.CircularIn" class="variant small-section-header"><a href="#variant.CircularIn" class="anchor field"></a><span id='CircularIn.v' class='invisible'><code>CircularIn</code></span></span><span id="variant.CircularOut" class="variant small-section-header"><a href="#variant.CircularOut" class="anchor field"></a><span id='CircularOut.v' class='invisible'><code>CircularOut</code></span></span><span id="variant.CircularInOut" class="variant small-section-header"><a href="#variant.CircularInOut" class="anchor field"></a><span id='CircularInOut.v' class='invisible'><code>CircularInOut</code></span></span><span id="variant.ExponentialIn" class="variant small-section-header"><a href="#variant.ExponentialIn" class="anchor field"></a><span id='ExponentialIn.v' class='invisible'><code>ExponentialIn</code></span></span><span id="variant.ExponentialOut" class="variant small-section-header"><a href="#variant.ExponentialOut" class="anchor field"></a><span id='ExponentialOut.v' class='invisible'><code>ExponentialOut</code></span></span><span id="variant.ExponentialInOut" class="variant small-section-header"><a href="#variant.ExponentialInOut" class="anchor field"></a><span id='ExponentialInOut.v' class='invisible'><code>ExponentialInOut</code></span></span><span id="variant.ElasticIn" class="variant small-section-header"><a href="#variant.ElasticIn" class="anchor field"></a><span id='ElasticIn.v' class='invisible'><code>ElasticIn</code></span></span><span id="variant.ElasticOut" class="variant small-section-header"><a href="#variant.ElasticOut" class="anchor field"></a><span id='ElasticOut.v' class='invisible'><code>ElasticOut</code></span></span><span id="variant.ElasticInOut" class="variant small-section-header"><a href="#variant.ElasticInOut" class="anchor field"></a><span id='ElasticInOut.v' class='invisible'><code>ElasticInOut</code></span></span><span id="variant.BackIn" class="variant small-section-header"><a href="#variant.BackIn" class="anchor field"></a><span id='BackIn.v' class='invisible'><code>BackIn</code></span></span><span id="variant.BackOut" class="variant small-section-header"><a href="#variant.BackOut" class="anchor field"></a><span id='BackOut.v' class='invisible'><code>BackOut</code></span></span><span id="variant.BackInOut" class="variant small-section-header"><a href="#variant.BackInOut" class="anchor field"></a><span id='BackInOut.v' class='invisible'><code>BackInOut</code></span></span><span id="variant.BounceIn" class="variant small-section-header"><a href="#variant.BounceIn" class="anchor field"></a><span id='BounceIn.v' class='invisible'><code>BounceIn</code></span></span><span id="variant.BounceOut" class="variant small-section-header"><a href="#variant.BounceOut" class="anchor field"></a><span id='BounceOut.v' class='invisible'><code>BounceOut</code></span></span><span id="variant.BounceInOut" class="variant small-section-header"><a href="#variant.BounceInOut" class="anchor field"></a><span id='BounceInOut.v' class='invisible'><code>BounceInOut</code></span></span>
+            <h2 id='implementations' class='small-section-header'>
+              Trait Implementations<a href='#implementations' class='anchor'></a>
+            </h2>
+            <div id='implementations-list'>
+        <h3 id='impl-Copy' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Copy.html" title="trait core::marker::Copy">Copy</a> for <a class="enum" href="../interpolation/enum.EaseFunction.html" title="enum interpolation::EaseFunction">EaseFunction</a></code><a href='#impl-Copy' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/interpolation/ease.rs.html#4' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'></div><h3 id='impl-Clone' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html" title="trait core::clone::Clone">Clone</a> for <a class="enum" href="../interpolation/enum.EaseFunction.html" title="enum interpolation::EaseFunction">EaseFunction</a></code><a href='#impl-Clone' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/interpolation/ease.rs.html#4' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.clone' class="method"><span id='clone.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class="enum" href="../interpolation/enum.EaseFunction.html" title="enum interpolation::EaseFunction">EaseFunction</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/interpolation/ease.rs.html#4' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class="method"><span id='clone_from.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/clone.rs.html#117-119' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div><h3 id='impl-PartialEq' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html" title="trait core::cmp::PartialEq">PartialEq</a> for <a class="enum" href="../interpolation/enum.EaseFunction.html" title="enum interpolation::EaseFunction">EaseFunction</a></code><a href='#impl-PartialEq' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/interpolation/ease.rs.html#4' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.eq' class="method"><span id='eq.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class="enum" href="../interpolation/enum.EaseFunction.html" title="enum interpolation::EaseFunction">EaseFunction</a>) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/interpolation/ease.rs.html#4' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class="method"><span id='ne.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;</a>Rhs) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/cmp.rs.html#121' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div></div>
+                <h2 id='synthetic-implementations' class='small-section-header'>
+                  Auto Trait Implementations<a href='#synthetic-implementations' class='anchor'></a>
+                </h2>
+                <div id='synthetic-implementations-list'>
+            <h3 id='impl-Send' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> for <a class="enum" href="../interpolation/enum.EaseFunction.html" title="enum interpolation::EaseFunction">EaseFunction</a></code><a href='#impl-Send' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div><h3 id='impl-Sync' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a> for <a class="enum" href="../interpolation/enum.EaseFunction.html" title="enum interpolation::EaseFunction">EaseFunction</a></code><a href='#impl-Sync' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt><kbd>?</kbd></dt>
+                    <dd>Show this help dialog</dd>
+                    <dt><kbd>S</kbd></dt>
+                    <dd>Focus the search field</dd>
+                    <dt><kbd>↑</kbd></dt>
+                    <dd>Move up in search results</dd>
+                    <dt><kbd>↓</kbd></dt>
+                    <dd>Move down in search results</dd>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
+                    <dd>Go to active search result</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "interpolation";
+    </script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

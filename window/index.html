@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `window` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, window">
+
+    <title>window - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css"
+          id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../dark.css">
+    <link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle">
+    <script src="../storage.js"></script>
+    
+
+    
+    
+</head>
+<body class="rustdoc mod">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
+        
+        <p class='location'>Crate window</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#traits">Traits</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'window', ty: 'mod', relpath: '../'};</script></div>
+    </nav>
+
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../theme.js"></script>
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Crate <a class="mod" href=''>window</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../src/window/lib.rs.html#1-708' title='goto source code'>[src]</a></span></h1><div class='docblock'><p>Window storage and interfacing traits.</p>
+<p>The <a href="./trait.Window.html"><code>Window</code></a> trait is the minimum interface required for event loop.
+All backends usually support this trait.</p>
+<p>The <a href="./trait.AdvancedWindow.html"><code>AdvancedWindow</code></a> trait
+is the maximum interface that can be provided,
+while still staying consistent between backends. Not all backends implement
+<code>AdvancedWindow</code>; check your backend's documentation to see whether it implements
+this trait.</p>
+<p>The <a href="./struct.WindowSettings.html"><code>WindowSettings</code></a> structure is the preferred way of building
+new windows in Piston. It uses the <code>BuildFromWindowSettings</code> trait,
+which backends implement to handle window creation and setup.</p>
+<p>The <a href="./trait.OpenGLWindow.html"><code>OpenGLWindow</code></a> trait is used to provide low-level
+access to OpenGL through the abstract Piston API.</p>
+<p>The <a href="./struct.Size.html"><code>Size</code></a> structure is used throughout Piston to store window sizes.
+It implements some conversion traits for convenience.</p>
+</div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.NoWindow.html"
+                                  title='struct window::NoWindow'>NoWindow</a></td>
+                           <td class='docblock-short'>
+                                <p>A window without user interface, often used in server event loops.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.Position.html"
+                                  title='struct window::Position'>Position</a></td>
+                           <td class='docblock-short'>
+                                <p>Structure to store the window position.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.Size.html"
+                                  title='struct window::Size'>Size</a></td>
+                           <td class='docblock-short'>
+                                <p>Structure to store the window size.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="struct" href="struct.WindowSettings.html"
+                                  title='struct window::WindowSettings'>WindowSettings</a></td>
+                           <td class='docblock-short'>
+                                <p>Settings structure for window behavior.</p>
+
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="trait" href="trait.AdvancedWindow.html"
+                                  title='trait window::AdvancedWindow'>AdvancedWindow</a></td>
+                           <td class='docblock-short'>
+                                <p>Trait representing a window with the most features that are still generic.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="trait" href="trait.BuildFromWindowSettings.html"
+                                  title='trait window::BuildFromWindowSettings'>BuildFromWindowSettings</a></td>
+                           <td class='docblock-short'>
+                                <p>Constructs a window from a <a href="./struct.WindowSettings.html"><code>WindowSettings</code></a>
+object.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="trait" href="trait.OpenGLWindow.html"
+                                  title='trait window::OpenGLWindow'>OpenGLWindow</a></td>
+                           <td class='docblock-short'>
+                                <p>Trait for OpenGL specific operations on a window.</p>
+
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class="trait" href="trait.Window.html"
+                                  title='trait window::Window'>Window</a></td>
+                           <td class='docblock-short'>
+                                <p>Trait representing the minimum requirements for defining a window.</p>
+
+                           </td>
+                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class="type" href="type.ProcAddress.html"
+                                  title='type window::ProcAddress'>ProcAddress</a></td>
+                           <td class='docblock-short'>
+                                <p>The type of an OpenGL function address.</p>
+
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt><kbd>?</kbd></dt>
+                    <dd>Show this help dialog</dd>
+                    <dt><kbd>S</kbd></dt>
+                    <dd>Focus the search field</dd>
+                    <dt><kbd>↑</kbd></dt>
+                    <dd>Move up in search results</dd>
+                    <dt><kbd>↓</kbd></dt>
+                    <dd>Move down in search results</dd>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
+                    <dd>Go to active search result</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "window";
+    </script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

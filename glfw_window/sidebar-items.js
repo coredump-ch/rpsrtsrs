@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["OpenGL",""]],"struct":[["GlfwWindow","Contains stuff for game window."]]});

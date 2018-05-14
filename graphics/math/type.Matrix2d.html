@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Matrix2d` type in crate `graphics`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Matrix2d">
+
+    <title>graphics::math::Matrix2d - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css"
+          id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../../dark.css">
+    <link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle">
+    <script src="../../storage.js"></script>
+    
+
+    
+    
+</head>
+<body class="rustdoc type">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
+        
+        <p class='location'>Type Definition Matrix2d</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-Transformed">Transformed</a></div></div><p class='location'><a href='../index.html'>graphics</a>::<wbr><a href='index.html'>math</a></p><script>window.sidebarCurrent = {name: 'Matrix2d', ty: 'type', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
+    </nav>
+
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../../theme.js"></script>
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Type Definition <a href='../index.html'>graphics</a>::<wbr><a href='index.html'>math</a>::<wbr><a class="type" href=''>Matrix2d</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../src/graphics/math.rs.html#25' title='goto source code'>[src]</a></span></h1><pre class='rust typedef'>type Matrix2d&lt;T&nbsp;=&nbsp;<a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a>&gt; = <a class="type" href="../../vecmath/type.Matrix2x3.html" title="type vecmath::Matrix2x3">Matrix2x3</a>&lt;T&gt;;</pre><div class='docblock'><p>The type used for matrices.</p>
+</div>
+            <h2 id='implementations' class='small-section-header'>
+              Trait Implementations<a href='#implementations' class='anchor'></a>
+            </h2>
+            <div id='implementations-list'>
+        <h3 id='impl-Transformed' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="../../graphics/trait.Transformed.html" title="trait graphics::Transformed">Transformed</a> for <a class="type" href="../../graphics/math/type.Matrix2d.html" title="type graphics::math::Matrix2d">Matrix2d</a></code><a href='#impl-Transformed' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#63-103' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.append_transform' class="method"><span id='append_transform.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../graphics/trait.Transformed.html#tymethod.append_transform' class='fnname'>append_transform</a>(self, transform: <a class="type" href="../../graphics/math/type.Matrix2d.html" title="type graphics::math::Matrix2d">Matrix2d</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#65-67' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Appends transform to the current one.</p>
+</div><h4 id='method.prepend_transform' class="method"><span id='prepend_transform.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../graphics/trait.Transformed.html#tymethod.prepend_transform' class='fnname'>prepend_transform</a>(self, transform: <a class="type" href="../../graphics/math/type.Matrix2d.html" title="type graphics::math::Matrix2d">Matrix2d</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#70-72' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Prepends transform to the current one.</p>
+</div><h4 id='method.trans' class="method"><span id='trans.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../graphics/trait.Transformed.html#tymethod.trans' class='fnname'>trans</a>(self, x: <a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a>, y: <a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#75-78' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Translate x an y in local coordinates.</p>
+</div><h4 id='method.rot_rad' class="method"><span id='rot_rad.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../graphics/trait.Transformed.html#tymethod.rot_rad' class='fnname'>rot_rad</a>(self, angle: <a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#81-84' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Rotate radians in local coordinates.</p>
+</div><h4 id='method.orient' class="method"><span id='orient.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../graphics/trait.Transformed.html#tymethod.orient' class='fnname'>orient</a>(self, x: <a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a>, y: <a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#87-90' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Orients x axis to look at point locally. <a href="../../graphics/trait.Transformed.html#tymethod.orient">Read more</a></p>
+</div><h4 id='method.scale' class="method"><span id='scale.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../graphics/trait.Transformed.html#tymethod.scale' class='fnname'>scale</a>(self, sx: <a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a>, sy: <a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#93-96' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Scales in local coordinates.</p>
+</div><h4 id='method.shear' class="method"><span id='shear.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../graphics/trait.Transformed.html#tymethod.shear' class='fnname'>shear</a>(self, v: <a class="type" href="../../graphics/math/type.Vec2d.html" title="type graphics::math::Vec2d">Vec2d</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#99-102' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Shears in local coordinates.</p>
+</div><h4 id='method.rot_deg' class="method"><span id='rot_deg.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../graphics/trait.Transformed.html#method.rot_deg' class='fnname'>rot_deg</a>(self, angle: <a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#18-21' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Rotates degrees in local coordinates.</p>
+</div><h4 id='method.zoom' class="method"><span id='zoom.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../graphics/trait.Transformed.html#method.zoom' class='fnname'>zoom</a>(self, s: <a class="type" href="../../graphics/math/type.Scalar.html" title="type graphics::math::Scalar">Scalar</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#37-39' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Scales in both directions in local coordinates.</p>
+</div><h4 id='method.flip_v' class="method"><span id='flip_v.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../graphics/trait.Transformed.html#method.flip_v' class='fnname'>flip_v</a>(self) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#43-45' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Flips vertically in local coordinates.</p>
+</div><h4 id='method.flip_h' class="method"><span id='flip_h.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../graphics/trait.Transformed.html#method.flip_h' class='fnname'>flip_h</a>(self) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#49-51' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Flips horizontally in local coordinates.</p>
+</div><h4 id='method.flip_hv' class="method"><span id='flip_hv.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../../graphics/trait.Transformed.html#method.flip_hv' class='fnname'>flip_hv</a>(self) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/graphics/transformed.rs.html#55-57' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Flips horizontally and vertically in local coordinates.</p>
+</div></div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt><kbd>?</kbd></dt>
+                    <dd>Show this help dialog</dd>
+                    <dt><kbd>S</kbd></dt>
+                    <dd>Focus the search field</dd>
+                    <dt><kbd>↑</kbd></dt>
+                    <dd>Move up in search results</dd>
+                    <dt><kbd>↓</kbd></dt>
+                    <dd>Move down in search results</dd>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
+                    <dd>Go to active search result</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "graphics";
+    </script>
+    <script src="../../main.js"></script>
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

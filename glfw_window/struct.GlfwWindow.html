@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `GlfwWindow` struct in crate `glfw_window`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, GlfwWindow">
+
+    <title>glfw_window::GlfwWindow - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css"
+          id="mainThemeStyle">
+    
+    <link rel="stylesheet" type="text/css" href="../dark.css">
+    <link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle">
+    <script src="../storage.js"></script>
+    
+
+    
+    
+</head>
+<body class="rustdoc struct">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        <div class="sidebar-menu">&#9776;</div>
+        
+        <p class='location'>Struct GlfwWindow</p><div class="sidebar-elems"><div class="block items"><a class="sidebar-title" href="#fields">Fields</a><div class="sidebar-links"><a href="#structfield.window">window</a><a href="#structfield.glfw">glfw</a></div><a class="sidebar-title" href="#methods">Methods</a><div class="sidebar-links"><a href="#method.from_pieces">from_pieces</a><a href="#method.new">new</a></div><a class="sidebar-title" href="#implementations">Trait Implementations</a><div class="sidebar-links"><a href="#impl-BuildFromWindowSettings">BuildFromWindowSettings</a><a href="#impl-Window">Window</a><a href="#impl-AdvancedWindow">AdvancedWindow</a><a href="#impl-OpenGLWindow">OpenGLWindow</a></div><a class="sidebar-title" href="#synthetic-implementations">Auto Trait Implementations</a><div class="sidebar-links"><a href="#impl-Send">!Send</a><a href="#impl-Sync">!Sync</a></div></div><p class='location'><a href='index.html'>glfw_window</a></p><script>window.sidebarCurrent = {name: 'GlfwWindow', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script></div>
+    </nav>
+
+    <div class="theme-picker">
+        <button id="theme-picker" aria-label="Pick another theme!">
+            <img src="../brush.svg" width="18" alt="Pick another theme!">
+        </button>
+        <div id="theme-choices"></div>
+    </div>
+    <script src="../theme.js"></script>
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content"><h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>glfw_window</a>::<wbr><a class="struct" href=''>GlfwWindow</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../src/glfw_window/lib.rs.html#40-53' title='goto source code'>[src]</a></span></h1><div class="docblock type-decl"><pre class='rust struct'>pub struct GlfwWindow {
+    pub window: <a class="struct" href="../glfw/struct.Window.html" title="struct glfw::Window">Window</a>,
+    pub glfw: <a class="struct" href="../glfw/struct.Glfw.html" title="struct glfw::Glfw">Glfw</a>,
+    // some fields omitted
+}</pre></div><div class='docblock'><p>Contains stuff for game window.</p>
+</div><h2 id='fields' class='fields small-section-header'>
+                       Fields<a href='#fields' class='anchor'></a></h2><span id="structfield.window" class="structfield small-section-header">
+                           <a href="#structfield.window" class="anchor field"></a>
+                           <span id="window.v" class='invisible'>
+                           <code>window: <a class="struct" href="../glfw/struct.Window.html" title="struct glfw::Window">Window</a></code>
+                           </span></span><div class='docblock'><p>The window.</p>
+</div><span id="structfield.glfw" class="structfield small-section-header">
+                           <a href="#structfield.glfw" class="anchor field"></a>
+                           <span id="glfw.v" class='invisible'>
+                           <code>glfw: <a class="struct" href="../glfw/struct.Glfw.html" title="struct glfw::Glfw">Glfw</a></code>
+                           </span></span><div class='docblock'><p>GLFW context.</p>
+</div>
+                    <h2 id='methods' class='small-section-header'>
+                      Methods<a href='#methods' class='anchor'></a>
+                    </h2>
+                <h3 id='impl' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="struct" href="../glfw_window/struct.GlfwWindow.html" title="struct glfw_window::GlfwWindow">GlfwWindow</a></code><a href='#impl' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#55-243' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.from_pieces' class="method"><span id='from_pieces.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.from_pieces' class='fnname'>from_pieces</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;win: <a class="struct" href="../glfw/struct.Window.html" title="struct glfw::Window">Window</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;glfw: <a class="struct" href="../glfw/struct.Glfw.html" title="struct glfw::Glfw">Glfw</a>, <br>&nbsp;&nbsp;&nbsp;&nbsp;events: <a class="struct" href="https://doc.rust-lang.org/nightly/std/sync/mpsc/struct.Receiver.html" title="struct std::sync::mpsc::Receiver">Receiver</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.f64.html">f64</a>, <a class="enum" href="../glfw/enum.WindowEvent.html" title="enum glfw::WindowEvent">WindowEvent</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a>&gt;, <br>&nbsp;&nbsp;&nbsp;&nbsp;exit_on_esc: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a><br>) -&gt; <a class="struct" href="../glfw_window/struct.GlfwWindow.html" title="struct glfw_window::GlfwWindow">GlfwWindow</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#57-72' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Create a new game window from an existing GLFW window.</p>
+</div><h4 id='method.new' class="method"><span id='new.v' class='invisible'><table class='table-display'><tbody><tr><td><code>pub fn <a href='#method.new' class='fnname'>new</a>(settings: &amp;<a class="struct" href="../window/struct.WindowSettings.html" title="struct window::WindowSettings">WindowSettings</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="../glfw_window/struct.GlfwWindow.html" title="struct glfw_window::GlfwWindow">GlfwWindow</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#75-128' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Creates a new game window for GLFW.</p>
+</div></div>
+            <h2 id='implementations' class='small-section-header'>
+              Trait Implementations<a href='#implementations' class='anchor'></a>
+            </h2>
+            <div id='implementations-list'>
+        <h3 id='impl-BuildFromWindowSettings' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="../window/trait.BuildFromWindowSettings.html" title="trait window::BuildFromWindowSettings">BuildFromWindowSettings</a> for <a class="struct" href="../glfw_window/struct.GlfwWindow.html" title="struct glfw_window::GlfwWindow">GlfwWindow</a></code><a href='#impl-BuildFromWindowSettings' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#245-249' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.build_from_window_settings' class="method"><span id='build_from_window_settings.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.BuildFromWindowSettings.html#tymethod.build_from_window_settings' class='fnname'>build_from_window_settings</a>(<br>&nbsp;&nbsp;&nbsp;&nbsp;settings: &amp;<a class="struct" href="../window/struct.WindowSettings.html" title="struct window::WindowSettings">WindowSettings</a><br>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="struct" href="../glfw_window/struct.GlfwWindow.html" title="struct glfw_window::GlfwWindow">GlfwWindow</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#246-248' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Builds the window from a <code>WindowSettings</code> object. <a href="../window/trait.BuildFromWindowSettings.html#tymethod.build_from_window_settings">Read more</a></p>
+</div></div><h3 id='impl-Window' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="../window/trait.Window.html" title="trait window::Window">Window</a> for <a class="struct" href="../glfw_window/struct.GlfwWindow.html" title="struct glfw_window::GlfwWindow">GlfwWindow</a></code><a href='#impl-Window' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#251-285' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.size' class="method"><span id='size.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.Window.html#tymethod.size' class='fnname'>size</a>(&amp;self) -&gt; <a class="struct" href="../window/struct.Size.html" title="struct window::Size">Size</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#252-255' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Gets the size of the window.</p>
+</div><h4 id='method.draw_size' class="method"><span id='draw_size.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.Window.html#tymethod.draw_size' class='fnname'>draw_size</a>(&amp;self) -&gt; <a class="struct" href="../window/struct.Size.html" title="struct window::Size">Size</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#257-260' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Gets the draw size of the window. <a href="../window/trait.Window.html#tymethod.draw_size">Read more</a></p>
+</div><h4 id='method.set_should_close' class="method"><span id='set_should_close.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.Window.html#tymethod.set_should_close' class='fnname'>set_should_close</a>(&amp;mut self, value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#262-264' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Tells the window to close or stay open.</p>
+</div><h4 id='method.should_close' class="method"><span id='should_close.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.Window.html#tymethod.should_close' class='fnname'>should_close</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#266-268' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Returns true if the window should close.</p>
+</div><h4 id='method.swap_buffers' class="method"><span id='swap_buffers.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.Window.html#tymethod.swap_buffers' class='fnname'>swap_buffers</a>(&amp;mut self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#270-272' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Swaps render buffers. <a href="../window/trait.Window.html#tymethod.swap_buffers">Read more</a></p>
+</div><h4 id='method.wait_event' class="method"><span id='wait_event.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.Window.html#tymethod.wait_event' class='fnname'>wait_event</a>(&amp;mut self) -&gt; <a class="enum" href="../input/enum.Input.html" title="enum input::Input">Input</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#274-276' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Wait indefinitely for an input event to be available from the window.</p>
+</div><h4 id='method.wait_event_timeout' class="method"><span id='wait_event_timeout.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.Window.html#tymethod.wait_event_timeout' class='fnname'>wait_event_timeout</a>(&amp;mut self, timeout: <a class="struct" href="https://doc.rust-lang.org/nightly/core/time/struct.Duration.html" title="struct core::time::Duration">Duration</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="enum" href="../input/enum.Input.html" title="enum input::Input">Input</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#278-280' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Wait for an input event to be available from the window or for the specified timeout to be reached. <a href="../window/trait.Window.html#tymethod.wait_event_timeout">Read more</a></p>
+</div><h4 id='method.poll_event' class="method"><span id='poll_event.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.Window.html#tymethod.poll_event' class='fnname'>poll_event</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="enum" href="../input/enum.Input.html" title="enum input::Input">Input</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#282-284' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Polls an input event from the window. <a href="../window/trait.Window.html#tymethod.poll_event">Read more</a></p>
+</div></div><h3 id='impl-AdvancedWindow' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="../window/trait.AdvancedWindow.html" title="trait window::AdvancedWindow">AdvancedWindow</a> for <a class="struct" href="../glfw_window/struct.GlfwWindow.html" title="struct glfw_window::GlfwWindow">GlfwWindow</a></code><a href='#impl-AdvancedWindow' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#287-321' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.get_title' class="method"><span id='get_title.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#tymethod.get_title' class='fnname'>get_title</a>(&amp;self) -&gt; <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#288-290' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Gets a copy of the title of the window.</p>
+</div><h4 id='method.set_title' class="method"><span id='set_title.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#tymethod.set_title' class='fnname'>set_title</a>(&amp;mut self, value: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#292-294' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Sets the title of the window.</p>
+</div><h4 id='method.get_exit_on_esc' class="method"><span id='get_exit_on_esc.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#tymethod.get_exit_on_esc' class='fnname'>get_exit_on_esc</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#296-298' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Gets whether to exit when pressing esc. <a href="../window/trait.AdvancedWindow.html#tymethod.get_exit_on_esc">Read more</a></p>
+</div><h4 id='method.set_exit_on_esc' class="method"><span id='set_exit_on_esc.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#tymethod.set_exit_on_esc' class='fnname'>set_exit_on_esc</a>(&amp;mut self, value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#300-302' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Sets whether to exit when pressing esc. <a href="../window/trait.AdvancedWindow.html#tymethod.set_exit_on_esc">Read more</a></p>
+</div><h4 id='method.set_capture_cursor' class="method"><span id='set_capture_cursor.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#tymethod.set_capture_cursor' class='fnname'>set_capture_cursor</a>(&amp;mut self, value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#304-306' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Sets whether to capture/grab the cursor. <a href="../window/trait.AdvancedWindow.html#tymethod.set_capture_cursor">Read more</a></p>
+</div><h4 id='method.show' class="method"><span id='show.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#tymethod.show' class='fnname'>show</a>(&amp;mut self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#308' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Shows the window. <a href="../window/trait.AdvancedWindow.html#tymethod.show">Read more</a></p>
+</div><h4 id='method.hide' class="method"><span id='hide.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#tymethod.hide' class='fnname'>hide</a>(&amp;mut self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#310' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Hides the window. <a href="../window/trait.AdvancedWindow.html#tymethod.hide">Read more</a></p>
+</div><h4 id='method.get_position' class="method"><span id='get_position.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#tymethod.get_position' class='fnname'>get_position</a>(&amp;self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../window/struct.Position.html" title="struct window::Position">Position</a>&gt;</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#312-315' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Gets the position of window.</p>
+</div><h4 id='method.set_position' class="method"><span id='set_position.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#tymethod.set_position' class='fnname'>set_position</a>&lt;P:&nbsp;<a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../window/struct.Position.html" title="struct window::Position">Position</a>&gt;&gt;(&amp;mut self, pos: P)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#317-320' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Sets the position of window. <a href="../window/trait.AdvancedWindow.html#tymethod.set_position">Read more</a></p>
+</div><h4 id='method.title' class="method"><span id='title.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#method.title' class='fnname'>title</a>(self, value: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/window/lib.rs.html#225-228' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Sets title on window. <a href="../window/trait.AdvancedWindow.html#method.title">Read more</a></p>
+</div><h4 id='method.exit_on_esc' class="method"><span id='exit_on_esc.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#method.exit_on_esc' class='fnname'>exit_on_esc</a>(self, value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/window/lib.rs.html#247-250' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Sets whether to exit when pressing the Esc button. <a href="../window/trait.AdvancedWindow.html#method.exit_on_esc">Read more</a></p>
+</div><h4 id='method.capture_cursor' class="method"><span id='capture_cursor.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#method.capture_cursor' class='fnname'>capture_cursor</a>(self, value: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a>) -&gt; Self</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/window/lib.rs.html#263-266' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Sets whether to capture/grab the cursor. <a href="../window/trait.AdvancedWindow.html#method.capture_cursor">Read more</a></p>
+</div><h4 id='method.position' class="method"><span id='position.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.AdvancedWindow.html#method.position' class='fnname'>position</a>&lt;P&gt;(self, val: P) -&gt; Self <span class="where fmt-newline">where<br>&nbsp;&nbsp;&nbsp;&nbsp;P: <a class="trait" href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../window/struct.Position.html" title="struct window::Position">Position</a>&gt;,&nbsp;</span></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/window/lib.rs.html#295-298' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Sets the position of window. <a href="../window/trait.AdvancedWindow.html#method.position">Read more</a></p>
+</div></div><h3 id='impl-OpenGLWindow' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl <a class="trait" href="../window/trait.OpenGLWindow.html" title="trait window::OpenGLWindow">OpenGLWindow</a> for <a class="struct" href="../glfw_window/struct.GlfwWindow.html" title="struct glfw_window::GlfwWindow">GlfwWindow</a></code><a href='#impl-OpenGLWindow' class='anchor'></a></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#323-335' title='goto source code'>[src]</a></span></td></tr></tbody></table></h3><div class='impl-items'><h4 id='method.get_proc_address' class="method"><span id='get_proc_address.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.OpenGLWindow.html#tymethod.get_proc_address' class='fnname'>get_proc_address</a>(&amp;mut self, proc_name: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="type" href="../window/type.ProcAddress.html" title="type window::ProcAddress">ProcAddress</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#324-326' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Returns the address of the specified OpenGL function if it exists. <a href="../window/trait.OpenGLWindow.html#tymethod.get_proc_address">Read more</a></p>
+</div><h4 id='method.is_current' class="method"><span id='is_current.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.OpenGLWindow.html#tymethod.is_current' class='fnname'>is_current</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.bool.html">bool</a></code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#328-330' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Returns true if this window's gl context is the current gl context.</p>
+</div><h4 id='method.make_current' class="method"><span id='make_current.v' class='invisible'><table class='table-display'><tbody><tr><td><code>fn <a href='../window/trait.OpenGLWindow.html#tymethod.make_current' class='fnname'>make_current</a>(&amp;mut self)</code></span></td><td><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../src/glfw_window/lib.rs.html#332-334' title='goto source code'>[src]</a></td></tr></tbody></table></span></h4><div class='docblock'><p>Make the window's gl context the current gl context.</p>
+</div></div></div>
+                <h2 id='synthetic-implementations' class='small-section-header'>
+                  Auto Trait Implementations<a href='#synthetic-implementations' class='anchor'></a>
+                </h2>
+                <div id='synthetic-implementations-list'>
+            <h3 id='impl-Send' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl !<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> for <a class="struct" href="../glfw_window/struct.GlfwWindow.html" title="struct glfw_window::GlfwWindow">GlfwWindow</a></code><a href='#impl-Send' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div><h3 id='impl-Sync' class='impl'><span class='in-band'><table class='table-display'><tbody><tr><td><code>impl !<a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a> for <a class="struct" href="../glfw_window/struct.GlfwWindow.html" title="struct glfw_window::GlfwWindow">GlfwWindow</a></code><a href='#impl-Sync' class='anchor'></a></span></td><td><span class='out-of-band'></span></td></tr></tbody></table></h3><div class='impl-items'></div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt><kbd>?</kbd></dt>
+                    <dd>Show this help dialog</dd>
+                    <dt><kbd>S</kbd></dt>
+                    <dd>Focus the search field</dd>
+                    <dt><kbd>↑</kbd></dt>
+                    <dd>Move up in search results</dd>
+                    <dt><kbd>↓</kbd></dt>
+                    <dd>Move down in search results</dd>
+                    <dt><kbd>↹</kbd></dt>
+                    <dd>Switch tab</dd>
+                    <dt><kbd>&#9166;</kbd></dt>
+                    <dd>Go to active search result</dd>
+                    <dt><kbd>+</kbd></dt>
+                    <dd>Expand all sections</dd>
+                    <dt><kbd>-</kbd></dt>
+                    <dd>Collapse all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "glfw_window";
+    </script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

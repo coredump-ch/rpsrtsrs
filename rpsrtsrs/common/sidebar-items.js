@@ -1,0 +1,1 @@
+initSidebarItems({"type":[["Vec2","Cartesian x/y coordinates using f64."]]});
