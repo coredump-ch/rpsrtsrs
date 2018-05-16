@@ -2,9 +2,13 @@
 //!
 //! All these structures should be serializable, so that they can be
 //! transferred from the server to the client over the network.
+
+extern crate serde_millis;
+
 use std::convert::Into;
 use std::fmt;
 use std::collections::HashMap;
+use std::time;
 
 use common::Vec2;
 use shapes::Shape;
@@ -62,6 +66,9 @@ pub struct Unit {
 
     /// Health of the unit
     pub health: u64,
+
+    #[serde(with = "serde_millis")]
+    pub last_shoot: time::Instant,
 }
 
 impl Unit {
@@ -73,6 +80,7 @@ impl Unit {
             angle: 0.0f64,
             speed_vector: Vec2::new(0.0, 0.0),
             health: 100_000,
+            last_shoot: time::Instant::now(),
         }
     }
 
@@ -80,7 +88,11 @@ impl Unit {
         self.position += self.speed_vector * dt_ms;
     }
 
-    pub fn shoot(&self, size: f64, speed: f64) -> Bullet {
+    pub fn shoot(&mut self, size: f64, speed: f64) -> Option<Bullet> {
+        if self.last_shoot.elapsed() < time::Duration::from_millis(500) {
+            return None;
+        }
+        self.last_shoot = time::Instant::now();
         let position = Vec2::new(
             self.position.x + self.angle.cos() * size,
             self.position.y + self.angle.sin() * size,
@@ -89,7 +101,7 @@ impl Unit {
             self.angle.cos() * speed,
             self.angle.sin() * speed,
         );
-        Bullet::new(position, speed)
+        Some(Bullet::new(position, speed))
     }
 }
 
@@ -240,10 +252,11 @@ impl GameState {
 
     pub fn shoot(&mut self, id: UnitId) {
         for player in self.players.iter_mut() {
-            for unit in player.units.iter() {
+            for unit in player.units.iter_mut() {
                 if unit.id == id {
-                    let bullet = unit.shoot(UNIT_SIZE, 0.1);
-                    self.bullets.push(bullet);
+                    if let Some(bullet) = unit.shoot(UNIT_SIZE, 0.1) {
+                        self.bullets.push(bullet);
+                    }
                 }
             }
         }
