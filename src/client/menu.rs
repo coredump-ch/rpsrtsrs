@@ -20,7 +20,13 @@ impl Entries {
     }
 }
 
-#[derive(Clone, Copy, Debug)]
+impl Default for Entries {
+    fn default() -> Self {
+        Entries::Start
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default)]
 pub struct Menu {
     selected_entry: Entries,
 }

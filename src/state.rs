@@ -68,7 +68,7 @@ impl Unit {
         println!("Create unit at {:?}", position);
         Unit {
             id: id.into(),
-            position: position,
+            position,
             angle: 0.0f64,
             speed_vector: Vec2::new(0.0, 0.0),
             health: 100_000,
@@ -98,7 +98,7 @@ pub struct Bullet {
 impl Bullet {
     pub fn new(position: Vec2, speed: Vec2) -> Bullet {
         Bullet {
-            position: position,
+            position,
             speed_vector: speed,
         }
     }
@@ -263,7 +263,7 @@ pub struct WorldState {
 
 impl WorldState {
     pub fn new(x: f64, y: f64) -> WorldState {
-        WorldState { x: x, y: y }
+        WorldState { x, y }
     }
 }
 

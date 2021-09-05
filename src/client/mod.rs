@@ -37,10 +37,10 @@ impl NetworkClient {
     ) -> NetworkClient {
         let server_addr = server_addrs.to_socket_addrs().unwrap().next().unwrap();
         NetworkClient {
-            game_state: game_state,
-            server_addr: server_addr,
+            game_state,
+            server_addr,
             stream: None,
-            commands: commands,
+            commands,
         }
     }
 
@@ -69,12 +69,12 @@ impl NetworkClient {
                     let mut commands = commands.lock().unwrap();
                     commands.pop_front()
                 };
-                command.map(|cmd| {
+                if let Some(cmd) = command {
                     println!("Got command: {:?}", cmd);
                     //let cmd = Message::Command(Command::Move(0.into(), [100f64, 100f64]));
                     serialize_into(&mut command_stream, &Message::Command(cmd), Infinite)
                         .unwrap_or_else(|e| println!("Sending command failed: {}", e));
-                });
+                }
                 thread::sleep(time::Duration::from_millis(10));
             }
         });
@@ -129,7 +129,7 @@ pub struct App {
 impl App {
     pub fn new(gl: GlGraphics, server_ip: String, server_port: u16) -> App {
         App {
-            gl: gl,
+            gl,
             world_state: None,
             game_state_server: Arc::new(Mutex::new(None)),
             game_state: GameState::new(),
@@ -163,7 +163,7 @@ impl App {
     pub fn select(&mut self, position: Vec2) {
         let player = {
             let index = self.client_id.unwrap_or(ClientId(0)).0 as usize;
-            self.game_state.players.get(index).map(|v| v.clone())
+            self.game_state.players.get(index)
         };
 
         self.selected_units.truncate(0);
@@ -209,7 +209,7 @@ impl App {
             }
 
             for i in 0..game_state.players.len() {
-                let ref player = game_state.players[i];
+                let player = &game_state.players[i];
                 let color = &colors::PLAYERS[i % colors::PLAYERS.len()];
                 for s in player.units.iter() {
                     // Create a triangle polygon. The initial orientation is facing east.
@@ -280,29 +280,27 @@ impl App {
         };
         if let Some(game_state) = game_state_option {
             self.game_state = game_state;
-        } else {
-            if let Some(ref world) = self.world_state {
-                self.game_state.update(world, args.dt * 1000.0);
-            }
+        } else if let Some(ref world) = self.world_state {
+            self.game_state.update(world, args.dt * 1000.0);
         }
     }
 
     pub fn on_button_press(&mut self, button: &Button) -> bool {
         match self.state {
             State::Menu => match button {
-                &Button::Keyboard(Key::Up) => {
+                Button::Keyboard(Key::Up) => {
                     self.menu.previous();
                 }
-                &Button::Keyboard(Key::Down) => {
+                Button::Keyboard(Key::Down) => {
                     self.menu.next();
                 }
-                &Button::Keyboard(Key::Return) => match self.menu.get_selected_entry() {
+                Button::Keyboard(Key::Return) => match self.menu.get_selected_entry() {
                     menu::Entries::Start => match self.start() {
                         Ok(_) => {
                             self.state = State::Running;
                         }
                         Err(err) => {
-                            self.state = State::Error(error::Message::new(err.to_string().into()));
+                            self.state = State::Error(error::Message::new(err.to_string()));
                         }
                     },
                     menu::Entries::Exit => {
@@ -312,36 +310,35 @@ impl App {
                 _ => {}
             },
             State::Running => match button {
-                &Button::Keyboard(Key::Up) => {
+                Button::Keyboard(Key::Up) => {
                     self.scroll.y += 10.0;
                 }
-                &Button::Keyboard(Key::Down) => {
+                Button::Keyboard(Key::Down) => {
                     self.scroll.y -= 10.0;
                 }
-                &Button::Keyboard(Key::Left) => {
+                Button::Keyboard(Key::Left) => {
                     self.scroll.x += 10.0;
                 }
-                &Button::Keyboard(Key::Right) => {
+                Button::Keyboard(Key::Right) => {
                     self.scroll.x -= 10.0;
                 }
-                &Button::Keyboard(Key::F) => {
+                Button::Keyboard(Key::F) => {
                     self.shoot();
                 }
-                &Button::Keyboard(Key::D) => {
+                Button::Keyboard(Key::D) => {
                     self.debug = !self.debug;
                 }
-                &Button::Keyboard(_) => {}
-                &Button::Mouse(button) => {
-                    self.on_mouse_click(&button);
+                Button::Keyboard(_) => {}
+                Button::Mouse(button) => {
+                    self.on_mouse_click(button);
                 }
-                &Button::Controller(_) => {}
+                Button::Controller(_) => {}
             },
-            State::Error(_) => match button {
-                &Button::Keyboard(_) => {
+            State::Error(_) => {
+                if let Button::Keyboard(_) = button {
                     self.state = State::Menu;
                 }
-                _ => {}
-            },
+            }
         };
         false
     }

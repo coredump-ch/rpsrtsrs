@@ -41,8 +41,8 @@ impl Server {
         let game = Arc::new(Mutex::new(GameState::new()));
         Ok(Server {
             socket_addr: addr,
-            world: world,
-            game: game,
+            world,
+            game,
             client_id_generator: Arc::new(Mutex::new(0..)),
             unit_id_generator: Arc::new(Mutex::new(0..)),
             unit_targets: Arc::new(Mutex::new(HashMap::new())),
@@ -200,9 +200,7 @@ pub fn handle_client(
     }
 
     let mut command_stream = stream.try_clone().unwrap();
-    let world_clone = world.clone();
     let game_clone = game.clone();
-    let unit_targets_clone = unit_targets.clone();
     // Command receiver loop
     thread::spawn(move || loop {
         let client_message = deserialize_from(&mut command_stream, Bounded(128));
@@ -210,13 +208,8 @@ pub fn handle_client(
             Ok(message) => match message {
                 Message::Command(command) => {
                     let mut game_lock = game_clone.lock().unwrap();
-                    let mut unit_targets_lock = unit_targets_clone.lock().unwrap();
-                    handle_command(
-                        &world_clone.clone(),
-                        &mut game_lock,
-                        &mut unit_targets_lock,
-                        &command,
-                    );
+                    let mut unit_targets_lock = unit_targets.lock().unwrap();
+                    handle_command(&world, &mut game_lock, &mut unit_targets_lock, &command);
                 }
                 _ => {
                     println!("Did receive unexpected message: {:?}", message);
@@ -256,10 +249,10 @@ pub fn handle_command(
 ) {
     println!("Did receive command {:?}", command);
     match command {
-        &Command::Move(id, move_target) => {
+        Command::Move(id, move_target) => {
             for player in game.players.iter_mut() {
                 for unit in player.units.iter_mut() {
-                    if unit.id == id {
+                    if unit.id == *id {
                         println!("Found it :)");
                         let mut target = Vec2::new(0.0, 0.0);
                         target.x = clamp(move_target.x, 0.0, world.x);
@@ -271,14 +264,14 @@ pub fn handle_command(
                         } else {
                             unit.angle = (dy / dx).atan();
                         }
-                        unit_targets.insert(id, target.into());
+                        unit_targets.insert(*id, target);
                     }
                 }
             }
             println!("Move {} to {:?}!", id, move_target);
         }
-        &Command::Shoot(id) => {
-            game.shoot(id);
+        Command::Shoot(id) => {
+            game.shoot(*id);
         }
     }
 }

@@ -12,7 +12,7 @@ pub struct Message {
 
 impl Message {
     pub fn new(message: String) -> Message {
-        Message { message: message }
+        Message { message }
     }
 
     pub fn render(&self, args: &RenderArgs, gl: &mut GlGraphics, cache: &mut GlyphCache) {
