@@ -1,26 +1,33 @@
 extern crate piston;
-#[macro_use] extern crate serde_derive;
+#[macro_use]
+extern crate serde_derive;
 extern crate docopt;
+#[cfg(feature = "include_glfw")]
+extern crate glfw_window;
+#[cfg(feature = "include_glutin")]
+extern crate glutin_window;
 extern crate graphics;
 extern crate opengl_graphics;
-extern crate texture;
 extern crate rand;
 extern crate rpsrtsrs;
-#[cfg(feature = "include_sdl2")] extern crate sdl2_window;
-#[cfg(feature = "include_glfw")] extern crate glfw_window;
-#[cfg(feature = "include_glutin")] extern crate glutin_window;
+#[cfg(feature = "include_sdl2")]
+extern crate sdl2_window;
+extern crate texture;
 
 use std::path::Path;
 
-use piston::window::WindowSettings;
-use opengl_graphics::{ GlGraphics, OpenGL };
+#[cfg(feature = "include_glfw")]
+use glfw_window::GlfwWindow as Window;
+#[cfg(feature = "include_glutin")]
+use glutin_window::GlutinWindow as Window;
 use opengl_graphics::GlyphCache;
-use texture::TextureSettings;
-use piston::input::*;
+use opengl_graphics::{GlGraphics, OpenGL};
 use piston::event_loop::*;
-#[cfg(feature = "include_sdl2")] use sdl2_window::Sdl2Window as Window;
-#[cfg(feature = "include_glfw")] use glfw_window::GlfwWindow as Window;
-#[cfg(feature = "include_glutin")] use glutin_window::GlutinWindow as Window;
+use piston::input::*;
+use piston::window::WindowSettings;
+#[cfg(feature = "include_sdl2")]
+use sdl2_window::Sdl2Window as Window;
+use texture::TextureSettings;
 
 use rpsrtsrs::client::*;
 
@@ -39,20 +46,19 @@ struct Args {
     flag_i: String,
 }
 
-
-
 fn main() {
     let opengl = OpenGL::V3_2;
 
-    let args: Args = docopt::Docopt::new(USAGE).and_then(|d| d.deserialize())
-                                       .unwrap_or_else(|e| e.exit());
+    let args: Args = docopt::Docopt::new(USAGE)
+        .and_then(|d| d.deserialize())
+        .unwrap_or_else(|e| e.exit());
 
     // Create an Glutin window.
-    let mut window : Window = WindowSettings::new(
-        "rpsrtsrs",
-        [640, 480]
-    ).exit_on_esc(true).samples(8).build().unwrap();
-
+    let mut window: Window = WindowSettings::new("rpsrtsrs", [640, 480])
+        .exit_on_esc(true)
+        .samples(8)
+        .build()
+        .unwrap();
 
     let font_path = Path::new("assets/DejaVuSans.ttf");
     let texture_settings = TextureSettings::new();
@@ -63,7 +69,6 @@ fn main() {
 
     let mut events = Events::new(EventSettings::new());
     while let Some(e) = events.next(&mut window) {
-
         if let Some(r) = e.render_args() {
             app.render(&r, cache);
         }

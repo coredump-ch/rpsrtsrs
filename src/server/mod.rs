@@ -1,24 +1,24 @@
 extern crate rand;
 
-use std::io::Write;
+use std::collections::HashMap;
+use std::f64::consts::PI;
 use std::io::Result as IoResult;
-use std::net::{TcpListener, TcpStream, SocketAddr, ToSocketAddrs};
+use std::io::Write;
+use std::net::{SocketAddr, TcpListener, TcpStream, ToSocketAddrs};
+use std::ops::Deref;
+use std::ops::RangeFrom;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
-use std::ops::RangeFrom;
-use std::collections::HashMap;
-use std::f64::consts::PI;
-use std::ops::Deref;
 
+use bincode::{deserialize_from, serialize, Bounded, Infinite};
 use rand::Rng;
-use bincode::{serialize, deserialize_from, Infinite, Bounded};
 
 use common::Vec2;
-use shapes::Shape;
-use state::{UNIT_SIZE, WorldState, GameState, Player, Unit, UnitId};
-use network::{Message, Command};
+use network::{Command, Message};
 use num::clamp;
+use shapes::Shape;
+use state::{GameState, Player, Unit, UnitId, WorldState, UNIT_SIZE};
 
 /// A `Server` instance holds global server state.
 pub struct Server {
@@ -35,9 +35,7 @@ pub struct Server {
 }
 
 impl Server {
-    pub fn new<T: ToSocketAddrs>(addr: T,
-                                world_size: (f64, f64))
-                                -> IoResult<Server> {
+    pub fn new<T: ToSocketAddrs>(addr: T, world_size: (f64, f64)) -> IoResult<Server> {
         let addr = try!(addr.to_socket_addrs()).next().unwrap();
         let world = Arc::new(WorldState::new(world_size.0, world_size.1));
         let game = Arc::new(Mutex::new(GameState::new()));
@@ -72,8 +70,14 @@ impl Server {
                     let unit_targets = self.unit_targets.clone();
                     println!("Spawning thread...");
                     thread::spawn(move || {
-                        handle_client(stream, world_clone, game_clone,
-                                      client_id_generator_clone, unit_id_generator_clone, unit_targets);
+                        handle_client(
+                            stream,
+                            world_clone,
+                            game_clone,
+                            client_id_generator_clone,
+                            unit_id_generator_clone,
+                            unit_targets,
+                        );
                     });
                 }
                 Err(e) => {
@@ -86,13 +90,14 @@ impl Server {
 
 pub type SafeUnitTargets = Arc<Mutex<HashMap<UnitId, Vec2>>>;
 
-pub fn handle_client(mut stream: TcpStream,
-                     world: Arc<WorldState>,
-                     game: Arc<Mutex<GameState>>,
-                     client_id_generator: Arc<Mutex<RangeFrom<u32>>>,
-                     unit_id_generator: Arc<Mutex<RangeFrom<u32>>>,
-                     unit_targets: SafeUnitTargets) {
-
+pub fn handle_client(
+    mut stream: TcpStream,
+    world: Arc<WorldState>,
+    game: Arc<Mutex<GameState>>,
+    client_id_generator: Arc<Mutex<RangeFrom<u32>>>,
+    unit_id_generator: Arc<Mutex<RangeFrom<u32>>>,
+    unit_targets: SafeUnitTargets,
+) {
     // handle client hello
     let client_message = deserialize_from(&mut stream, Bounded(128));
     match client_message {
@@ -104,22 +109,24 @@ pub fn handle_client(mut stream: TcpStream,
 
                     // Create new player for the newly connected client
                     let client_id = client_id_generator
-                        .lock().expect("Could not lock client_id_generator mutex")
-                        .next().expect("No more client IDs available!");
+                        .lock()
+                        .expect("Could not lock client_id_generator mutex")
+                        .next()
+                        .expect("No more client IDs available!");
                     let mut player = Player::new(client_id);
 
                     let mut rng = rand::thread_rng();
                     for _ in 0..4 {
                         let unit_id = unit_id_generator
-                            .lock().expect("Could not lock unit_id_generator mutex")
-                            .next().expect("No more unit IDs available!");
+                            .lock()
+                            .expect("Could not lock unit_id_generator mutex")
+                            .next()
+                            .expect("No more unit IDs available!");
 
                         // Try 42 times to create a new unit
                         'outer: for _ in 0..42 {
-                            let position = Vec2::new(
-                                rng.next_f64() * world.x,
-                                rng.next_f64() * world.y,
-                            );
+                            let position =
+                                Vec2::new(rng.next_f64() * world.x, rng.next_f64() * world.y);
                             let new_unit = Unit::new(unit_id, position);
                             for player in &game_lock.players {
                                 for unit in &player.units {
@@ -129,9 +136,9 @@ pub fn handle_client(mut stream: TcpStream,
                                 }
                             }
                             for unit in &player.units {
-                                    if unit.collision_detect(&new_unit, UNIT_SIZE) {
-                                        continue 'outer;
-                                    }
+                                if unit.collision_detect(&new_unit, UNIT_SIZE) {
+                                    continue 'outer;
+                                }
                             }
                             // check if collision
                             player.units.push(new_unit);
@@ -146,10 +153,11 @@ pub fn handle_client(mut stream: TcpStream,
                     // Send ServerHello message
                     let encoded: Vec<u8> = serialize(
                         &Message::ServerHello(player_id, world.deref().clone()),
-                        Infinite
-                    ).unwrap();
+                        Infinite,
+                    )
+                    .unwrap();
                     stream.write(&encoded).unwrap();
-                },
+                }
                 Message::ClientReconnect(id) => {
                     // Get exclusive world access
                     let game_lock = game.lock().unwrap();
@@ -162,33 +170,32 @@ pub fn handle_client(mut stream: TcpStream,
                             // Send ServerHello message
                             let encoded: Vec<u8> = serialize(
                                 &Message::ServerHello(id, world.deref().clone()),
-                                Infinite
-                            ).unwrap();
+                                Infinite,
+                            )
+                            .unwrap();
                             stream.write(&encoded).unwrap();
-                        },
+                        }
                         None => {
                             println!("Reconnect to id {} not possible", id);
 
                             // Send Error message
-                            let encoded: Vec<u8> = serialize(
-                                &Message::Error,
-                                Infinite).unwrap();
+                            let encoded: Vec<u8> = serialize(&Message::Error, Infinite).unwrap();
                             stream.write(&encoded).unwrap();
-                            return  // Don't enter game loop
+                            return; // Don't enter game loop
                         }
                     }
-                },
+                }
                 _ => {
                     println!("Did not receive ClientHello: {:?}", message);
                     let encoded: Vec<u8> = serialize(&Message::Error, Infinite).unwrap();
                     stream.write(&encoded).unwrap();
-                    return  // Don't enter game loop
+                    return; // Don't enter game loop
                 }
             }
         }
         Err(e) => {
             println!("Error: {:?}", e);
-            return  // Don't enter game loop
+            return; // Don't enter game loop
         }
     }
 
@@ -197,31 +204,32 @@ pub fn handle_client(mut stream: TcpStream,
     let game_clone = game.clone();
     let unit_targets_clone = unit_targets.clone();
     // Command receiver loop
-    thread::spawn(move || {
-        loop {
-            let client_message = deserialize_from(&mut command_stream, Bounded(128));
-            match client_message {
-                Ok(message) => {
-                    match message {
-                        Message::Command(command) => {
-                            let mut game_lock = game_clone.lock().unwrap();
-                            let mut unit_targets_lock = unit_targets_clone.lock().unwrap();
-                            handle_command(&world_clone.clone(), &mut game_lock, &mut unit_targets_lock, &command);
-                        },
-                        _ => {
-                            println!("Did receive unexpected message: {:?}", message);
-                            let encoded: Vec<u8> = serialize(&Message::Error, Infinite).unwrap();
-                            command_stream.write(&encoded).unwrap();
-                            return
-                        },
-                    }
-                },
-                Err(e) => {
-                    println!("Error: {:?}", e);
+    thread::spawn(move || loop {
+        let client_message = deserialize_from(&mut command_stream, Bounded(128));
+        match client_message {
+            Ok(message) => match message {
+                Message::Command(command) => {
+                    let mut game_lock = game_clone.lock().unwrap();
+                    let mut unit_targets_lock = unit_targets_clone.lock().unwrap();
+                    handle_command(
+                        &world_clone.clone(),
+                        &mut game_lock,
+                        &mut unit_targets_lock,
+                        &command,
+                    );
+                }
+                _ => {
+                    println!("Did receive unexpected message: {:?}", message);
+                    let encoded: Vec<u8> = serialize(&Message::Error, Infinite).unwrap();
+                    command_stream.write(&encoded).unwrap();
                     return;
                 }
-            };
-        }
+            },
+            Err(e) => {
+                println!("Error: {:?}", e);
+                return;
+            }
+        };
     });
 
     // GameState loop
@@ -240,9 +248,12 @@ pub fn handle_client(mut stream: TcpStream,
     }
 }
 
-pub fn handle_command(world: &WorldState,
-                      game: &mut GameState,
-                      unit_targets: &mut HashMap<UnitId, Vec2>, command: &Command) {
+pub fn handle_command(
+    world: &WorldState,
+    game: &mut GameState,
+    unit_targets: &mut HashMap<UnitId, Vec2>,
+    command: &Command,
+) {
     println!("Did receive command {:?}", command);
     match command {
         &Command::Move(id, move_target) => {
@@ -272,7 +283,11 @@ pub fn handle_command(world: &WorldState,
     }
 }
 
-pub fn update_world(world: Arc<WorldState>, game: Arc<Mutex<GameState>>, unit_targets: SafeUnitTargets) {
+pub fn update_world(
+    world: Arc<WorldState>,
+    game: Arc<Mutex<GameState>>,
+    unit_targets: SafeUnitTargets,
+) {
     loop {
         {
             let mut game_lock = game.lock().unwrap();

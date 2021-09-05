@@ -4,7 +4,7 @@
 //! clients.
 
 use common::Vec2;
-use state::{GameState, WorldState, UnitId, ClientId};
+use state::{ClientId, GameState, UnitId, WorldState};
 
 /// Commands alter the game state.
 ///

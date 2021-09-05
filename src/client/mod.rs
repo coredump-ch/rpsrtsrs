@@ -1,27 +1,26 @@
-use std::thread;
-use std::time;
-use std::mem;
-use std::sync::{Mutex, Arc};
-use std::net::{SocketAddr, ToSocketAddrs, TcpStream};
 use std::collections::VecDeque;
 use std::error::Error;
+use std::mem;
+use std::net::{SocketAddr, TcpStream, ToSocketAddrs};
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::time;
 
+use bincode::{deserialize_from, serialize_into, Infinite};
 use opengl_graphics::GlGraphics;
 use opengl_graphics::GlyphCache;
 use piston::input::{Button, Key, MouseButton, RenderArgs, UpdateArgs};
-use bincode::{serialize_into, deserialize_from, Infinite};
 
+use colors::{self, BLACK, ORANGE, TRANSPARENT_WHITE, WHITE};
 use common::Vec2;
 use network::{Command, Message};
-use state::{UnitId, ClientId, WorldState, GameState, UNIT_SIZE};
 use shapes::Shape;
-use colors::{self, BLACK, ORANGE, WHITE, TRANSPARENT_WHITE};
+use state::{ClientId, GameState, UnitId, WorldState, UNIT_SIZE};
 
-pub mod menu;
 pub mod error;
+pub mod menu;
 
 use self::menu::Menu;
-
 
 pub struct NetworkClient {
     pub game_state: Arc<Mutex<Option<GameState>>>,
@@ -31,9 +30,11 @@ pub struct NetworkClient {
 }
 
 impl NetworkClient {
-    pub fn new<T: ToSocketAddrs>(server_addrs: T,
-                                 game_state: Arc<Mutex<Option<GameState>>>,
-                                 commands: Arc<Mutex<VecDeque<Command>>>) -> NetworkClient {
+    pub fn new<T: ToSocketAddrs>(
+        server_addrs: T,
+        game_state: Arc<Mutex<Option<GameState>>>,
+        commands: Arc<Mutex<VecDeque<Command>>>,
+    ) -> NetworkClient {
         let server_addr = server_addrs.to_socket_addrs().unwrap().next().unwrap();
         NetworkClient {
             game_state: game_state,
@@ -43,7 +44,7 @@ impl NetworkClient {
         }
     }
 
-    pub fn connect(&mut self) -> Result<(ClientId, WorldState), Box<Error>>  {
+    pub fn connect(&mut self) -> Result<(ClientId, WorldState), Box<Error>> {
         let mut stream = TcpStream::connect(self.server_addr)?;
         serialize_into(&mut stream, &Message::ClientHello, Infinite)?;
         let server_hello = deserialize_from(&mut stream, Infinite);
@@ -72,7 +73,7 @@ impl NetworkClient {
                     println!("Got command: {:?}", cmd);
                     //let cmd = Message::Command(Command::Move(0.into(), [100f64, 100f64]));
                     serialize_into(&mut command_stream, &Message::Command(cmd), Infinite)
-                        .unwrap_or_else(|e|println!("Sending command failed: {}", e));
+                        .unwrap_or_else(|e| println!("Sending command failed: {}", e));
                 });
                 thread::sleep(time::Duration::from_millis(10));
             }
@@ -82,15 +83,13 @@ impl NetworkClient {
         let game_state = self.game_state.clone();
         thread::spawn(move || {
             loop {
-                let game_state_server: Result<GameState,_> = deserialize_from(
-                    &mut game_state_stream,
-                    Infinite);
+                let game_state_server: Result<GameState, _> =
+                    deserialize_from(&mut game_state_stream, Infinite);
                 match game_state_server {
                     Ok(game) => {
                         //println!("{:?}", game);
                         let mut game_state_lock = game_state.lock().unwrap();
                         *game_state_lock = Some(game);
-
                     }
                     Err(e) => {
                         println!("{:?}", e);
@@ -152,7 +151,8 @@ impl App {
         let mut network_client = NetworkClient::new(
             (&*self.server_ip, self.server_port),
             self.game_state_server.clone(),
-            self.commands.clone());
+            self.commands.clone(),
+        );
         let (client_id, world_state) = network_client.connect()?;
         self.client_id = Some(client_id);
         self.world_state = Some(world_state);
@@ -161,7 +161,6 @@ impl App {
     }
 
     pub fn select(&mut self, position: Vec2) {
-
         let player = {
             let index = self.client_id.unwrap_or(ClientId(0)).0 as usize;
             self.game_state.players.get(index).map(|v| v.clone())
@@ -178,9 +177,9 @@ impl App {
     }
 
     fn render_game(&mut self, args: &RenderArgs, _: &mut GlyphCache) {
-        use graphics::{polygon, line, clear, ellipse};
+        use graphics::types::{Line, Polygon};
         use graphics::Transformed;
-        use graphics::types::{Polygon, Line};
+        use graphics::{clear, ellipse, line, polygon};
 
         const FRONT_THICKNESS: f64 = 5.0;
 
@@ -193,19 +192,16 @@ impl App {
         let debug = self.debug;
 
         self.gl.draw(args.viewport(), |c, gl| {
-
-            let transform = c.transform
-                .scale(zoom, zoom)
-                .trans(scroll.x, scroll.y);
+            let transform = c.transform.scale(zoom, zoom).trans(scroll.x, scroll.y);
 
             // Clear the screen.
             clear(BLACK, gl);
 
             let world: [Line; 4] = [
-                [0.0, 0.0, wx,  0.0],
-                [wx,  0.0, wx,  wy],
-                [wx,  wy,  0.0, wy],
-                [0.0, wy,  0.0, 0.0],
+                [0.0, 0.0, wx, 0.0],
+                [wx, 0.0, wx, wy],
+                [wx, wy, 0.0, wy],
+                [0.0, wy, 0.0, 0.0],
             ];
 
             for l in world.iter() {
@@ -222,10 +218,13 @@ impl App {
                     // Create a border on the front of the polygon. This is a trapezoid.
                     // Because the angle of the trapezoid side is 22.5°, we know that `dx` is always `2 * dy`.
                     let front: Polygon = &[
-                        [UNIT_SIZE, UNIT_SIZE],                                           // Top right
-                        [UNIT_SIZE, 0.0],                                                 // Bottom right
-                        [UNIT_SIZE - FRONT_THICKNESS, FRONT_THICKNESS / 2.0],             // Bottom left
-                        [UNIT_SIZE - FRONT_THICKNESS, UNIT_SIZE - FRONT_THICKNESS / 2.0], // Top left
+                        [UNIT_SIZE, UNIT_SIZE],                               // Top right
+                        [UNIT_SIZE, 0.0],                                     // Bottom right
+                        [UNIT_SIZE - FRONT_THICKNESS, FRONT_THICKNESS / 2.0], // Bottom left
+                        [
+                            UNIT_SIZE - FRONT_THICKNESS,
+                            UNIT_SIZE - FRONT_THICKNESS / 2.0,
+                        ], // Top left
                     ];
 
                     // Rotate the front to match the unit
@@ -234,8 +233,7 @@ impl App {
                         .rot_rad(s.angle)
                         .trans(-0.5 * UNIT_SIZE, -0.5 * UNIT_SIZE);
 
-                    let transform_circle = transform
-                        .trans(s.position[0], s.position[1]);
+                    let transform_circle = transform.trans(s.position[0], s.position[1]);
 
                     // We don't need to apply any transformation to the units
                     let transform_triangle = transform;
@@ -250,11 +248,13 @@ impl App {
                         polygon(color.primary, front, transform_front, gl);
                     }
                     if debug {
-                        ellipse(TRANSPARENT_WHITE,
-                                [-UNIT_SIZE, -UNIT_SIZE, 2.0*UNIT_SIZE, 2.0*UNIT_SIZE],
-                                transform_circle, gl);
+                        ellipse(
+                            TRANSPARENT_WHITE,
+                            [-UNIT_SIZE, -UNIT_SIZE, 2.0 * UNIT_SIZE, 2.0 * UNIT_SIZE],
+                            transform_circle,
+                            gl,
+                        );
                     }
-
                 }
             }
             for b in game_state.bullets.iter() {
@@ -282,74 +282,67 @@ impl App {
             self.game_state = game_state;
         } else {
             if let Some(ref world) = self.world_state {
-                self.game_state.update(world, args.dt*1000.0);
+                self.game_state.update(world, args.dt * 1000.0);
             }
         }
     }
 
     pub fn on_button_press(&mut self, button: &Button) -> bool {
         match self.state {
-            State::Menu => {
-                match button {
-                    &Button::Keyboard(Key::Up) => {
-                        self.menu.previous();
-                    }
-                    &Button::Keyboard(Key::Down) => {
-                        self.menu.next();
-                    }
-                    &Button::Keyboard(Key::Return) => {
-                        match self.menu.get_selected_entry() {
-                            menu::Entries::Start => {
-                                match self.start() {
-                                    Ok(_) => {
-                                        self.state = State::Running;
-                                    }
-                                    Err(err) => {
-                                        self.state = State::Error(error::Message::new(err.description().into()));
-                                    }
-                                }
-                            }
-                            menu::Entries::Exit => {
-                                return true;
-                            }
+            State::Menu => match button {
+                &Button::Keyboard(Key::Up) => {
+                    self.menu.previous();
+                }
+                &Button::Keyboard(Key::Down) => {
+                    self.menu.next();
+                }
+                &Button::Keyboard(Key::Return) => match self.menu.get_selected_entry() {
+                    menu::Entries::Start => match self.start() {
+                        Ok(_) => {
+                            self.state = State::Running;
                         }
+                        Err(err) => {
+                            self.state =
+                                State::Error(error::Message::new(err.description().into()));
+                        }
+                    },
+                    menu::Entries::Exit => {
+                        return true;
                     }
-                    _ => { }
+                },
+                _ => {}
+            },
+            State::Running => match button {
+                &Button::Keyboard(Key::Up) => {
+                    self.scroll.y += 10.0;
                 }
-            }
-            State::Running => {
-                match button {
-                    &Button::Keyboard(Key::Up) => {
-                        self.scroll.y += 10.0;
-                    }
-                    &Button::Keyboard(Key::Down) => {
-                        self.scroll.y -= 10.0;
-                    }
-                    &Button::Keyboard(Key::Left) => {
-                        self.scroll.x += 10.0;
-                    }
-                    &Button::Keyboard(Key::Right) => {
-                        self.scroll.x -= 10.0;
-                    }
-                    &Button::Keyboard(Key::F) => {
-                        self.shoot();
-                    }
-                    &Button::Keyboard(Key::D) => {
-                        self.debug = !self.debug;
-                    }
-                    &Button::Keyboard(_) => { }
-                    &Button::Mouse(button) => {
-                        self.on_mouse_click(&button);
-                    }
-                    &Button::Controller(_) => { }
+                &Button::Keyboard(Key::Down) => {
+                    self.scroll.y -= 10.0;
                 }
-            }
-            State::Error(_) => {
-                match button {
-                    &Button::Keyboard(_) => { self.state = State::Menu; }
-                    _ => { }
+                &Button::Keyboard(Key::Left) => {
+                    self.scroll.x += 10.0;
                 }
-            }
+                &Button::Keyboard(Key::Right) => {
+                    self.scroll.x -= 10.0;
+                }
+                &Button::Keyboard(Key::F) => {
+                    self.shoot();
+                }
+                &Button::Keyboard(Key::D) => {
+                    self.debug = !self.debug;
+                }
+                &Button::Keyboard(_) => {}
+                &Button::Mouse(button) => {
+                    self.on_mouse_click(&button);
+                }
+                &Button::Controller(_) => {}
+            },
+            State::Error(_) => match button {
+                &Button::Keyboard(_) => {
+                    self.state = State::Menu;
+                }
+                _ => {}
+            },
         };
         false
     }
@@ -357,7 +350,7 @@ impl App {
     pub fn on_mouse_click(&mut self, button: &MouseButton) {
         let cursor = self.cursor / self.zoom - self.scroll;
         match *button {
-            MouseButton::Left  => self.select(cursor),
+            MouseButton::Left => self.select(cursor),
             MouseButton::Right => self.move_selected(cursor),
             _ => println!("Pressed mouse button '{:?}'", button),
         }

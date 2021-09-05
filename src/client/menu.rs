@@ -1,9 +1,9 @@
 use opengl_graphics::GlGraphics;
 use opengl_graphics::GlyphCache;
 
-use piston::input::{RenderArgs};
+use piston::input::RenderArgs;
 
-use colors::{BLACK, YELLOW, ORANGE};
+use colors::{BLACK, ORANGE, YELLOW};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Entries {
@@ -27,11 +27,13 @@ pub struct Menu {
 
 impl Menu {
     pub fn new() -> Menu {
-        Menu { selected_entry: Entries::Start }
+        Menu {
+            selected_entry: Entries::Start,
+        }
     }
 
     pub fn render(&self, args: &RenderArgs, gl: &mut GlGraphics, cache: &mut GlyphCache) {
-        use graphics::{Text, clear, Transformed};
+        use graphics::{clear, Text, Transformed};
         let text = Text::new_color(YELLOW, 64);
         let text_selected = Text::new_color(ORANGE, 64);
         gl.draw(args.viewport(), |c, gl| {
@@ -42,7 +44,13 @@ impl Menu {
             for entry in &[Entries::Start, Entries::Exit] {
                 transform = transform.trans(0.0, 100.0);
                 if *entry == self.selected_entry {
-                    text_selected.draw(&format!("{:?}", entry), cache, &c.draw_state, transform, gl);
+                    text_selected.draw(
+                        &format!("{:?}", entry),
+                        cache,
+                        &c.draw_state,
+                        transform,
+                        gl,
+                    );
                 } else {
                     text.draw(&format!("{:?}", entry), cache, &c.draw_state, transform, gl);
                 }
@@ -61,5 +69,4 @@ impl Menu {
     pub fn next(&mut self) {
         self.selected_entry.next();
     }
-
 }
