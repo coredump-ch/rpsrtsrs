@@ -36,7 +36,7 @@ pub struct Server {
 
 impl Server {
     pub fn new<T: ToSocketAddrs>(addr: T, world_size: (f64, f64)) -> IoResult<Server> {
-        let addr = try!(addr.to_socket_addrs()).next().unwrap();
+        let addr = addr.to_socket_addrs()?.next().unwrap();
         let world = Arc::new(WorldState::new(world_size.0, world_size.1));
         let game = Arc::new(Mutex::new(GameState::new()));
         Ok(Server {

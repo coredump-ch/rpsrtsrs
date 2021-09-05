@@ -44,7 +44,7 @@ impl NetworkClient {
         }
     }
 
-    pub fn connect(&mut self) -> Result<(ClientId, WorldState), Box<Error>> {
+    pub fn connect(&mut self) -> Result<(ClientId, WorldState), Box<dyn Error>> {
         let mut stream = TcpStream::connect(self.server_addr)?;
         serialize_into(&mut stream, &Message::ClientHello, Infinite)?;
         let server_hello = deserialize_from(&mut stream, Infinite);
@@ -147,7 +147,7 @@ impl App {
         }
     }
 
-    pub fn start(&mut self) -> Result<(), Box<Error>> {
+    pub fn start(&mut self) -> Result<(), Box<dyn Error>> {
         let mut network_client = NetworkClient::new(
             (&*self.server_ip, self.server_port),
             self.game_state_server.clone(),
@@ -302,8 +302,7 @@ impl App {
                             self.state = State::Running;
                         }
                         Err(err) => {
-                            self.state =
-                                State::Error(error::Message::new(err.description().into()));
+                            self.state = State::Error(error::Message::new(err.to_string().into()));
                         }
                     },
                     menu::Entries::Exit => {
