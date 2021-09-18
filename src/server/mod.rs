@@ -11,7 +11,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 
-use bincode::{deserialize_from, serialize, Bounded, Infinite};
+use bincode::Options;
 use rand::Rng;
 
 use common::Vec2;
@@ -99,7 +99,9 @@ pub fn handle_client(
     unit_targets: SafeUnitTargets,
 ) {
     // handle client hello
-    let client_message = deserialize_from(&mut stream, Bounded(128));
+    let bincode = bincode::DefaultOptions::new().with_limit(1024);
+    let client_message = bincode.deserialize_from(&mut stream);
+    println!("Received: {:?}", client_message);
     match client_message {
         Ok(message) => {
             match message {
@@ -151,11 +153,9 @@ pub fn handle_client(
                     game_lock.players.push(player);
 
                     // Send ServerHello message
-                    let encoded: Vec<u8> = serialize(
-                        &Message::ServerHello(player_id, world.deref().clone()),
-                        Infinite,
-                    )
-                    .unwrap();
+                    let encoded: Vec<u8> = bincode
+                        .serialize(&Message::ServerHello(player_id, world.deref().clone()))
+                        .unwrap();
                     stream.write(&encoded).unwrap();
                 }
                 Message::ClientReconnect(id) => {
@@ -168,18 +168,16 @@ pub fn handle_client(
                             println!("Found you :)");
 
                             // Send ServerHello message
-                            let encoded: Vec<u8> = serialize(
-                                &Message::ServerHello(id, world.deref().clone()),
-                                Infinite,
-                            )
-                            .unwrap();
+                            let encoded: Vec<u8> = bincode
+                                .serialize(&Message::ServerHello(id, world.deref().clone()))
+                                .unwrap();
                             stream.write(&encoded).unwrap();
                         }
                         None => {
                             println!("Reconnect to id {} not possible", id);
 
                             // Send Error message
-                            let encoded: Vec<u8> = serialize(&Message::Error, Infinite).unwrap();
+                            let encoded: Vec<u8> = bincode.serialize(&Message::Error).unwrap();
                             stream.write(&encoded).unwrap();
                             return; // Don't enter game loop
                         }
@@ -187,7 +185,7 @@ pub fn handle_client(
                 }
                 _ => {
                     println!("Did not receive ClientHello: {:?}", message);
-                    let encoded: Vec<u8> = serialize(&Message::Error, Infinite).unwrap();
+                    let encoded: Vec<u8> = bincode.serialize(&Message::Error).unwrap();
                     stream.write(&encoded).unwrap();
                     return; // Don't enter game loop
                 }
@@ -203,7 +201,8 @@ pub fn handle_client(
     let game_clone = game.clone();
     // Command receiver loop
     thread::spawn(move || loop {
-        let client_message = deserialize_from(&mut command_stream, Bounded(128));
+        let client_message: Result<Message, _> = bincode.deserialize_from(&mut command_stream);
+        println!("{:?}", client_message);
         match client_message {
             Ok(message) => match message {
                 Message::Command(command) => {
@@ -213,7 +212,7 @@ pub fn handle_client(
                 }
                 _ => {
                     println!("Did receive unexpected message: {:?}", message);
-                    let encoded: Vec<u8> = serialize(&Message::Error, Infinite).unwrap();
+                    let encoded: Vec<u8> = bincode.serialize(&Message::Error).unwrap();
                     command_stream.write(&encoded).unwrap();
                     return;
                 }
@@ -229,7 +228,7 @@ pub fn handle_client(
     loop {
         let encoded: Vec<u8> = {
             let game_lock = game.lock().unwrap();
-            serialize(&*game_lock, Infinite).unwrap()
+            bincode.serialize(&*game_lock).unwrap()
         };
         match stream.write(&encoded) {
             Err(e) => {
