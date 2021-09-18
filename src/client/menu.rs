@@ -50,15 +50,12 @@ impl Menu {
             for entry in &[Entries::Start, Entries::Exit] {
                 transform = transform.trans(0.0, 100.0);
                 if *entry == self.selected_entry {
-                    text_selected.draw(
-                        &format!("{:?}", entry),
-                        cache,
-                        &c.draw_state,
-                        transform,
-                        gl,
-                    );
+                    text_selected
+                        .draw(&format!("{:?}", entry), cache, &c.draw_state, transform, gl)
+                        .unwrap();
                 } else {
-                    text.draw(&format!("{:?}", entry), cache, &c.draw_state, transform, gl);
+                    text.draw(&format!("{:?}", entry), cache, &c.draw_state, transform, gl)
+                        .unwrap();
                 }
             }
         });

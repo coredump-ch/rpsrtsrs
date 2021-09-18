@@ -22,7 +22,8 @@ impl Message {
             // Clear the screen.
             clear(BLACK, gl);
             let transform = c.transform.trans(0.0, 100.0);
-            text.draw(&self.message, cache, &c.draw_state, transform, gl);
+            text.draw(&self.message, cache, &c.draw_state, transform, gl)
+                .unwrap();
         });
     }
 }
