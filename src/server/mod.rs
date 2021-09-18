@@ -126,7 +126,7 @@ pub fn handle_client(
                         // Try 42 times to create a new unit
                         'outer: for _ in 0..42 {
                             let position =
-                                Vec2::new(rng.next_f64() * world.x, rng.next_f64() * world.y);
+                                Vec2::new(rng.gen::<f64>() * world.x, rng.gen::<f64>() * world.y);
                             let new_unit = Unit::new(unit_id, position);
                             for player in &game_lock.players {
                                 for unit in &player.units {

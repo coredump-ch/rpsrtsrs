@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Raphael Nestler <raphael.nestler@gmail.com>"]
 
 [dependencies]
-rand = "0.3"
+rand = "0.8.4"
 piston = "0.34"
 piston2d-opengl_graphics = "0.47"
 piston-texture = "0.5"
