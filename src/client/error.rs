@@ -1,7 +1,7 @@
 use opengl_graphics::GlGraphics;
 use opengl_graphics::GlyphCache;
 
-use piston::input::{RenderArgs};
+use piston::input::RenderArgs;
 
 use colors::{BLACK, YELLOW};
 
@@ -12,11 +12,11 @@ pub struct Message {
 
 impl Message {
     pub fn new(message: String) -> Message {
-        Message { message: message }
+        Message { message }
     }
 
     pub fn render(&self, args: &RenderArgs, gl: &mut GlGraphics, cache: &mut GlyphCache) {
-        use graphics::{Text, clear, Transformed};
+        use graphics::{clear, Text, Transformed};
         let text = Text::new_color(YELLOW, 64);
         gl.draw(args.viewport(), |c, gl| {
             // Clear the screen.
@@ -26,4 +26,3 @@ impl Message {
         });
     }
 }
-

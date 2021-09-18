@@ -2,13 +2,12 @@
 //!
 //! All these structures should be serializable, so that they can be
 //! transferred from the server to the client over the network.
+use std::collections::HashMap;
 use std::convert::Into;
 use std::fmt;
-use std::collections::HashMap;
 
 use common::Vec2;
 use shapes::Shape;
-
 
 /// A unit identifier.
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug, Copy, Clone, Hash)]
@@ -69,7 +68,7 @@ impl Unit {
         println!("Create unit at {:?}", position);
         Unit {
             id: id.into(),
-            position: position,
+            position,
             angle: 0.0f64,
             speed_vector: Vec2::new(0.0, 0.0),
             health: 100_000,
@@ -85,10 +84,7 @@ impl Unit {
             self.position.x + self.angle.cos() * size,
             self.position.y + self.angle.sin() * size,
         );
-        let speed = Vec2::new(
-            self.angle.cos() * speed,
-            self.angle.sin() * speed,
-        );
+        let speed = Vec2::new(self.angle.cos() * speed, self.angle.sin() * speed);
         Bullet::new(position, speed)
     }
 }
@@ -102,7 +98,7 @@ pub struct Bullet {
 impl Bullet {
     pub fn new(position: Vec2, speed: Vec2) -> Bullet {
         Bullet {
-            position: position,
+            position,
             speed_vector: speed,
         }
     }
@@ -111,7 +107,6 @@ impl Bullet {
         self.position += self.speed_vector * dt_ms;
     }
 }
-
 
 /// A player has an ID and consists of 0..N `Unit`s
 #[derive(Serialize, Deserialize, PartialEq, Debug, Clone)]
@@ -142,7 +137,7 @@ pub struct GameState {
 
 impl GameState {
     pub fn new() -> GameState {
-        GameState{
+        GameState {
             players: vec![],
             bullets: vec![],
         }
@@ -163,9 +158,10 @@ impl GameState {
         // Check for collisions between all units
         for p1 in 0..self.players.len() {
             for u1 in 0..self.players[p1].units.len() {
-
-                for u2 in u1+1..self.players[p1].units.len() {
-                    if self.players[p1].units[u1].collision_detect(&self.players[p1].units[u2], UNIT_SIZE) {
+                for u2 in u1 + 1..self.players[p1].units.len() {
+                    if self.players[p1].units[u1]
+                        .collision_detect(&self.players[p1].units[u2], UNIT_SIZE)
+                    {
                         {
                             let (s1, s2) = {
                                 let unit1 = &self.players[p1].units[u1];
@@ -178,9 +174,11 @@ impl GameState {
                     }
                 }
 
-                for p2 in p1+1..self.players.len() {
+                for p2 in p1 + 1..self.players.len() {
                     for u2 in 0..self.players[p2].units.len() {
-                        if self.players[p1].units[u1].collision_detect(&self.players[p2].units[u2], UNIT_SIZE) {
+                        if self.players[p1].units[u1]
+                            .collision_detect(&self.players[p2].units[u2], UNIT_SIZE)
+                        {
                             let (s1, s2) = {
                                 let unit1 = &self.players[p1].units[u1];
                                 let unit2 = &self.players[p2].units[u2];
@@ -196,7 +194,6 @@ impl GameState {
     }
 
     pub fn update(&mut self, world: &WorldState, dt: f64) {
-
         for bullet in self.bullets.iter_mut() {
             bullet.update(dt);
         }
@@ -205,12 +202,15 @@ impl GameState {
         {
             let bullets = &mut self.bullets;
             let players = &mut self.players;
-            bullets.retain(|bullet|{
+            bullets.retain(|bullet| {
                 // still inside world?
-                if bullet.position[0] > world.x || bullet.position[1] > world.y ||
-                    bullet.position[0] < 0.0 || bullet.position[1] < 0.0 {
-                        return false;
-                    }
+                if bullet.position[0] > world.x
+                    || bullet.position[1] > world.y
+                    || bullet.position[0] < 0.0
+                    || bullet.position[1] < 0.0
+                {
+                    return false;
+                }
 
                 for player in players.iter_mut() {
                     for unit in player.units.iter_mut() {
@@ -263,13 +263,9 @@ pub struct WorldState {
 
 impl WorldState {
     pub fn new(x: f64, y: f64) -> WorldState {
-        WorldState {
-            x: x,
-            y: y,
-        }
+        WorldState { x, y }
     }
 }
-
 
 #[cfg(test)]
 mod tests {

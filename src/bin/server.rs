@@ -1,7 +1,8 @@
 extern crate bincode;
-#[macro_use] extern crate serde_derive;
-extern crate rpsrtsrs;
+#[macro_use]
+extern crate serde_derive;
 extern crate docopt;
+extern crate rpsrtsrs;
 
 use std::ops::Deref;
 
@@ -25,11 +26,13 @@ struct Args {
 }
 
 fn main() {
-    let args: Args = Docopt::new(USAGE).and_then(|d| d.deserialize())
-                                       .unwrap_or_else(|e| e.exit());
+    let args: Args = Docopt::new(USAGE)
+        .and_then(|d| d.deserialize())
+        .unwrap_or_else(|e| e.exit());
     let host = args.flag_i;
     let port = args.flag_p;
 
-    let server = Server::new((host.deref(), port), (800.0, 600.0)).expect("Could not initialize server");
+    let server =
+        Server::new((host.deref(), port), (800.0, 600.0)).expect("Could not initialize server");
     server.serve();
 }

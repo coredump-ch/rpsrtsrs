@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: rust:1.46
+    steps:
+      - checkout
+      - run: apt-get update && apt-get install -y cmake libsdl2-dev
+      - run: cargo build
+      - run: cargo test
+
+
+  fmt:
+    docker:
+      - image: rust:1.46
+    steps:
+      - checkout
+      - run: rustup component add rustfmt
+      - run: cargo fmt -- --check
+
+workflows:
+  version: 2
+  on_push:
+    jobs:
+      - test
+      - fmt

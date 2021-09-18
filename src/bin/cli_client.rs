@@ -1,22 +1,22 @@
 extern crate bincode;
 #[macro_use]
 extern crate serde_derive;
-extern crate rpsrtsrs;
 extern crate docopt;
+extern crate rpsrtsrs;
 
+use std::io::Write;
 use std::net::TcpStream;
 use std::ops::Deref;
-use std::io::Write;
 use std::{thread, time};
 
 use rpsrtsrs::common::Vec2;
-use rpsrtsrs::state::GameState;
 use rpsrtsrs::network::{Command, Message};
+use rpsrtsrs::state::GameState;
 
 use docopt::Docopt;
 
-use bincode::{serialize_into, deserialize_from, Infinite};
 use bincode::internal::Result;
+use bincode::{deserialize_from, serialize_into, Infinite};
 
 static USAGE: &'static str = "
 Usage: cli_client [-p PORT] [-i IP] [-r ID] (read|move <id> <x> <y>)
@@ -40,24 +40,25 @@ struct Args {
 }
 
 fn main() {
-    let args: Args = Docopt::new(USAGE).and_then(|d| d.deserialize())
-                                       .unwrap_or_else(|e| e.exit());
+    let args: Args = Docopt::new(USAGE)
+        .and_then(|d| d.deserialize())
+        .unwrap_or_else(|e| e.exit());
     println!("{:?}", args);
     let host = args.flag_i;
     let port = args.flag_p;
     let reconnect = args.flag_r;
     let cmd_read = args.cmd_read;
 
-    println!("connecting to host: {:?}:{:?} reconnect? {:?}", host, port, reconnect);
+    println!(
+        "connecting to host: {:?}:{:?} reconnect? {:?}",
+        host, port, reconnect
+    );
 
     let mut stream = TcpStream::connect((host.deref(), port)).unwrap();
 
     match reconnect {
         Some(id) => {
-            serialize_into(&mut stream,
-                           &Message::ClientReconnect(id.into()),
-                           Infinite)
-                .unwrap();
+            serialize_into(&mut stream, &Message::ClientReconnect(id.into()), Infinite).unwrap();
         }
         None => {
             serialize_into(&mut stream, &Message::ClientHello, Infinite).unwrap();
@@ -68,8 +69,7 @@ fn main() {
 
     if cmd_read {
         loop {
-            let game_state: Result<GameState> = deserialize_from(&mut stream,
-                                                                 Infinite);
+            let game_state: Result<GameState> = deserialize_from(&mut stream, Infinite);
             match game_state {
                 Ok(game) => println!("{:?}", game),
                 Err(e) => {
@@ -82,10 +82,12 @@ fn main() {
         let id = args.arg_id.expect("<id> missing");
         let x = args.arg_x.expect("<x> missing");
         let y = args.arg_y.expect("<y> missing");
-        serialize_into(&mut stream,
-                       &Message::Command(Command::Move(id.into(), Vec2::new(x, y))),
-                       Infinite)
-            .unwrap();
+        serialize_into(
+            &mut stream,
+            &Message::Command(Command::Move(id.into(), Vec2::new(x, y))),
+            Infinite,
+        )
+        .unwrap();
         stream.flush().unwrap();
     }
 
