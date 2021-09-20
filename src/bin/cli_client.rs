@@ -15,8 +15,7 @@ use rpsrtsrs::state::GameState;
 
 use docopt::Docopt;
 
-use bincode::internal::Result;
-use bincode::{deserialize_from, serialize_into, Infinite};
+use bincode::Options;
 
 static USAGE: &'static str = "
 Usage: cli_client [-p PORT] [-i IP] [-r ID] (read|move <id> <x> <y>)
@@ -55,21 +54,26 @@ fn main() {
     );
 
     let mut stream = TcpStream::connect((host.deref(), port)).unwrap();
+    let bincode = bincode::DefaultOptions::new().with_limit(1024);
 
     match reconnect {
         Some(id) => {
-            serialize_into(&mut stream, &Message::ClientReconnect(id.into()), Infinite).unwrap();
+            bincode
+                .serialize_into(&mut stream, &Message::ClientReconnect(id.into()))
+                .unwrap();
         }
         None => {
-            serialize_into(&mut stream, &Message::ClientHello, Infinite).unwrap();
+            bincode
+                .serialize_into(&mut stream, &Message::ClientHello)
+                .unwrap();
         }
     }
-    let server_hello: Result<Message> = deserialize_from(&mut stream, Infinite);
+    let server_hello: Result<Message, _> = bincode.deserialize_from(&mut stream);
     println!("{:?}", server_hello);
 
     if cmd_read {
         loop {
-            let game_state: Result<GameState> = deserialize_from(&mut stream, Infinite);
+            let game_state: Result<GameState, _> = bincode.deserialize_from(&mut stream);
             match game_state {
                 Ok(game) => println!("{:?}", game),
                 Err(e) => {
@@ -82,12 +86,12 @@ fn main() {
         let id = args.arg_id.expect("<id> missing");
         let x = args.arg_x.expect("<x> missing");
         let y = args.arg_y.expect("<y> missing");
-        serialize_into(
-            &mut stream,
-            &Message::Command(Command::Move(id.into(), Vec2::new(x, y))),
-            Infinite,
-        )
-        .unwrap();
+        bincode
+            .serialize_into(
+                &mut stream,
+                &Message::Command(Command::Move(id.into(), Vec2::new(x, y))),
+            )
+            .unwrap();
         stream.flush().unwrap();
     }
 

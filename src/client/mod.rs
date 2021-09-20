@@ -6,7 +6,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time;
 
-use bincode::{deserialize_from, serialize_into, Infinite};
+use bincode::Options;
 use opengl_graphics::GlGraphics;
 use opengl_graphics::GlyphCache;
 use piston::input::{Button, Key, MouseButton, RenderArgs, UpdateArgs};
@@ -46,8 +46,10 @@ impl NetworkClient {
 
     pub fn connect(&mut self) -> Result<(ClientId, WorldState), Box<dyn Error>> {
         let mut stream = TcpStream::connect(self.server_addr)?;
-        serialize_into(&mut stream, &Message::ClientHello, Infinite)?;
-        let server_hello = deserialize_from(&mut stream, Infinite);
+        let bincode = bincode::DefaultOptions::new().with_limit(1024);
+        println!("Sending client hello");
+        bincode.serialize_into(&mut stream, &Message::ClientHello)?;
+        let server_hello = bincode.deserialize_from(&mut stream);
 
         self.stream = Some(stream);
         if let Ok(Message::ServerHello(client_id, world_state)) = server_hello {
@@ -61,6 +63,7 @@ impl NetworkClient {
         let stream = self.stream.as_ref().expect("Stream not here :(");
         let mut command_stream = stream.try_clone().unwrap();
         let commands = self.commands.clone();
+        let bincode = bincode::DefaultOptions::new().with_limit(1024);
 
         // Command sender loop
         thread::spawn(move || {
@@ -72,7 +75,8 @@ impl NetworkClient {
                 if let Some(cmd) = command {
                     println!("Got command: {:?}", cmd);
                     //let cmd = Message::Command(Command::Move(0.into(), [100f64, 100f64]));
-                    serialize_into(&mut command_stream, &Message::Command(cmd), Infinite)
+                    bincode
+                        .serialize_into(&mut command_stream, &Message::Command(cmd))
                         .unwrap_or_else(|e| println!("Sending command failed: {}", e));
                 }
                 thread::sleep(time::Duration::from_millis(10));
@@ -84,7 +88,7 @@ impl NetworkClient {
         thread::spawn(move || {
             loop {
                 let game_state_server: Result<GameState, _> =
-                    deserialize_from(&mut game_state_stream, Infinite);
+                    bincode.deserialize_from(&mut game_state_stream);
                 match game_state_server {
                     Ok(game) => {
                         //println!("{:?}", game);
@@ -333,6 +337,7 @@ impl App {
                     self.on_mouse_click(button);
                 }
                 Button::Controller(_) => {}
+                Button::Hat(_) => {}
             },
             State::Error(_) => {
                 if let Button::Keyboard(_) = button {
