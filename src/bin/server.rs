@@ -1,4 +1,5 @@
 extern crate bincode;
+extern crate env_logger;
 #[macro_use]
 extern crate serde_derive;
 extern crate docopt;
@@ -26,6 +27,7 @@ struct Args {
 }
 
 fn main() {
+    env_logger::init();
     let args: Args = Docopt::new(USAGE)
         .and_then(|d| d.deserialize())
         .unwrap_or_else(|e| e.exit());

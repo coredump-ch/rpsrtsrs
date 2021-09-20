@@ -65,7 +65,7 @@ pub struct Unit {
 
 impl Unit {
     pub fn new<T: Into<UnitId>>(id: T, position: Vec2) -> Unit {
-        println!("Create unit at {:?}", position);
+        info!("Create unit at {:?}", position);
         Unit {
             id: id.into(),
             position,
@@ -220,7 +220,7 @@ impl GameState {
                             } else {
                                 unit.health = 0;
                             }
-                            println!("hit: {}", unit.health);
+                            info!("hit: {}", unit.health);
                             return false;
                         }
                     }

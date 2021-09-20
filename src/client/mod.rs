@@ -47,7 +47,7 @@ impl NetworkClient {
     pub fn connect(&mut self) -> Result<(ClientId, WorldState), Box<dyn Error>> {
         let mut stream = TcpStream::connect(self.server_addr)?;
         let bincode = bincode::DefaultOptions::new().with_limit(1024);
-        println!("Sending client hello");
+        info!("Sending client hello");
         bincode.serialize_into(&mut stream, &Message::ClientHello)?;
         let server_hello = bincode.deserialize_from(&mut stream);
 
@@ -73,11 +73,11 @@ impl NetworkClient {
                     commands.pop_front()
                 };
                 if let Some(cmd) = command {
-                    println!("Got command: {:?}", cmd);
+                    info!("Got command: {:?}", cmd);
                     //let cmd = Message::Command(Command::Move(0.into(), [100f64, 100f64]));
                     bincode
                         .serialize_into(&mut command_stream, &Message::Command(cmd))
-                        .unwrap_or_else(|e| println!("Sending command failed: {}", e));
+                        .unwrap_or_else(|e| error!("Sending command failed: {}", e));
                 }
                 thread::sleep(time::Duration::from_millis(10));
             }
@@ -85,20 +85,18 @@ impl NetworkClient {
 
         let mut game_state_stream = stream.try_clone().unwrap();
         let game_state = self.game_state.clone();
-        thread::spawn(move || {
-            loop {
-                let game_state_server: Result<GameState, _> =
-                    bincode.deserialize_from(&mut game_state_stream);
-                match game_state_server {
-                    Ok(game) => {
-                        //println!("{:?}", game);
-                        let mut game_state_lock = game_state.lock().unwrap();
-                        *game_state_lock = Some(game);
-                    }
-                    Err(e) => {
-                        println!("{:?}", e);
-                        thread::sleep(time::Duration::from_millis(200));
-                    }
+        thread::spawn(move || loop {
+            let game_state_server: Result<GameState, _> =
+                bincode.deserialize_from(&mut game_state_stream);
+            match game_state_server {
+                Ok(game) => {
+                    debug!("{:?}", game);
+                    let mut game_state_lock = game_state.lock().unwrap();
+                    *game_state_lock = Some(game);
+                }
+                Err(e) => {
+                    error!("{:?}", e);
+                    thread::sleep(time::Duration::from_millis(200));
                 }
             }
         });
@@ -353,7 +351,7 @@ impl App {
         match *button {
             MouseButton::Left => self.select(cursor),
             MouseButton::Right => self.move_selected(cursor),
-            _ => println!("Pressed mouse button '{:?}'", button),
+            _ => info!("Pressed mouse button '{:?}'", button),
         }
     }
 
@@ -367,7 +365,7 @@ impl App {
         } else {
             self.zoom /= 1.5 * -scroll.y;
         }
-        println!("zoom: {}", self.zoom);
+        info!("zoom: {}", self.zoom);
     }
 
     pub fn move_selected(&mut self, position: Vec2) {

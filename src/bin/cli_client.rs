@@ -1,4 +1,5 @@
 extern crate bincode;
+extern crate env_logger;
 #[macro_use]
 extern crate serde_derive;
 extern crate docopt;
@@ -13,9 +14,8 @@ use rpsrtsrs::common::Vec2;
 use rpsrtsrs::network::{Command, Message};
 use rpsrtsrs::state::GameState;
 
-use docopt::Docopt;
-
 use bincode::Options;
+use docopt::Docopt;
 
 static USAGE: &'static str = "
 Usage: cli_client [-p PORT] [-i IP] [-r ID] (read|move <id> <x> <y>)
@@ -39,6 +39,7 @@ struct Args {
 }
 
 fn main() {
+    env_logger::init();
     let args: Args = Docopt::new(USAGE)
         .and_then(|d| d.deserialize())
         .unwrap_or_else(|e| e.exit());
