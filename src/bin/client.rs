@@ -1,3 +1,4 @@
+extern crate env_logger;
 extern crate piston;
 #[macro_use]
 extern crate serde_derive;
@@ -47,6 +48,7 @@ struct Args {
 }
 
 fn main() {
+    env_logger::init();
     let opengl = OpenGL::V3_2;
 
     let args: Args = docopt::Docopt::new(USAGE)

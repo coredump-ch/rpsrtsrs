@@ -51,7 +51,7 @@ impl Server {
 
     pub fn serve(&self) {
         let tcp_listener = TcpListener::bind(self.socket_addr).unwrap();
-        println!("Start server: {:?}", tcp_listener);
+        info!("Start server: {:?}", tcp_listener);
 
         let game_clone = self.game.clone();
         let unit_targets_clone = self.unit_targets.clone();
@@ -68,7 +68,7 @@ impl Server {
                     let client_id_generator_clone = self.client_id_generator.clone();
                     let unit_id_generator_clone = self.unit_id_generator.clone();
                     let unit_targets = self.unit_targets.clone();
-                    println!("Spawning thread...");
+                    info!("Spawning thread...");
                     thread::spawn(move || {
                         handle_client(
                             stream,
@@ -81,7 +81,7 @@ impl Server {
                     });
                 }
                 Err(e) => {
-                    println!("{:?}", e);
+                    error!("{:?}", e);
                 }
             }
         }
@@ -101,7 +101,7 @@ pub fn handle_client(
     // handle client hello
     let bincode = bincode::DefaultOptions::new().with_limit(1024);
     let client_message = bincode.deserialize_from(&mut stream);
-    println!("Received: {:?}", client_message);
+    info!("Received: {:?}", client_message);
     match client_message {
         Ok(message) => {
             match message {
@@ -165,7 +165,7 @@ pub fn handle_client(
                     // Find player with specified id
                     match game_lock.players.iter().find(|player| player.id == id) {
                         Some(_) => {
-                            println!("Found you :)");
+                            info!("Found you :)");
 
                             // Send ServerHello message
                             let encoded: Vec<u8> = bincode
@@ -174,7 +174,7 @@ pub fn handle_client(
                             stream.write(&encoded).unwrap();
                         }
                         None => {
-                            println!("Reconnect to id {} not possible", id);
+                            error!("Reconnect to id {} not possible", id);
 
                             // Send Error message
                             let encoded: Vec<u8> = bincode.serialize(&Message::Error).unwrap();
@@ -184,7 +184,7 @@ pub fn handle_client(
                     }
                 }
                 _ => {
-                    println!("Did not receive ClientHello: {:?}", message);
+                    error!("Did not receive ClientHello: {:?}", message);
                     let encoded: Vec<u8> = bincode.serialize(&Message::Error).unwrap();
                     stream.write(&encoded).unwrap();
                     return; // Don't enter game loop
@@ -192,7 +192,7 @@ pub fn handle_client(
             }
         }
         Err(e) => {
-            println!("Error: {:?}", e);
+            error!("Error: {:?}", e);
             return; // Don't enter game loop
         }
     }
@@ -202,7 +202,7 @@ pub fn handle_client(
     // Command receiver loop
     thread::spawn(move || loop {
         let client_message: Result<Message, _> = bincode.deserialize_from(&mut command_stream);
-        println!("{:?}", client_message);
+        info!("{:?}", client_message);
         match client_message {
             Ok(message) => match message {
                 Message::Command(command) => {
@@ -211,14 +211,14 @@ pub fn handle_client(
                     handle_command(&world, &mut game_lock, &mut unit_targets_lock, &command);
                 }
                 _ => {
-                    println!("Did receive unexpected message: {:?}", message);
+                    error!("Did receive unexpected message: {:?}", message);
                     let encoded: Vec<u8> = bincode.serialize(&Message::Error).unwrap();
                     command_stream.write(&encoded).unwrap();
                     return;
                 }
             },
             Err(e) => {
-                println!("Error: {:?}", e);
+                error!("Error: {:?}", e);
                 return;
             }
         };
@@ -232,7 +232,7 @@ pub fn handle_client(
         };
         match stream.write(&encoded) {
             Err(e) => {
-                println!("Error: {:?}", e);
+                error!("Error: {:?}", e);
                 return;
             }
             _ => thread::sleep(Duration::from_millis(10)),
@@ -246,13 +246,13 @@ pub fn handle_command(
     unit_targets: &mut HashMap<UnitId, Vec2>,
     command: &Command,
 ) {
-    println!("Did receive command {:?}", command);
+    info!("Did receive command {:?}", command);
     match command {
         Command::Move(id, move_target) => {
             for player in game.players.iter_mut() {
                 for unit in player.units.iter_mut() {
                     if unit.id == *id {
-                        println!("Found it :)");
+                        info!("Found it :)");
                         let mut target = Vec2::new(0.0, 0.0);
                         target.x = clamp(move_target.x, 0.0, world.x);
                         target.y = clamp(move_target.y, 0.0, world.y);
@@ -267,7 +267,7 @@ pub fn handle_command(
                     }
                 }
             }
-            println!("Move {} to {:?}!", id, move_target);
+            info!("Move {} to {:?}!", id, move_target);
         }
         Command::Shoot(id) => {
             game.shoot(*id);

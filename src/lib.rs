@@ -7,6 +7,8 @@ extern crate glfw_window;
 #[cfg(feature = "include_glutin")]
 extern crate glutin_window;
 extern crate graphics;
+#[macro_use]
+extern crate log;
 extern crate num;
 extern crate opengl_graphics;
 extern crate piston;
