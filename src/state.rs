@@ -6,8 +6,8 @@ use std::collections::HashMap;
 use std::convert::Into;
 use std::fmt;
 
-use common::Vec2;
-use shapes::Shape;
+use crate::common::Vec2;
+use crate::shapes::Shape;
 
 /// A unit identifier.
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug, Copy, Clone, Hash)]
@@ -20,7 +20,7 @@ impl Into<UnitId> for u32 {
 }
 
 impl fmt::Display for UnitId {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         self.0.fmt(f)
     }
 }
@@ -36,7 +36,7 @@ impl Into<ClientId> for u32 {
 }
 
 impl fmt::Display for ClientId {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         self.0.fmt(f)
     }
 }

@@ -3,7 +3,7 @@ use opengl_graphics::GlyphCache;
 
 use piston::input::RenderArgs;
 
-use colors::{BLACK, YELLOW};
+use crate::colors::{BLACK, YELLOW};
 
 #[derive(Clone, Debug)]
 pub struct Message {
@@ -15,7 +15,7 @@ impl Message {
         Message { message }
     }
 
-    pub fn render(&self, args: &RenderArgs, gl: &mut GlGraphics, cache: &mut GlyphCache) {
+    pub fn render(&self, args: &RenderArgs, gl: &mut GlGraphics, cache: &mut GlyphCache<'_>) {
         use graphics::{clear, Text, Transformed};
         let text = Text::new_color(YELLOW, 64);
         gl.draw(args.viewport(), |c, gl| {

@@ -1,12 +1,12 @@
 //! Shapes in the game, like units (triangles) and buildings (squares).
-extern crate graphics;
 use self::graphics::math;
 use self::graphics::math::{mul_scalar, square_len, sub};
 use self::graphics::types::Triangle;
 use super::state;
+use graphics;
 use std::f64;
 
-use common::Vec2;
+use crate::common::Vec2;
 
 pub trait Shape {
     fn get_shape(&self, size: f64) -> Triangle;

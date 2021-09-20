@@ -1,9 +1,6 @@
-extern crate bincode;
-extern crate env_logger;
+use env_logger;
 #[macro_use]
 extern crate serde_derive;
-extern crate docopt;
-extern crate rpsrtsrs;
 
 use std::ops::Deref;
 
