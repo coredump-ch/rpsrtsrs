@@ -178,7 +178,7 @@ impl App {
         }
     }
 
-    fn render_game(&mut self, args: &RenderArgs, _: &mut GlyphCache) {
+    fn render_game(&mut self, args: &RenderArgs, _: &mut GlyphCache<'_>) {
         use graphics::types::{Line, Polygon};
         use graphics::Transformed;
         use graphics::{clear, ellipse, line, polygon};
@@ -215,11 +215,11 @@ impl App {
                 let color = &colors::PLAYERS[i % colors::PLAYERS.len()];
                 for s in player.units.iter() {
                     // Create a triangle polygon. The initial orientation is facing east.
-                    let triangle: Polygon = &s.get_shape(UNIT_SIZE);
+                    let triangle: Polygon<'_> = &s.get_shape(UNIT_SIZE);
 
                     // Create a border on the front of the polygon. This is a trapezoid.
                     // Because the angle of the trapezoid side is 22.5°, we know that `dx` is always `2 * dy`.
-                    let front: Polygon = &[
+                    let front: Polygon<'_> = &[
                         [UNIT_SIZE, UNIT_SIZE],                               // Top right
                         [UNIT_SIZE, 0.0],                                     // Bottom right
                         [UNIT_SIZE - FRONT_THICKNESS, FRONT_THICKNESS / 2.0], // Bottom left
@@ -266,7 +266,7 @@ impl App {
         });
     }
 
-    pub fn render(&mut self, args: &RenderArgs, cache: &mut GlyphCache) {
+    pub fn render(&mut self, args: &RenderArgs, cache: &mut GlyphCache<'_>) {
         match self.state {
             State::Menu => self.menu.render(args, &mut self.gl, cache),
             State::Running => self.render_game(args, cache),

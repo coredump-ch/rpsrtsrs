@@ -1,19 +1,14 @@
-extern crate env_logger;
-extern crate piston;
+use env_logger;
+
 #[macro_use]
 extern crate serde_derive;
-extern crate docopt;
-#[cfg(feature = "include_glfw")]
-extern crate glfw_window;
+use docopt;
+
 #[cfg(feature = "include_glutin")]
 extern crate glutin_window;
-extern crate graphics;
-extern crate opengl_graphics;
-extern crate rand;
-extern crate rpsrtsrs;
+
 #[cfg(feature = "include_sdl2")]
 extern crate sdl2_window;
-extern crate texture;
 
 use std::path::Path;
 

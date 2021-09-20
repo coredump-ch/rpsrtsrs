@@ -20,7 +20,7 @@ impl Into<UnitId> for u32 {
 }
 
 impl fmt::Display for UnitId {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         self.0.fmt(f)
     }
 }
@@ -36,7 +36,7 @@ impl Into<ClientId> for u32 {
 }
 
 impl fmt::Display for ClientId {
-    fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error> {
         self.0.fmt(f)
     }
 }

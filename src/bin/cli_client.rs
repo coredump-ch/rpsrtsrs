@@ -1,9 +1,7 @@
-extern crate bincode;
-extern crate env_logger;
+use bincode;
+use env_logger;
 #[macro_use]
 extern crate serde_derive;
-extern crate docopt;
-extern crate rpsrtsrs;
 
 use std::io::Write;
 use std::net::TcpStream;

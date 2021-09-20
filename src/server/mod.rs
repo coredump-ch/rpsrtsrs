@@ -1,4 +1,4 @@
-extern crate rand;
+use rand;
 
 use std::collections::HashMap;
 use std::f64::consts::PI;
@@ -16,9 +16,9 @@ use rand::Rng;
 
 use crate::common::Vec2;
 use crate::network::{Command, Message};
-use num::clamp;
 use crate::shapes::Shape;
 use crate::state::{GameState, Player, Unit, UnitId, WorldState, UNIT_SIZE};
+use num::clamp;
 
 /// A `Server` instance holds global server state.
 pub struct Server {

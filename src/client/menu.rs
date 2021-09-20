@@ -38,7 +38,7 @@ impl Menu {
         }
     }
 
-    pub fn render(&self, args: &RenderArgs, gl: &mut GlGraphics, cache: &mut GlyphCache) {
+    pub fn render(&self, args: &RenderArgs, gl: &mut GlGraphics, cache: &mut GlyphCache<'_>) {
         use graphics::{clear, Text, Transformed};
         let text = Text::new_color(YELLOW, 64);
         let text_selected = Text::new_color(ORANGE, 64);
