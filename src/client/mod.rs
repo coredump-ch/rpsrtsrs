@@ -337,6 +337,7 @@ impl App {
                     self.on_mouse_click(button);
                 }
                 Button::Controller(_) => {}
+                Button::Hat(_) => {}
             },
             State::Error(_) => {
                 if let Button::Keyboard(_) = button {
