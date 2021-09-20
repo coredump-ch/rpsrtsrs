@@ -14,11 +14,11 @@ use std::time::Duration;
 use bincode::Options;
 use rand::Rng;
 
-use common::Vec2;
-use network::{Command, Message};
+use crate::common::Vec2;
+use crate::network::{Command, Message};
 use num::clamp;
-use shapes::Shape;
-use state::{GameState, Player, Unit, UnitId, WorldState, UNIT_SIZE};
+use crate::shapes::Shape;
+use crate::state::{GameState, Player, Unit, UnitId, WorldState, UNIT_SIZE};
 
 /// A `Server` instance holds global server state.
 pub struct Server {

@@ -6,7 +6,7 @@ use self::graphics::types::Triangle;
 use super::state;
 use std::f64;
 
-use common::Vec2;
+use crate::common::Vec2;
 
 pub trait Shape {
     fn get_shape(&self, size: f64) -> Triangle;

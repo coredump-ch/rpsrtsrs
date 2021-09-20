@@ -3,7 +3,7 @@ use opengl_graphics::GlyphCache;
 
 use piston::input::RenderArgs;
 
-use colors::{BLACK, ORANGE, YELLOW};
+use crate::colors::{BLACK, ORANGE, YELLOW};
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Entries {

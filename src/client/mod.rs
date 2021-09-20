@@ -11,11 +11,11 @@ use opengl_graphics::GlGraphics;
 use opengl_graphics::GlyphCache;
 use piston::input::{Button, Key, MouseButton, RenderArgs, UpdateArgs};
 
-use colors::{self, BLACK, ORANGE, TRANSPARENT_WHITE, WHITE};
-use common::Vec2;
-use network::{Command, Message};
-use shapes::Shape;
-use state::{ClientId, GameState, UnitId, WorldState, UNIT_SIZE};
+use crate::colors::{self, BLACK, ORANGE, TRANSPARENT_WHITE, WHITE};
+use crate::common::Vec2;
+use crate::network::{Command, Message};
+use crate::shapes::Shape;
+use crate::state::{ClientId, GameState, UnitId, WorldState, UNIT_SIZE};
 
 pub mod error;
 pub mod menu;

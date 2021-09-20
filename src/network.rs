@@ -3,8 +3,8 @@
 //! Everything related to the network protocol between the sever and the
 //! clients.
 
-use common::Vec2;
-use state::{ClientId, GameState, UnitId, WorldState};
+use crate::common::Vec2;
+use crate::state::{ClientId, GameState, UnitId, WorldState};
 
 /// Commands alter the game state.
 ///

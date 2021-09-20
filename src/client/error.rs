@@ -3,7 +3,7 @@ use opengl_graphics::GlyphCache;
 
 use piston::input::RenderArgs;
 
-use colors::{BLACK, YELLOW};
+use crate::colors::{BLACK, YELLOW};
 
 #[derive(Clone, Debug)]
 pub struct Message {
