@@ -17,6 +17,7 @@ cgmath = { version = "0.18", features = ["serde"] }
 num = "0.4"
 log = "0.4.14"
 env_logger = "0.9.0"
+laminar = "0.5"
 
 [dependencies.piston2d-graphics]
 version = "0.40"
