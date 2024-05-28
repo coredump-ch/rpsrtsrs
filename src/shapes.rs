@@ -61,17 +61,17 @@ impl Shape for state::Unit {
         let xs: [f64; 2] = self.speed_vector.into();
         let xo: [f64; 2] = other.speed_vector.into();
 
-        let foo = (xs[0] * d[0] + xs[1] * d[1]) / (d[0] * d[0] + d[1] * d[1]);
-        let ys = if foo < 0.0 {
-            let c = mul_scalar(d, foo);
+        let normalized_dot_product = (xs[0] * d[0] + xs[1] * d[1]) / (d[0] * d[0] + d[1] * d[1]);
+        let ys = if normalized_dot_product < 0.0 {
+            let c = mul_scalar(d, normalized_dot_product);
             sub(xs, c)
         } else {
             xs
         };
 
-        let foo = (xo[0] * d[0] + xo[1] * d[1]) / (d[0] * d[0] + d[1] * d[1]);
-        let yo = if foo > 0.0 {
-            let c = mul_scalar(d, foo);
+        let normalized_dot_product = (xo[0] * d[0] + xo[1] * d[1]) / (d[0] * d[0] + d[1] * d[1]);
+        let yo = if normalized_dot_product > 0.0 {
+            let c = mul_scalar(d, normalized_dot_product);
             sub(xo, c)
         } else {
             xo
