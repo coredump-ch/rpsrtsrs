@@ -1,6 +1,6 @@
 environment:
   TARGET: x86_64-pc-windows-gnu
-  RUST_VERSION: 1.46.0
+  RUST_VERSION: 1.73.0
   BITS: 64
 install:
   - SET PATH=C:\msys64\mingw%BITS%\bin;C:\msys64\usr\bin;%PATH%
