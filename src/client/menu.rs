@@ -5,8 +5,9 @@ use piston::input::RenderArgs;
 
 use crate::colors::{BLACK, ORANGE, YELLOW};
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Default)]
 pub enum Entries {
+    #[default]
     Start,
     Exit,
 }
@@ -17,12 +18,6 @@ impl Entries {
             Entries::Start => Entries::Exit,
             Entries::Exit => Entries::Start,
         };
-    }
-}
-
-impl Default for Entries {
-    fn default() -> Self {
-        Entries::Start
     }
 }
 

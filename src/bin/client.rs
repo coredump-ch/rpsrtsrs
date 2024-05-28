@@ -1,8 +1,5 @@
-use env_logger;
-
 #[macro_use]
 extern crate serde_derive;
-use docopt;
 
 #[cfg(feature = "include_glutin")]
 extern crate glutin_window;
@@ -27,7 +24,7 @@ use texture::TextureSettings;
 
 use rpsrtsrs::client::*;
 
-static USAGE: &'static str = "
+static USAGE: &str = "
 Usage: client [-p PORT] [-i IP]
 
 Options:
@@ -59,7 +56,7 @@ fn main() {
 
     let font_path = Path::new("assets/DejaVuSans.ttf");
     let texture_settings = TextureSettings::new();
-    let ref mut cache = GlyphCache::new(font_path, (), texture_settings).unwrap();
+    let cache = &mut GlyphCache::new(font_path, (), texture_settings).unwrap();
 
     // Create a new game and run it.
     let mut app = App::new(GlGraphics::new(opengl), args.flag_i, args.flag_p);

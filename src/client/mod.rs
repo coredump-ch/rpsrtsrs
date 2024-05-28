@@ -1,6 +1,5 @@
 use std::collections::VecDeque;
 use std::error::Error;
-use std::mem;
 use std::net::{SocketAddr, TcpStream, ToSocketAddrs};
 use std::sync::{Arc, Mutex};
 use std::thread;
@@ -278,7 +277,7 @@ impl App {
         // grab updated server state if it is available
         let game_state_option = {
             let mut game_state_lock = self.game_state_server.lock().unwrap();
-            mem::replace(&mut *game_state_lock, None)
+            (*game_state_lock).take()
         };
         if let Some(game_state) = game_state_option {
             self.game_state = game_state;

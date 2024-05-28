@@ -18,9 +18,19 @@ jobs:
       - run: rustup component add rustfmt
       - run: cargo fmt -- --check
 
+  clippy:
+    docker:
+      - image: rust:1.78
+    steps:
+      - checkout
+      - run: apt-get update && apt-get install -y cmake libsdl2-dev
+      - run: rustup component add clippy
+      - run: cargo clippy -- --D warnings
+
 workflows:
   version: 2
   on_push:
     jobs:
       - test
       - fmt
+      - clippy
