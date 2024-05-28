@@ -1,5 +1,3 @@
-use bincode;
-use env_logger;
 #[macro_use]
 extern crate serde_derive;
 
@@ -15,7 +13,7 @@ use rpsrtsrs::state::GameState;
 use bincode::Options;
 use docopt::Docopt;
 
-static USAGE: &'static str = "
+static USAGE: &str = "
 Usage: cli_client [-p PORT] [-i IP] [-r ID] (read|move <id> <x> <y>)
 
 Options:

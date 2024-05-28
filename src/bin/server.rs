@@ -1,4 +1,3 @@
-use env_logger;
 #[macro_use]
 extern crate serde_derive;
 
@@ -8,7 +7,7 @@ use docopt::Docopt;
 
 use rpsrtsrs::server::Server;
 
-static USAGE: &'static str = "
+static USAGE: &str = "
 Usage: server [-p PORT] [-i IP]
 
 Options:

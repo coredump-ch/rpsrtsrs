@@ -77,7 +77,7 @@ impl Shape for state::Unit {
             xo
         };
 
-        return (ys.into(), yo.into());
+        (ys.into(), yo.into())
     }
 }
 
@@ -102,33 +102,27 @@ mod test {
         let a = size * 3.0 / 3.0f64.sqrt();
 
         // The following points should be outside of the hitbox.
-        assert_eq!(unit.is_hit(1.0, Vec2::new(a / 2.0, epsilon)), false);
-        assert_eq!(unit.is_hit(1.0, Vec2::new(a / 2.0, epsilon)), false);
+        assert!(!unit.is_hit(1.0, Vec2::new(a / 2.0, epsilon)));
+        assert!(!unit.is_hit(1.0, Vec2::new(a / 2.0, epsilon)));
 
         // The following five points should be inside the hitbox.
         //      .
         //     /.\
         //   ./_._\.
         //
-        assert_eq!(unit.is_hit(1.0, Vec2::new(0.0, 0.0)), true);
-        assert_eq!(unit.is_hit(1.0, Vec2::new(0.0, -size + epsilon)), true);
-        assert_eq!(unit.is_hit(1.0, Vec2::new(0.0, size / 2.0 - epsilon)), true);
-        assert_eq!(
-            unit.is_hit(1.0, Vec2::new(-a / 2.0 + epsilon, size / 2.0 - epsilon)),
-            true
-        );
-        assert_eq!(
-            unit.is_hit(1.0, Vec2::new(a / 2.0 - epsilon, size / 2.0 - epsilon)),
-            true
-        );
+        assert!(unit.is_hit(1.0, Vec2::new(0.0, 0.0)));
+        assert!(unit.is_hit(1.0, Vec2::new(0.0, -size + epsilon)));
+        assert!(unit.is_hit(1.0, Vec2::new(0.0, size / 2.0 - epsilon)));
+        assert!(unit.is_hit(1.0, Vec2::new(-a / 2.0 + epsilon, size / 2.0 - epsilon)));
+        assert!(unit.is_hit(1.0, Vec2::new(a / 2.0 - epsilon, size / 2.0 - epsilon)));
 
         // The following two points should be outside the hitbox.
         //
         //  . /\ .
         //   /__\
         //
-        assert_eq!(unit.is_hit(1.0, Vec2::new(a / 2.0, 0.0)), false);
-        assert_eq!(unit.is_hit(1.0, Vec2::new(a / 2.0, 0.0)), false);
+        assert!(!unit.is_hit(1.0, Vec2::new(a / 2.0, 0.0)));
+        assert!(!unit.is_hit(1.0, Vec2::new(a / 2.0, 0.0)));
     }
 
     #[test]

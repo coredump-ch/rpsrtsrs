@@ -285,7 +285,7 @@ pub fn update_world(
             let mut game_lock = game.lock().unwrap();
             let unit_targets = unit_targets.lock().unwrap();
             game_lock.update_targets(&unit_targets);
-            game_lock.update(&*world, 5.0);
+            game_lock.update(&world, 5.0);
         }
         thread::sleep(Duration::from_millis(5));
     }

@@ -13,9 +13,9 @@ use crate::shapes::Shape;
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug, Copy, Clone, Hash)]
 pub struct UnitId(pub u32);
 
-impl Into<UnitId> for u32 {
-    fn into(self) -> UnitId {
-        UnitId(self)
+impl From<u32> for UnitId {
+    fn from(val: u32) -> Self {
+        UnitId(val)
     }
 }
 
@@ -29,9 +29,9 @@ impl fmt::Display for UnitId {
 #[derive(Serialize, Deserialize, PartialEq, Eq, Debug, Copy, Clone)]
 pub struct ClientId(pub u32);
 
-impl Into<ClientId> for u32 {
-    fn into(self) -> ClientId {
-        ClientId(self)
+impl From<u32> for ClientId {
+    fn from(val: u32) -> Self {
+        ClientId(val)
     }
 }
 
@@ -133,6 +133,12 @@ pub struct GameState {
     /// List of players
     pub players: Vec<Player>,
     pub bullets: Vec<Bullet>,
+}
+
+impl Default for GameState {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl GameState {
