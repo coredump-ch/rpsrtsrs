@@ -156,7 +156,7 @@ pub fn handle_client(
                     let encoded: Vec<u8> = bincode
                         .serialize(&Message::ServerHello(player_id, world.deref().clone()))
                         .unwrap();
-                    stream.write(&encoded).unwrap();
+                    stream.write_all(&encoded).unwrap();
                 }
                 Message::ClientReconnect(id) => {
                     // Get exclusive world access
@@ -171,14 +171,14 @@ pub fn handle_client(
                             let encoded: Vec<u8> = bincode
                                 .serialize(&Message::ServerHello(id, world.deref().clone()))
                                 .unwrap();
-                            stream.write(&encoded).unwrap();
+                            stream.write_all(&encoded).unwrap();
                         }
                         None => {
                             error!("Reconnect to id {} not possible", id);
 
                             // Send Error message
                             let encoded: Vec<u8> = bincode.serialize(&Message::Error).unwrap();
-                            stream.write(&encoded).unwrap();
+                            stream.write_all(&encoded).unwrap();
                             return; // Don't enter game loop
                         }
                     }
@@ -186,7 +186,7 @@ pub fn handle_client(
                 _ => {
                     error!("Did not receive ClientHello: {:?}", message);
                     let encoded: Vec<u8> = bincode.serialize(&Message::Error).unwrap();
-                    stream.write(&encoded).unwrap();
+                    stream.write_all(&encoded).unwrap();
                     return; // Don't enter game loop
                 }
             }
@@ -213,7 +213,7 @@ pub fn handle_client(
                 _ => {
                     error!("Did receive unexpected message: {:?}", message);
                     let encoded: Vec<u8> = bincode.serialize(&Message::Error).unwrap();
-                    command_stream.write(&encoded).unwrap();
+                    command_stream.write_all(&encoded).unwrap();
                     return;
                 }
             },
@@ -230,7 +230,7 @@ pub fn handle_client(
             let game_lock = game.lock().unwrap();
             bincode.serialize(&*game_lock).unwrap()
         };
-        match stream.write(&encoded) {
+        match stream.write_all(&encoded) {
             Err(e) => {
                 error!("Error: {:?}", e);
                 return;
